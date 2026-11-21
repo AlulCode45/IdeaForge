@@ -3,7 +3,7 @@
 - **Track**: `tech` (Software / Web Application PRP)
 - **Date**: 2026-11-22
 - **Target Stack**: Next.js (App Router) + Go/Node Worker + PostgreSQL + Redis
-- **Note**: Public sample demonstrating `BrainstormingAgent`'s `tech` track (`00`–`06`, `13`, `17`, `decisions/`), Mermaid architecture/ERD diagrams, build-vs-buy & infra COGS estimation, and `--mode technical` PDF export.
+- **Note**: Public sample demonstrating `IdeaForge`'s `tech` track (`00`–`06`, `13`, `17`, `decisions/`), Mermaid architecture/ERD diagrams, build-vs-buy & infra COGS estimation, and `--mode technical` PDF export.
 
 ## Documents
 

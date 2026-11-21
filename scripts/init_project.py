@@ -96,7 +96,7 @@ def update_index(index_path: Path, title: str, folder_rel: str, track: str, toda
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Initialize a BrainstormingAgent project or quick brief.")
+    ap = argparse.ArgumentParser(description="Initialize an IdeaForge project or quick brief.")
     ap.add_argument("--slug", required=True, help="Lowercase hyphenated project slug")
     ap.add_argument("--title", required=True, help="Human-readable project title")
     ap.add_argument("--track", choices=["quick", "tech", "business", "full"], default="full", help="Engagement track")

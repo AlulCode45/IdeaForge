@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lint a BrainstormingAgent project folder for structural, arithmetic, and evidence quality gates.
+"""Lint an IdeaForge project folder for structural, arithmetic, and evidence quality gates.
 
 Usage:
   python3 scripts/lint_project.py prps/<project-slug> [--index prps/INDEX.md] [--strict] [--max-age-days 365]
@@ -196,7 +196,7 @@ def check_index_registration(proj_dir: Path, index_path: Path, findings: list[tu
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Lint a BrainstormingAgent project directory.")
+    ap = argparse.ArgumentParser(description="Lint an IdeaForge project directory.")
     ap.add_argument("project_dir", help="Path to prps/<project-slug>")
     ap.add_argument("--index", help="Path to prps/INDEX.md (default: <project_dir>/../INDEX.md)")
     ap.add_argument("--strict", action="store_true", help="Exit 1 on warnings as well as failures")

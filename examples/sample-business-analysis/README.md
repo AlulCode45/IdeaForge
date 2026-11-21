@@ -3,7 +3,7 @@
 - **Track**: `business` (`saas` model)
 - **Date**: 2026-11-22
 - **Currency**: IDR | **Jurisdiction**: Indonesia
-- **Note**: Public sample case demonstrating `BrainstormingAgent`'s full workflow, 4 auto-generated SVG charts, KPI cards, visual scorecard, ADR, and interactive PDF export.
+- **Note**: Public sample case demonstrating `IdeaForge`'s full workflow, 4 auto-generated SVG charts, KPI cards, visual scorecard, ADR, and interactive PDF export.
 
 ## Documents
 

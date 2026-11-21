@@ -1,4 +1,4 @@
-# BrainstormingAgent
+# IdeaForge
 
 [English](README.md) | [Bahasa Indonesia](README.id.md) | **简体中文**
 
@@ -23,17 +23,17 @@
   - **OpenAI Codex / Antigravity / OpenCode**：自动读取 `AGENTS.md` 与 `.agents/skills/`。
   - **Claude Code**：自动读取 `CLAUDE.md`（运行 `python3 scripts/install_skills.py --target claude` 可将技能同步至 `.claude/skills/`，加 `--scope global` 可安装至 `~/.claude/skills/`）。
   - **Gemini CLI**：自动读取 `GEMINI.md`（运行 `python3 scripts/install_skills.py --target gemini` 可同步至 `.gemini/skills/`）。
-  - **Cursor & GitHub Copilot**：自动读取 `.cursor/rules/brainstorming-agent.mdc` 与 `.github/copilot-instructions.md`。
+  - **Cursor & GitHub Copilot**：自动读取 `.cursor/rules/ideaforge.mdc` 与 `.github/copilot-instructions.md`。
 - **Python 3**（仅需标准库，无需 `pip install`）。
 - **Brave Browser / Google Chrome / Chromium**（供 `export_pdf.py` 以无头模式渲染 PDF；可通过 `PDF_BROWSER` 环境变量指定路径）。
 
 ### 快速上手
 1. 克隆本仓库：
    ```bash
-   git clone https://github.com/AlulCode45/BrainstormingAgent.git
-   cd BrainstormingAgent
+   git clone https://github.com/AlulCode45/IdeaForge.git
+   cd IdeaForge
    ```
-2. 在您偏好的 AI 工具中打开 `BrainstormingAgent` 文件夹（如需同步技能至 Claude/Gemini/Codex，可运行 `python3 scripts/install_skills.py --target all`）。
+2. 在您偏好的 AI 工具中打开 `IdeaForge` 文件夹（如需同步技能至 Claude/Gemini/Codex，可运行 `python3 scripts/install_skills.py --target all`）。
 3. 直接描述您的想法或目标即可开始，例如：
    - *“我想头脑风暴一个面向汽修店的 B2B SaaS 方案。”*
    - *“为这个项目初始化一个完整的 full 可行性分析工作区。”*
@@ -168,7 +168,7 @@ python3 -m unittest discover -s tests -v
 ## 目录结构
 
 ```text
-BrainstormingAgent/
+IdeaForge/
 ├── AGENTS.md                           # 核心智能体规范、交付轨道、质量门禁与 Git 隐私规则
 ├── README.md / README.id.md / README.zh.md
 ├── LICENSE

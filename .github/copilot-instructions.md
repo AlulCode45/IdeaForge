@@ -1,4 +1,4 @@
-# BrainstormingAgent Instructions (GitHub Copilot)
+# IdeaForge Instructions (GitHub Copilot)
 
 Follow all guidelines, engagement tracks, skill routing, quality gates, and Git privacy rules in `AGENTS.md`.
 

@@ -1,4 +1,4 @@
-# BrainstormingAgent Instructions (Gemini CLI)
+# IdeaForge Instructions (Gemini CLI)
 
 Follow all guidelines, engagement tracks, skill routing, quality gates, and Git privacy rules in [AGENTS.md](AGENTS.md).
 

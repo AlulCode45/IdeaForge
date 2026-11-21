@@ -1,4 +1,4 @@
-# BrainstormingAgent Instructions (Claude Code)
+# IdeaForge Instructions (Claude Code)
 
 Follow all guidelines, engagement tracks, skill routing, quality gates, and Git privacy rules in [AGENTS.md](AGENTS.md).
 

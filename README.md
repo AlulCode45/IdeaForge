@@ -1,4 +1,4 @@
-# BrainstormingAgent
+# IdeaForge
 
 **English** | [Bahasa Indonesia](README.id.md) | [简体中文](README.zh.md)
 
@@ -6,7 +6,7 @@ A structured, enterprise-grade workspace for an **AI Brainstorming Partner & Str
 
 ---
 
-## Why Use BrainstormingAgent?
+## Why Use IdeaForge?
 
 - **Right-Sized Engagement Tracks**: Avoid over-engineering. Triage every request into `quick` (1–2 page brief), `tech` (product/architecture PRP), `business` (commercial feasibility), or `full` (end-to-end) using `project-intake` and `scripts/init_project.py`.
 - **Staged Pipeline with Checkpoints**: Work progresses step by step; the agent summarizes findings, runs a short red-team check, and waits for your approval before moving to the next stage.
@@ -23,17 +23,17 @@ A structured, enterprise-grade workspace for an **AI Brainstorming Partner & Str
   - **OpenAI Codex / Antigravity / OpenCode**: automatically reads `AGENTS.md` and `.agents/skills/`.
   - **Claude Code**: automatically reads `CLAUDE.md` (run `python3 scripts/install_skills.py --target claude` to mirror skills into `.claude/skills/` or `--scope global` for `~/.claude/skills/`).
   - **Gemini CLI**: automatically reads `GEMINI.md` (run `python3 scripts/install_skills.py --target gemini` to mirror into `.gemini/skills/`).
-  - **Cursor & GitHub Copilot**: automatically reads `.cursor/rules/brainstorming-agent.mdc` and `.github/copilot-instructions.md`.
+  - **Cursor & GitHub Copilot**: automatically reads `.cursor/rules/ideaforge.mdc` and `.github/copilot-instructions.md`.
 - **Python 3** (stdlib only; no `pip install` required).
 - **Brave Browser, Google Chrome, or Chromium** (used headless by `export_pdf.py` to render PDFs; override path via `PDF_BROWSER` env var).
 
 ### Getting Started
 1. Clone this repository:
    ```bash
-   git clone https://github.com/AlulCode45/BrainstormingAgent.git
-   cd BrainstormingAgent
+   git clone https://github.com/AlulCode45/IdeaForge.git
+   cd IdeaForge
    ```
-2. Open the `BrainstormingAgent` folder in your preferred AI tool (or mirror skills for Claude/Gemini/Codex with `python3 scripts/install_skills.py --target all`).
+2. Open the `IdeaForge` folder in your preferred AI tool (or mirror skills for Claude/Gemini/Codex with `python3 scripts/install_skills.py --target all`).
 3. Start a session by describing your idea or goal, for example:
    - *"Let's brainstorm a B2B SaaS idea for auto repair shops."*
    - *"Initialize a full feasibility project for this concept."*
@@ -168,7 +168,7 @@ python3 -m unittest discover -s tests -v
 ## Directory Structure
 
 ```text
-BrainstormingAgent/
+IdeaForge/
 ├── AGENTS.md                           # Core agent rules, tracks, quality gates, & Git privacy
 ├── README.md / README.id.md / README.zh.md
 ├── LICENSE

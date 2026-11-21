@@ -1,6 +1,6 @@
 # Overview - BengkelKu SaaS (Sample)
 
-> **Sample Note**: Illustrative Indonesian B2B SaaS case study demonstrating the `BrainstormingAgent` standard (`saas` model, 4 auto-generated SVG charts, KPI cards, and interactive PDF export).
+> **Sample Note**: Illustrative Indonesian B2B SaaS case study demonstrating the `IdeaForge` standard (`saas` model, 4 auto-generated SVG charts, KPI cards, and interactive PDF export).
 
 - **Problem**: Independent motorcycle repair shops (2–6 mechanics) still track spare-part inventory, mechanic commissions, and service reminders manually using paper notebooks and WhatsApp [Assumption].
 - **Solution**: A lightweight web/mobile workshop POS and operations app featuring automated WhatsApp service reminders and daily profit/loss reporting [Assumption].
