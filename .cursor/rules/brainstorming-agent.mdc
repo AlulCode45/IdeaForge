@@ -1,0 +1,7 @@
+---
+description: BrainstormingAgent universal rules, engagement tracks, skill routing, and quality gates
+alwaysApply: true
+---
+
+Follow all guidelines, engagement tracks, skill routing, quality gates, and Git privacy rules in `AGENTS.md`.
+Load the matching skill in `.agents/skills/<skill-name>/SKILL.md` before executing any stage, and run `scripts/lint_project.py` before final scorecard or PDF export.

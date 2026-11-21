@@ -2,7 +2,7 @@
 
 **English** | [Bahasa Indonesia](README.id.md) | [简体中文](README.zh.md)
 
-A structured, enterprise-grade workspace for an **AI Brainstorming Partner & Strategic Analysis Agent** powered by Antigravity Customizations (`AGENTS.md` + `.agents/skills/`). Built to take raw ideas from initial exploration through business validation, technical PRP (*Project Requirements & Plan*), live market research, computed financial modeling, compliance checks, and print-ready editorial PDF reports—using **pure Python 3 stdlib** with zero external `pip` dependencies.
+A structured, enterprise-grade workspace for an **AI Brainstorming Partner & Strategic Analysis Agent** compatible with **all major AI coding & agent tools** (**Claude Code**, **OpenAI Codex**, **Antigravity**, **Gemini CLI**, **Cursor**, **GitHub Copilot**, **OpenCode**) via `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.cursor/rules/`, `.github/copilot-instructions.md`, and `.agents/skills/`. Built to take raw ideas from initial exploration through business validation, technical PRP (*Project Requirements & Plan*), live market research, computed financial modeling, compliance checks, and print-ready editorial PDF reports—using **pure Python 3 stdlib** with zero external `pip` dependencies.
 
 ---
 
@@ -19,7 +19,11 @@ A structured, enterprise-grade workspace for an **AI Brainstorming Partner & Str
 ## Prerequisites & Quick Start
 
 ### Prerequisites
-- **Antigravity** (automatically loads `AGENTS.md` and all skills in `.agents/skills/`).
+- **Any AI Agent / Coding CLI**:
+  - **OpenAI Codex / Antigravity / OpenCode**: automatically reads `AGENTS.md` and `.agents/skills/`.
+  - **Claude Code**: automatically reads `CLAUDE.md` (run `python3 scripts/install_skills.py --target claude` to mirror skills into `.claude/skills/` or `--scope global` for `~/.claude/skills/`).
+  - **Gemini CLI**: automatically reads `GEMINI.md` (run `python3 scripts/install_skills.py --target gemini` to mirror into `.gemini/skills/`).
+  - **Cursor & GitHub Copilot**: automatically reads `.cursor/rules/brainstorming-agent.mdc` and `.github/copilot-instructions.md`.
 - **Python 3** (stdlib only; no `pip install` required).
 - **Brave Browser, Google Chrome, or Chromium** (used headless by `export_pdf.py` to render PDFs; override path via `PDF_BROWSER` env var).
 
@@ -29,7 +33,7 @@ A structured, enterprise-grade workspace for an **AI Brainstorming Partner & Str
    git clone https://github.com/AlulCode45/BrainstormingAgent.git
    cd BrainstormingAgent
    ```
-2. Open the `BrainstormingAgent` folder as your workspace in Antigravity.
+2. Open the `BrainstormingAgent` folder in your preferred AI tool (or mirror skills for Claude/Gemini/Codex with `python3 scripts/install_skills.py --target all`).
 3. Start a session by describing your idea or goal, for example:
    - *"Let's brainstorm a B2B SaaS idea for auto repair shops."*
    - *"Initialize a full feasibility project for this concept."*

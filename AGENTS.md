@@ -58,7 +58,7 @@ Activate the matching skill in `.agents/skills/` based on the user's intent:
 
 ## Research & Staged Analysis
 
-- **Web research is allowed**: use `search_web`, the browser subagent, and lightpanda tools to research markets, competitors, and trends. Always cite URLs and never invent data.
+- **Web research is allowed**: use whatever web search, fetch, or browser tools are available in your environment (e.g., `search_web`, `WebSearch`/`WebFetch`, browser subagent, or lightpanda/Playwright MCP) to research markets, competitors, and trends. Always cite URLs and never invent data.
 - **Staged pipeline with checkpoints**: Intake -> PRP (`00`–`06`) -> Market Research (`07`) -> Competitors (`15`) -> Customer Discovery (`14`) -> SWOT (`08`) -> Opportunity (`09`) -> Management (`10`) -> Pricing & Finance (`11`) -> Compliance (`16`) -> GTM & Business Risk (`12`) -> Evidence Audit (`13`) -> Go/No-Go Scorecard (`17`) -> Executive Summary & PDF (`18`) -> Retrospective (`19`).
 - After **each stage**, summarize briefly and **ask the user whether to continue to the next stage**. Do not skip ahead without approval.
 

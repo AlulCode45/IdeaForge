@@ -2,7 +2,7 @@
 
 [English](README.md) | **Bahasa Indonesia** | [简体中文](README.zh.md)
 
-Workspace terstruktur untuk **AI Brainstorming Partner & Strategic Analysis Agent** berbasis Antigravity Customizations (`AGENTS.md` + `.agents/skills/`). Dirancang untuk mengawal ide mentah menjadi keputusan berbasis bukti: mulai dari eksplorasi ide, validasi bisnis, penyusunan PRP (*Project Requirements & Plan*), riset pasar, pemodelan keuangan terhitung, kepatuhan regulasi, hingga laporan eksekutif PDF—menggunakan **Python 3 stdlib murni** tanpa dependency `pip` eksternal.
+Workspace terstruktur untuk **AI Brainstorming Partner & Strategic Analysis Agent** yang kompatibel dengan **berbagai tool AI modern** (**Claude Code**, **OpenAI Codex**, **Antigravity**, **Gemini CLI**, **Cursor**, **GitHub Copilot**, **OpenCode**) melalui `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.cursor/rules/`, `.github/copilot-instructions.md`, dan `.agents/skills/`. Dirancang untuk mengawal ide mentah menjadi keputusan berbasis bukti: mulai dari eksplorasi ide, validasi bisnis, penyusunan PRP (*Project Requirements & Plan*), riset pasar, pemodelan keuangan terhitung, kepatuhan regulasi, hingga laporan eksekutif PDF—menggunakan **Python 3 stdlib murni** tanpa dependency `pip` eksternal.
 
 ---
 
@@ -19,7 +19,11 @@ Workspace terstruktur untuk **AI Brainstorming Partner & Strategic Analysis Agen
 ## Prasyarat & Cara Mulai (Quick Start)
 
 ### Prasyarat
-- **Antigravity** (otomatis membaca `AGENTS.md` dan seluruh skill di `.agents/skills/`).
+- **Tool AI / Coding CLI Apa Saja**:
+  - **OpenAI Codex / Antigravity / OpenCode**: otomatis membaca `AGENTS.md` dan `.agents/skills/`.
+  - **Claude Code**: otomatis membaca `CLAUDE.md` (jalankan `python3 scripts/install_skills.py --target claude` untuk mirror skill ke `.claude/skills/` atau `--scope global` ke `~/.claude/skills/`).
+  - **Gemini CLI**: otomatis membaca `GEMINI.md` (jalankan `python3 scripts/install_skills.py --target gemini` untuk mirror ke `.gemini/skills/`).
+  - **Cursor & GitHub Copilot**: otomatis membaca `.cursor/rules/brainstorming-agent.mdc` dan `.github/copilot-instructions.md`.
 - **Python 3** (hanya stdlib; tidak perlu `pip install`).
 - **Brave Browser, Google Chrome, atau Chromium** (dipakai headless oleh `export_pdf.py`; path dapat dioverride melalui env `PDF_BROWSER`).
 
@@ -29,7 +33,7 @@ Workspace terstruktur untuk **AI Brainstorming Partner & Strategic Analysis Agen
    git clone https://github.com/AlulCode45/BrainstormingAgent.git
    cd BrainstormingAgent
    ```
-2. Buka folder `BrainstormingAgent` sebagai workspace di Antigravity.
+2. Buka folder `BrainstormingAgent` di tool AI pilihan Anda (atau mirror skill untuk Claude/Gemini/Codex dengan `python3 scripts/install_skills.py --target all`).
 3. Mulai sesi dengan menceritakan ide atau target Anda, misalnya:
    - *"Aku mau brainstorm ide SaaS kasir untuk bengkel..."*
    - *"Inisialisasi project full feasibility untuk konsep ini."*

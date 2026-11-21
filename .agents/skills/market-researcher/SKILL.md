@@ -8,7 +8,7 @@ description: >-
 
 # Market Researcher
 
-Research the market with live sources (`search_web`, browser subagent, lightpanda MCP).
+Research the market with live sources using whatever web search, fetch, or browser tools are available in your agent environment (e.g., `search_web`, `WebSearch`/`WebFetch`, browser subagent, or MCP browser tools).
 
 ## Workflow
 

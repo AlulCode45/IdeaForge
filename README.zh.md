@@ -2,7 +2,7 @@
 
 [English](README.md) | [Bahasa Indonesia](README.id.md) | **简体中文**
 
-一个结构化、企业级的 **AI 头脑风暴伙伴与战略分析智能体（Strategic Analysis Agent）** 工作区，基于 Antigravity Customizations（`AGENTS.md` + `.agents/skills/`）构建。旨在将原始想法系统化推进至商业验证、技术需求规划（PRP）、实时市场调研、可计算财务建模、合规核查及出版级 PDF 报告导出——全程仅依赖 **Python 3 标准库**，无需任何外部 `pip` 依赖。
+一个结构化、企业级的 **AI 头脑风暴伙伴与战略分析智能体（Strategic Analysis Agent）** 工作区，全面兼容 **主流 AI 编程与智能体工具**（**Claude Code**、**OpenAI Codex**、**Antigravity**、**Gemini CLI**、**Cursor**、**GitHub Copilot**、**OpenCode**），通过 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`、`.cursor/rules/`、`.github/copilot-instructions.md` 与 `.agents/skills/` 统一接入。旨在将原始想法系统化推进至商业验证、技术需求规划（PRP）、实时市场调研、可计算财务建模、合规核查及出版级 PDF 报告导出——全程仅依赖 **Python 3 标准库**，无需任何外部 `pip` 依赖。
 
 ---
 
@@ -19,7 +19,11 @@
 ## 环境要求与快速开始
 
 ### 环境要求
-- **Antigravity**（自动加载 `AGENTS.md` 及 `.agents/skills/` 下的全部技能）。
+- **任意 AI 智能体 / 编程 CLI 工具**：
+  - **OpenAI Codex / Antigravity / OpenCode**：自动读取 `AGENTS.md` 与 `.agents/skills/`。
+  - **Claude Code**：自动读取 `CLAUDE.md`（运行 `python3 scripts/install_skills.py --target claude` 可将技能同步至 `.claude/skills/`，加 `--scope global` 可安装至 `~/.claude/skills/`）。
+  - **Gemini CLI**：自动读取 `GEMINI.md`（运行 `python3 scripts/install_skills.py --target gemini` 可同步至 `.gemini/skills/`）。
+  - **Cursor & GitHub Copilot**：自动读取 `.cursor/rules/brainstorming-agent.mdc` 与 `.github/copilot-instructions.md`。
 - **Python 3**（仅需标准库，无需 `pip install`）。
 - **Brave Browser / Google Chrome / Chromium**（供 `export_pdf.py` 以无头模式渲染 PDF；可通过 `PDF_BROWSER` 环境变量指定路径）。
 
@@ -29,7 +33,7 @@
    git clone https://github.com/AlulCode45/BrainstormingAgent.git
    cd BrainstormingAgent
    ```
-2. 在 Antigravity 中将 `BrainstormingAgent` 文件夹作为工作区打开。
+2. 在您偏好的 AI 工具中打开 `BrainstormingAgent` 文件夹（如需同步技能至 Claude/Gemini/Codex，可运行 `python3 scripts/install_skills.py --target all`）。
 3. 直接描述您的想法或目标即可开始，例如：
    - *“我想头脑风暴一个面向汽修店的 B2B SaaS 方案。”*
    - *“为这个项目初始化一个完整的 full 可行性分析工作区。”*

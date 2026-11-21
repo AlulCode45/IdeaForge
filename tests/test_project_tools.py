@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 INIT_SCRIPT = ROOT / "scripts/init_project.py"
 LINT_SCRIPT = ROOT / "scripts/lint_project.py"
+INSTALL_SCRIPT = ROOT / "scripts/install_skills.py"
 
 
 class TestProjectTools(unittest.TestCase):
@@ -102,6 +103,19 @@ class TestProjectTools(unittest.TestCase):
             )
             self.assertNotEqual(lint_proc.returncode, 0)
             self.assertIn("[FAIL]", lint_proc.stdout)
+
+    def test_install_skills_for_claude_and_gemini(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ws = Path(tmp)
+            shutil.copytree(ROOT / ".agents", ws / ".agents")
+            subprocess.run(
+                [sys.executable, str(INSTALL_SCRIPT), "--target", "all", "--scope", "project", "--base-dir", str(ws)],
+                check=True,
+                capture_output=True,
+            )
+            self.assertTrue((ws / ".claude/skills/project-intake/SKILL.md").exists())
+            self.assertTrue((ws / ".gemini/skills/financial-modeler/scripts/model.py").exists())
+            self.assertTrue((ws / ".codex/skills/decision-scorecard/SKILL.md").exists())
 
 
 if __name__ == "__main__":
