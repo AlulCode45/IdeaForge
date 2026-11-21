@@ -1,0 +1,41 @@
+{
+  "currency": "IDR",
+  "model_type": "saas",
+  "months": 12,
+  "price": 199000,
+  "scenarios": {
+    "pessimistic": {
+      "breakeven_month": 11,
+      "lowest_cash": 14277861,
+      "ending_cash": 17596956,
+      "runway": ">12 months (cash-flow positive)",
+      "gross_margin_pct": 85.34,
+      "ltv": 2795473.25,
+      "cac": 280000.0,
+      "ltv_cac": 9.98,
+      "payback_months": 1.65
+    },
+    "base": {
+      "breakeven_month": 7,
+      "lowest_cash": 34770101,
+      "ending_cash": 87918180,
+      "runway": ">12 months (cash-flow positive)",
+      "gross_margin_pct": 86.44,
+      "ltv": 3822777.78,
+      "cac": 280000.0,
+      "ltv_cac": 13.65,
+      "payback_months": 1.63
+    },
+    "optimistic": {
+      "breakeven_month": 5,
+      "lowest_cash": 40878091,
+      "ending_cash": 157282180,
+      "runway": ">12 months (cash-flow positive)",
+      "gross_margin_pct": 87.0,
+      "ltv": 5129629.63,
+      "cac": 280000.0,
+      "ltv_cac": 18.32,
+      "payback_months": 1.62
+    }
+  }
+}

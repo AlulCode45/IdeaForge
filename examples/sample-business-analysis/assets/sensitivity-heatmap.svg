@@ -1,0 +1,65 @@
+<svg viewBox="0 0 680 225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sensitivity Heatmap">
+  <rect x="0" y="0" width="680" height="225" fill="#FFFFFF"/>
+  <text x="40" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">4. Peta Sensitivitas Kas Bulan Akhir (ARPU vs Churn)</text>
+  <text x="40" y="38" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#6B7280">Hijau/Biru = kas positif aman | Merah = defisit kas (bahaya)</text>
+  <text x="151.0" y="50" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#1B365D">0.5x churn</text>
+  <text x="263.0" y="50" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#1B365D">0.75x churn</text>
+  <text x="375.0" y="50" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#1B365D">1x churn</text>
+  <text x="487.0" y="50" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#1B365D">1.25x churn</text>
+  <text x="599.0" y="50" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#1B365D">1.5x churn</text>
+  <text x="85" y="76" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#374151">-20%</text>
+  <rect x="95" y="58" width="110" height="26" fill="#ECFDF5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="150.0" y="76" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">55,0jt IDR</text>
+  <rect x="207" y="58" width="110" height="26" fill="#ECFDF5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="262.0" y="76" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">49,4jt IDR</text>
+  <rect x="319" y="58" width="110" height="26" fill="#ECFDF5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="374.0" y="76" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">44,0jt IDR</text>
+  <rect x="431" y="58" width="110" height="26" fill="#ECFDF5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="486.0" y="76" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">38,9jt IDR</text>
+  <rect x="543" y="58" width="110" height="26" fill="#ECFDF5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="598.0" y="76" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">34,1jt IDR</text>
+  <text x="85" y="104" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#374151">-10%</text>
+  <rect x="95" y="86" width="110" height="26" fill="#D1FAE5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="150.0" y="104" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">78,6jt IDR</text>
+  <rect x="207" y="86" width="110" height="26" fill="#D1FAE5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="262.0" y="104" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">72,1jt IDR</text>
+  <rect x="319" y="86" width="110" height="26" fill="#D1FAE5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="374.0" y="104" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">66,0jt IDR</text>
+  <rect x="431" y="86" width="110" height="26" fill="#D1FAE5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="486.0" y="104" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">60,2jt IDR</text>
+  <rect x="543" y="86" width="110" height="26" fill="#ECFDF5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="598.0" y="104" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">54,6jt IDR</text>
+  <text x="85" y="132" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#374151">+0%</text>
+  <rect x="95" y="114" width="110" height="26" fill="#D1FAE5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="150.0" y="132" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">102,1jt IDR</text>
+  <rect x="207" y="114" width="110" height="26" fill="#D1FAE5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="262.0" y="132" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">94,8jt IDR</text>
+  <rect x="319" y="114" width="110" height="26" fill="#D1FAE5" stroke="#1B365D" stroke-width="2" rx="3"/>
+  <text x="374.0" y="132" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">87,9jt IDR</text>
+  <rect x="431" y="114" width="110" height="26" fill="#D1FAE5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="486.0" y="132" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">81,4jt IDR</text>
+  <rect x="543" y="114" width="110" height="26" fill="#D1FAE5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="598.0" y="132" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">75,1jt IDR</text>
+  <text x="85" y="160" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#374151">+10%</text>
+  <rect x="95" y="142" width="110" height="26" fill="#A7F3D0" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="150.0" y="160" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">125,7jt IDR</text>
+  <rect x="207" y="142" width="110" height="26" fill="#A7F3D0" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="262.0" y="160" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">117,6jt IDR</text>
+  <rect x="319" y="142" width="110" height="26" fill="#D1FAE5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="374.0" y="160" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">109,9jt IDR</text>
+  <rect x="431" y="142" width="110" height="26" fill="#D1FAE5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="486.0" y="160" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">102,6jt IDR</text>
+  <rect x="543" y="142" width="110" height="26" fill="#D1FAE5" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="598.0" y="160" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">95,7jt IDR</text>
+  <text x="85" y="188" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#374151">+20%</text>
+  <rect x="95" y="170" width="110" height="26" fill="#A7F3D0" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="150.0" y="188" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">149,2jt IDR</text>
+  <rect x="207" y="170" width="110" height="26" fill="#A7F3D0" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="262.0" y="188" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">140,3jt IDR</text>
+  <rect x="319" y="170" width="110" height="26" fill="#A7F3D0" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="374.0" y="188" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">131,8jt IDR</text>
+  <rect x="431" y="170" width="110" height="26" fill="#A7F3D0" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="486.0" y="188" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">123,8jt IDR</text>
+  <rect x="543" y="170" width="110" height="26" fill="#A7F3D0" stroke="#FFFFFF" stroke-width="1" rx="3"/>
+  <text x="598.0" y="188" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#065F46">116,2jt IDR</text>
+</svg>
