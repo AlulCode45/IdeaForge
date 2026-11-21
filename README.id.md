@@ -1,0 +1,177 @@
+# BrainstormingAgent
+
+[English](README.md) | **Bahasa Indonesia** | [简体中文](README.zh.md)
+
+Workspace terstruktur untuk **AI Brainstorming Partner & Strategic Analysis Agent** berbasis Antigravity Customizations (`AGENTS.md` + `.agents/skills/`). Dirancang untuk mengawal ide mentah menjadi keputusan berbasis bukti: mulai dari eksplorasi ide, validasi bisnis, penyusunan PRP (*Project Requirements & Plan*), riset pasar, pemodelan keuangan terhitung, kepatuhan regulasi, hingga laporan eksekutif PDF—menggunakan **Python 3 stdlib murni** tanpa dependency `pip` eksternal.
+
+---
+
+## Keunggulan Utama
+
+- **Engagement Tracks Sesuai Kebutuhan**: Tidak *one-size-fits-all*. Setiap permintaan diklasifikasikan ke track `quick` (ringkasan 1–2 halaman), `tech` (PRP teknis & arsitektur), `business` (studi kelayakan komersial), atau `full` (lengkap) via `project-intake` dan `scripts/init_project.py`.
+- **Alur Bertahap dengan Checkpoint**: Analisis berjalan langkah demi langkah; agent merangkum hasil, menjalankan *red-team* singkat, dan meminta persetujuan sebelum lanjut ke tahap berikutnya.
+- **Standar Bukti & Linter Otomatis**: Setiap angka dilabeli `[Verified]`, `[Estimate]`, `[Assumption]`, atau `[Unverified]`, sumber diberi grade `A`/`B`/`C` beserta tanggal akses, dan `scripts/lint_project.py` memvalidasi link, aritmatika scorecard, data kedaluwarsa, serta anti-*AI slop*.
+- **Model Keuangan Terhitung (Transactional & SaaS)**: `model.py` menghitung 3 skenario (pesimis, dasar, optimis), CAPEX, *channel fee*, pajak, *runway* eksak, LTV/CAC, *payback period*, sensitivitas 2-arah, dan grafik SVG otomatis.
+- **Export PDF Editorial + Mermaid**: `export_pdf.py` mengekspor satu file Markdown atau folder PRP (`--mode executive|technical|full`) menjadi PDF A4 dengan cover, daftar isi (TOC) otomatis, header tabel berulang, grafik SVG, dan diagram Mermaid.
+
+---
+
+## Prasyarat & Cara Mulai (Quick Start)
+
+### Prasyarat
+- **Antigravity** (otomatis membaca `AGENTS.md` dan seluruh skill di `.agents/skills/`).
+- **Python 3** (hanya stdlib; tidak perlu `pip install`).
+- **Brave Browser, Google Chrome, atau Chromium** (dipakai headless oleh `export_pdf.py`; path dapat dioverride melalui env `PDF_BROWSER`).
+
+### Langkah Awal
+1. Clone repository ini:
+   ```bash
+   git clone https://github.com/AlulCode45/BrainstormingAgent.git
+   cd BrainstormingAgent
+   ```
+2. Buka folder `BrainstormingAgent` sebagai workspace di Antigravity.
+3. Mulai sesi dengan menceritakan ide atau target Anda, misalnya:
+   - *"Aku mau brainstorm ide SaaS kasir untuk bengkel..."*
+   - *"Inisialisasi project full feasibility untuk konsep ini."*
+   - *"Bantu rancang paket pricing dan hitung proyeksi SaaS 12 bulan."*
+   - *"Audit bukti project ini dengan lint_project.py lalu export PDF."*
+
+---
+
+## Engagement Tracks & Alur Kerja (Pipeline)
+
+| Track | Kapan Dipakai | Lokasi Output |
+|---|---|---|
+| `quick` | Eksplorasi awal / catatan cepat 1–2 halaman | `ideas/<slug>/YYYY-MM-DD-brief.md` |
+| `tech` | Spesifikasi produk & arsitektur software | `prps/YYYY-MM-DD-<slug>/` (`00`–`06`, `13`, `17`) |
+| `business` | Kelayakan bisnis & finansial tanpa spek teknis | `prps/YYYY-MM-DD-<slug>/` (`00`, `07`–`19`) |
+| `full` | Produk + bisnis + finansial + kepatuhan lengkap | `prps/YYYY-MM-DD-<slug>/` (`00`–`19`) |
+
+```text
+Intake & Scaffold (init_project.py)
+  └─> PRP Teknis (00–06)
+        └─> Riset Pasar (07) -> Kompetitor (15) -> Customer Discovery (14)
+              └─> SWOT/TOWS (08) -> Peluang (09) -> Manajemen (10)
+                    └─> Pricing & Keuangan Terhitung (11)
+                          └─> Kepatuhan & Legal (16) -> GTM & Risiko Bisnis (12)
+                                └─> Audit Bukti & Linter (13) -> Scorecard Go/No-Go (17)
+                                      └─> Executive Summary & PDF (18) -> Retrospective (19)
+```
+
+---
+
+## Daftar 20 Skill Modular (`.agents/skills/`)
+
+### 1. Intake, Ideasi & Scoping Produk
+| Skill | Fungsi Utama | Output Utama |
+|---|---|---|
+| `project-intake` | Triase track (`quick`/`tech`/`business`/`full`), catat batasan, scaffold folder | Scaffold project |
+| `ideation-facilitator` | Eksplorasi kreatif (*First Principles*, *SCAMPER*, *HMW*, *3-Horizon*) | Opsi & arah ide |
+| `business-validator` | Validasi cepat (*Lean Canvas*, ICP, eksperimen dengan *Pass/Kill criteria*) | Ringkasan validasi |
+| `project-scoper` | Pemecahan ide menjadi MVP (*MoSCoW*), arsitektur ringkas, & task | Scope MVP & tugas |
+| `prp-writer` | Penyusunan PRP detail berurutan lengkap dengan diagram Mermaid | `prps/<project>/00`–`06` |
+| `tech-feasibility-estimator` | Build-vs-buy, estimasi effort (man-days), infra/AI API COGS, & security | Update `03`, `06`, `inputs.json` |
+| `idea-logger` | Pengarsipan catatan brainstorming ke folder topik masing-masing | `ideas/<topic-slug>/` |
+
+### 2. Riset Pasar, Pelanggan & Eksperimen
+| Skill | Fungsi Utama | Output Utama |
+|---|---|---|
+| `market-researcher` | Triangulasi TAM/SAM/SOM (Top-Down + Bottom-Up), tren, & sumber grade `A`/`B`/`C` | `07-market-research.md` |
+| `competitor-analyst` | Matriks fitur-harga, *review mining*, peta posisi, & ERRC (*Blue Ocean*) | `15-competitor-analysis.md` |
+| `customer-discovery` | Panduan wawancara *Mom Test*, survei, JTBD, & persona berbasis data | `14-customer-discovery.md` |
+| `experiment-designer` | Kartu eksperimen terstruktur dengan *Pass/Kill criteria* numerik & jadwal 1–4 minggu | Experiment cards |
+
+### 3. Strategi, Pricing, Keuangan & Kepatuhan
+| Skill | Fungsi Utama | Output Utama |
+|---|---|---|
+| `pricing-strategist` | *Value metric*, paket tiering, WTP (Van Westendorp), & *channel margin waterfall* | Pricing & input model |
+| `strategy-analyst` | SWOT/TOWS, PESTEL, Five Forces, manajemen/KPI, GTM, & register risiko bisnis | `08`–`12` |
+| `financial-modeler` | Simulasi `transactional` & `saas`, CAPEX, pajak, sensitivitas 2-arah, & grafik SVG | `model/inputs.json` & `11` |
+| `compliance-checker` | Checklist perizinan RI (OSS/NIB, BPOM, halal, pajak, DJKI, PSE, UU PDP) | `16-compliance-and-legal.md` |
+
+### 4. Audit, Keputusan & Pelaporan
+| Skill | Fungsi Utama | Output Utama |
+|---|---|---|
+| `devils-advocate` | Uji ketahanan ide (*pre-mortem* 6 bulan, asumsi rapuh, mitigasi risiko) | Kritik & mitigasi |
+| `evidence-auditor` | Audit sumber (`A`/`B`/`C`), penanda `[Stale]`, register asumsi, & run `lint_project.py` | `13-assumption-register.md` |
+| `decision-scorecard` | Red-team otomatis, rubrik 1–5, scorecard Go/No-Go, sensitivitas bobot, & ADR | `17-scorecard-and-decision.md` |
+| `executive-reporter` | Ringkasan 1 halaman, grafik SVG, *pitch/backlog outline*, & export PDF | `18-executive-summary.md` & PDF |
+| `retrospective-tracker` | Evaluasi aktual vs proyeksi, update asumsi/model, & log keputusan pivot/scale | `19-retrospective.md` |
+
+---
+
+## Menjalankan Skrip & Test Secara Langsung
+
+### 1. Inisialisasi Project (`init_project.py`)
+```bash
+python3 scripts/init_project.py --slug kasir-bengkel --title "Kasir Bengkel SaaS" --track full --model-type saas
+```
+
+### 2. Model Keuangan (`model.py`)
+```bash
+python3 .agents/skills/financial-modeler/scripts/model.py \
+  .agents/skills/financial-modeler/scripts/example_inputs.json \
+  --months 12 --locale auto \
+  --chart-out examples/sample-report/cash-projection.svg \
+  --json-out /tmp/summary.json
+```
+
+### 3. Audit Kualitas Otomatis (`lint_project.py`)
+```bash
+python3 scripts/lint_project.py prps/<project-slug>
+```
+
+### 4. Export Laporan ke PDF (`export_pdf.py`)
+Export satu file Markdown dengan Daftar Isi (`--toc`):
+```bash
+python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
+  --input examples/sample-report/sample-executive-report.md \
+  --output examples/sample-report/sample-executive-report.pdf \
+  --title "Contoh Laporan Analisa Bisnis (Sample)" --toc
+```
+Atau gabungkan folder PRP berdasarkan mode (`executive`, `technical`, atau `full`):
+```bash
+python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
+  --project prps/<project-slug> --mode executive \
+  --output prps/<project-slug>/assets/<project-slug>-report.pdf \
+  --title "Nama Project"
+```
+Lihat contoh hasilnya di [examples/sample-report/sample-executive-report.pdf](examples/sample-report/sample-executive-report.pdf).
+
+### 5. Menjalankan Unit & Integration Tests
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+---
+
+## Struktur Direktori
+
+```text
+BrainstormingAgent/
+├── AGENTS.md                           # Aturan utama, tracks, quality gates, & privasi Git
+├── README.md / README.id.md / README.zh.md
+├── LICENSE
+├── scripts/
+│   ├── init_project.py                 # Scaffold folder prps/ atau ideas/ + update INDEX.md
+│   └── lint_project.py                 # Validator link, aritmatika scorecard, tag bukti, & anti-slop
+├── tests/                              # Suite unit & integration test (unittest)
+├── .agents/skills/                     # 20 skill modular (SKILL.md + scripts/)
+├── templates/                          # Template baku dokumen
+├── examples/sample-report/             # Contoh laporan Markdown, grafik SVG, & PDF
+├── ideas/                              # Catatan brainstorming lokal (per folder topik)
+└── prps/                               # Dokumen PRP & analisa lengkap lokal + INDEX.md
+```
+
+---
+
+## Aturan Git & Privasi Data
+
+- **Tooling** (`.agents/skills/`, `scripts/`, `templates/`, `tests/`, `examples/`, `AGENTS.md`, `README*.md`): commit dan push ke `origin` (`main`).
+- **Data Proyek & Klien** (`prps/` dan `ideas/`): bersifat lokal secara default. **Jangan** di-push ke repository publik `origin` tanpa persetujuan eksplisit pengguna.
+
+---
+
+## Lisensi
+
+Lihat [LICENSE](LICENSE) untuk detail lisensi penggunaan dan distribusi.
