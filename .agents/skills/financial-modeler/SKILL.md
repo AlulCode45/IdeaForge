@@ -9,15 +9,27 @@ description: >-
 
 # Financial Modeler
 
-Numbers must be computed, not narrated.
+Numbers must be computed by script, never narrated or guessed in prose.
+
+## Supported Modes (`model_type`)
+- `transactional`: unit sales, repeat orders (CAC charged only on newly acquired customers `units / repeat_orders_per_customer`), CAPEX, channel fee, tax rate.
+- `saas`: monthly ARPU, active customer retention/churn (`monthly_churn_rate`), new customer acquisition growth, LTV (`unit_margin / churn`), CAC payback months.
 
 ## Workflow
 
-1. **Collect inputs** (ask for missing ones; label guesses as assumptions and add them to the Assumption Register): price, unit variable cost, monthly fixed costs, starting cash, monthly customers or units in the base case, growth rate, churn or repeat rate, CAC.
-2. **Write inputs** to `prps/<project>/model/inputs.json` (see [example](./scripts/example_inputs.json)).
-3. **Run the model**:
-   `python3 .agents/skills/financial-modeler/scripts/model.py prps/<project>/model/inputs.json`
-   It prints a Markdown report with three scenarios (pessimistic, base, optimistic), 12-month cash, break-even month, runway, LTV/CAC, and a sensitivity table. Save the output to `prps/<project>/11-financial-plan.md` (append under "Model Output").
-4. **Interpret**: explain which input changes the outcome most, and what must be true for the project to be viable.
-5. **Sanity checks**: gross margin plausible for the industry, LTV/CAC above 3 is healthy, runway at least 6 months, and no scenario relies on unverified numbers without saying so.
-6. **Checkpoint**: ask whether to continue.
+1. **Collect Inputs** (align pricing with `pricing-strategist` and infra/COGS with `tech-feasibility-estimator`; log guesses in `13-assumption-register.md`):
+   - `price`, `unit_variable_cost`, `channel_fee_rate`, `tax_rate`, `capex`, `monthly_fixed_costs`, `starting_cash`, `cac`, volume/growth/churn/repeat parameters.
+2. **Write** `prps/<project>/model/inputs.json` (see [example_inputs.json](./scripts/example_inputs.json) or [example_saas_inputs.json](./scripts/example_saas_inputs.json)).
+3. **Run the Model**:
+   ```bash
+   python3 .agents/skills/financial-modeler/scripts/model.py prps/<project>/model/inputs.json \
+     --months 12 --locale auto \
+     --chart-out prps/<project>/assets/cash-projection.svg \
+     --json-out prps/<project>/model/summary.json
+   ```
+4. **Save & Embed**: Paste/append the generated Markdown output into `prps/<project>/11-financial-plan.md` and embed `assets/cash-projection.svg`.
+5. **Sanity Checks**:
+   - Gross margin plausible for industry?
+   - `LTV / CAC >= 3.0x` and CAC payback `<= 12 months`?
+   - Lowest cash point stays positive in base case (and document required cash buffer if pessimistic goes negative)?
+6. **Checkpoint**: explain the top sensitivity driver from the 2-way table and ask whether to continue.

@@ -8,17 +8,19 @@ description: >-
 
 # Market Researcher
 
-Research the market with live sources. The agent is explicitly allowed to use web research tools: `search_web` for quick lookups, the browser subagent for interactive or JS-rendered pages, and the lightpanda MCP tools for page extraction.
+Research the market with live sources (`search_web`, browser subagent, lightpanda MCP).
 
 ## Workflow
 
-1. **Scope the Research**: Confirm industry, geography (default: Indonesia unless told otherwise), target segment, and the decision this research supports.
-2. **Research These Areas** (cite every claim with a URL and access date):
-   - **Market size & growth**: TAM / SAM / SOM with the assumptions behind each number.
-   - **Trends & demand signals**: search interest, news, regulation, community discussions.
+1. **Scope the Research**: Confirm industry, geography (default: Indonesia), target segment, and decision supported.
+2. **Triangulate Market Size (Mandatory)**:
+   - Compute **TAM / SAM / SOM** using **both** Top-Down (industry reports) and Bottom-Up (`target customers x ARPU x realistic capture %`).
+   - Show explicit formulas and flag if Top-Down vs Bottom-Up diverges by >2x.
+3. **Research These Areas** (cite URL + `(accessed YYYY-MM-DD)` + source grade `A`/`B`/`C`):
+   - **Trends & demand signals**: search interest, regulation, community discussions.
    - **Target customers**: segments, pain points, buying behavior, willingness to pay.
-   - **Competitors** (3–7 direct and indirect): offering, pricing, strengths, weaknesses, reviews.
-   - **Pricing benchmarks** and common business models.
-3. **Be Honest About Evidence**: Label each finding as `Verified` (primary or reputable source), `Estimate` (derived), or `Unverified`. Never invent figures. If data is not found, say so.
-4. **Save the Result**: Write to `prps/<project>/07-market-research.md` (or `ideas/` if no PRP exists yet), with a competitor comparison table, a Mermaid chart where useful, and a `Sources` section.
-5. **Checkpoint**: Summarize the top 3 findings and ask the user: "Lanjut ke tahap berikutnya (Analisa SWOT & Strategi)?" Do not continue until the user agrees.
+   - **Market-level competitor landscape** (high-level 3–5 players & pricing benchmarks; deep feature/review mining belongs to `competitor-analyst`).
+4. **Evidence Discipline**:
+   - Label every figure `[Verified]` (2+ A/B sources), `[Estimate]` (derived with formula), or `[Unverified]`. Never invent numbers; if unavailable, state "Data not found".
+5. **Save**: Write to `prps/<project>/07-market-research.md` (or `ideas/<topic>/` if Quick Brief) with a `Sources` table.
+6. **Checkpoint**: Summarize top 3 findings + biggest data gap, then ask: "Lanjut ke tahap berikutnya (`competitor-analyst` -> `15-competitor-analysis.md`)?"

@@ -13,17 +13,12 @@ Evaluate business and product ideas rigorously using practical startup framework
 ## Workflow
 
 1. **Gather Missing Context** (if not yet provided):
-   - Who has the problem? How painful/frequent is it?
-   - How are they solving it today?
+   - Who has the problem (ICP)? How painful and frequent is it?
+   - How are they solving it today, and what are they paying?
 2. **Build a Concise Lean Canvas**:
-   - **Problem**: Top 1–3 pains.
-   - **Customer Segments**: Specific early adopter profile (ICP), not "everyone".
-   - **Unique Value Proposition**: Clear 1-sentence promise.
-   - **Solution**: Core mechanism (keep it minimal).
-   - **Channels**: Realistic way to reach the first 10–100 users.
-   - **Revenue Streams & Pricing**: How it makes money and rough price point.
-   - **Unfair Advantage / Moat**: What makes it hard to copy.
-3. **Validation Experiments**:
-   - Propose 2–3 cheap, fast tests the user can run in 48 hours to 2 weeks before building (e.g., landing page, 5 customer interviews, manual concierge MVP, pre-order).
-4. **Verdict**:
+   - **Problem** (top 1–3 pains) | **Customer Segments** (specific ICP) | **UVP** (1-sentence promise) | **Solution** (minimal core) | **Channels** (first 10–100 users) | **Revenue & Pricing** | **Unfair Advantage / Moat**.
+3. **Validation Experiments with Pass/Kill Criteria**:
+   - Propose 2–3 fast tests (48 hours to 2 weeks) with **explicit numeric Pass and Kill thresholds** (e.g., "Pass if >= 5/20 target leads pay refundable DP; Kill if < 2/20"). Use `experiment-designer` if formal Experiment Cards are needed.
+4. **Verdict & Track Routing**:
    - Summarize **Strongest Signal**, **Biggest Risk**, and **Recommended Next Step**.
+   - Offer to save as a Quick Brief (`ideas/<slug>/`) or initialize a full feasibility project (`scripts/init_project.py`).

@@ -13,22 +13,19 @@ Run the analysis in stages. Each stage ends with a checkpoint question; never st
 
 ## Stages
 
-1. **SWOT** -> `08-swot.md`
-   - Strengths, Weaknesses (internal); Opportunities, Threats (external).
-   - Tie each point to evidence from `07-market-research.md`. Add a TOWS matrix (strategies from SO, WO, ST, WT).
+1. **SWOT & TOWS** -> `08-swot.md`
+   - Tie every Strength, Weakness, Opportunity, Threat to evidence in `07-market-research.md`, `14-customer-discovery.md`, and `15-competitor-analysis.md`. Add a TOWS action matrix (SO, WO, ST, WT).
 2. **Opportunity & Environment** -> `09-opportunity-analysis.md`
-   - Ranked opportunities (impact vs effort), PESTEL, Porter's Five Forces, differentiation and positioning.
+   - Ranked opportunities (Impact vs Effort), PESTEL, Porter's Five Forces, and positioning.
 3. **Management & Operations** -> `10-management-plan.md`
-   - Team and roles, key hires, operations and processes, tools, partnerships, governance, KPIs/OKRs.
-4. **Finance & Unit Economics** -> `11-financial-plan.md`
-   - Cost structure, pricing, revenue projections (stated assumptions, 3 scenarios), break-even, funding needs.
-5. **Go-to-Market & Risk** -> `12-go-to-market-and-risk.md`
-   - Channels, launch plan, first 90 days, risk register with likelihood, impact, and mitigation.
+   - Team, key hires, operational SOPs, tools, partnerships, governance, KPIs/OKRs.
+4. **Pricing & Computed Finance** -> `11-financial-plan.md`
+   - **Mandatory delegation**: Use `pricing-strategist` for pricing/channel waterfall and `financial-modeler` (`model.py`) for 3-scenario numbers, cash chart, and sensitivity. Do NOT invent financial projections in prose.
+5. **Go-to-Market & Business Risk Register** -> `12-go-to-market-and-risk.md`
+   - Channels, launch plan, first 90 days, and the canonical **Business/Market Risk Register** (likelihood, impact, mitigation; technical/delivery risks stay in `06-risks-and-mitigation.md`).
 
 ## Rules
 
 - If market research is missing, offer to run `market-researcher` first.
-- Use tables and Mermaid charts (e.g., quadrant or flow) for clarity.
-- Separate facts from assumptions; flag every assumption explicitly.
-- Save files in `prps/<project>/` and link them from that folder's `README.md`.
-- **Checkpoint after each stage**: summarize in 3–5 bullets, then ask "Lanjut ke tahap berikutnya: <nama tahap>?" with the options: lanjut, revisi tahap ini, atau berhenti.
+- Use tables and Mermaid charts for clarity; label every claim (`Verified`, `Estimate`, `Assumption`).
+- **Checkpoint after each stage**: summarize in 3–5 bullets, then ask "Lanjut ke tahap berikutnya: <nama tahap>?" (lanjut / revisi / berhenti).
