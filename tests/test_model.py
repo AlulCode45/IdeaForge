@@ -50,18 +50,20 @@ class TestFinancialModel(unittest.TestCase):
     def test_saas_mode_and_cli_outputs(self):
         saas_path = ROOT / ".agents/skills/financial-modeler/scripts/example_saas_inputs.json"
         with tempfile.TemporaryDirectory() as tmp:
-            chart_out = Path(tmp) / "chart.svg"
+            charts_dir = Path(tmp) / "charts"
             json_out = Path(tmp) / "summary.json"
             proc = subprocess.run(
-                [sys.executable, str(MODEL_SCRIPT), str(saas_path), "--chart-out", str(chart_out), "--json-out", str(json_out)],
+                [sys.executable, str(MODEL_SCRIPT), str(saas_path), "--charts-dir", str(charts_dir), "--json-out", str(json_out)],
                 capture_output=True,
                 text=True,
                 check=True,
             )
             self.assertIn("mode: saas", proc.stdout)
             self.assertIn("2-Way Sensitivity", proc.stdout)
-            self.assertTrue(chart_out.exists())
-            self.assertIn("<svg", chart_out.read_text(encoding="utf-8"))
+            for fname in ("cash-projection.svg", "revenue-profit.svg", "unit-economics.svg", "sensitivity-heatmap.svg"):
+                p = charts_dir / fname
+                self.assertTrue(p.exists(), f"Missing {fname}")
+                self.assertIn("<svg", p.read_text(encoding="utf-8"))
             summary = json.loads(json_out.read_text(encoding="utf-8"))
             self.assertEqual(summary["model_type"], "saas")
             self.assertIn("base", summary["scenarios"])

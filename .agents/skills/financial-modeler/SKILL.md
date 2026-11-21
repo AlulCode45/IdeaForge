@@ -24,10 +24,11 @@ Numbers must be computed by script, never narrated or guessed in prose.
    ```bash
    python3 .agents/skills/financial-modeler/scripts/model.py prps/<project>/model/inputs.json \
      --months 12 --locale auto \
-     --chart-out prps/<project>/assets/cash-projection.svg \
+     --charts-dir prps/<project>/assets \
      --json-out prps/<project>/model/summary.json
    ```
-4. **Save & Embed**: Paste/append the generated Markdown output into `prps/<project>/11-financial-plan.md` and embed `assets/cash-projection.svg`.
+   This generates 4 SVG charts in `assets/`: `cash-projection.svg`, `revenue-profit.svg`, `unit-economics.svg`, and `sensitivity-heatmap.svg`.
+4. **Save & Embed**: Paste/append the generated Markdown output into `prps/<project>/11-financial-plan.md` and embed all 4 SVG charts (`assets/*.svg`) so numbers are immediately scannable.
 5. **Sanity Checks**:
    - Gross margin plausible for industry?
    - `LTV / CAC >= 3.0x` and CAC payback `<= 12 months`?

@@ -15,10 +15,10 @@ Busy decision-makers need the answer first, backed by consistent numbers.
 1. **Read & Verify Consistency**:
    - Read `prps/<project>/` and `model/summary.json`. Never invent data not in the folder; flag gaps instead.
    - Ensure consistent number formatting (`IDR` uses `.` thousands and `,` decimals; `USD` uses `,` thousands and `.` decimals).
-2. **Write Executive Summary** (`prps/<project>/18-executive-summary.md`) using [the template](../../../templates/executive-summary.md): recommendation first, problem, solution, market, evidence quality, economics, top risks, compliance blockers, and 30-day actions.
+2. **Write Executive Summary** (`prps/<project>/18-executive-summary.md`) using [the template](../../../templates/executive-summary.md): start with `**Recommendation**: ...` (rendered as a highlight banner) and a 4-card `<!-- kpi-grid -->` strip (Target/Verdict, Break-Even, Gross Margin & LTV/CAC, Cash Runway), followed by problem, solution, market, evidence quality, economics, top risks, compliance blockers, and 30-day actions.
 3. **Visuals & Diagrams**:
-   - Embed the computed cash chart (`assets/cash-projection.svg`) from `financial-modeler`.
-   - Use Mermaid diagrams (` ```mermaid `) where helpful; `export_pdf.py` renders them to SVG automatically.
+   - Embed the 4 computed SVG charts from `financial-modeler` (`assets/cash-projection.svg`, `assets/revenue-profit.svg`, `assets/unit-economics.svg`, `assets/sensitivity-heatmap.svg`).
+   - Use Mermaid diagrams (` ```mermaid `) where helpful; `export_pdf.py` renders them to SVG automatically and adds clickable TOC + "↑ Daftar Isi" links + visual score bars on `Score (1-5)` tables.
 4. **Run Linter Before Export**:
    ```bash
    python3 scripts/lint_project.py prps/<project>

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export a Markdown report or PRP folder to a clean, print-ready PDF.
+"""Export a Markdown report or PRP folder to an interactive, visual, print-ready PDF.
 
 Uses only Python stdlib + headless Chromium (Brave / Chrome) --print-to-pdf.
 Usage:
@@ -88,7 +88,7 @@ SECTION_MODES = {
 BASE_CSS = """
 @page {
   size: A4;
-  margin: 20mm 18mm 20mm 18mm;
+  margin: 18mm 16mm 18mm 16mm;
   @bottom-left {
     content: "__FOOTER_TITLE__";
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
@@ -108,7 +108,7 @@ BASE_CSS = """
 * { box-sizing: border-box; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  font-size: 10pt;
+  font-size: 9.8pt;
   line-height: 1.55;
   color: #1A1D21;
   margin: 0;
@@ -117,17 +117,17 @@ body {
 }
 .cover-page {
   border-top: 4px solid #1B365D;
-  padding-top: 32px;
-  margin-bottom: 24px;
+  padding-top: 24px;
+  margin-bottom: 18px;
 }
 .doc-header {
   border-bottom: 2px solid #1B365D;
   padding-bottom: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 .doc-kicker {
   font-size: 8.5pt;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #1B365D;
@@ -146,14 +146,15 @@ body {
   margin: 0;
 }
 .toc-box {
-  background: #F7F8FA;
+  background: #F8FAFC;
   border: 1px solid #D9DEE5;
+  border-left: 4px solid #1B365D;
   padding: 14px 18px;
-  margin: 16px 0 20px 0;
+  margin: 14px 0 20px 0;
   break-inside: avoid;
 }
 .toc-title {
-  font-size: 10pt;
+  font-size: 9.5pt;
   font-weight: 700;
   color: #1B365D;
   margin: 0 0 8px 0;
@@ -165,66 +166,140 @@ body {
   margin: 0;
   padding: 0;
   font-size: 9pt;
+  column-count: 1;
 }
-.toc-list li { margin: 3px 0; }
-.toc-list li.toc-h2 { padding-left: 14px; color: #4B5563; }
+.toc-list li {
+  margin: 4px 0;
+  padding: 2px 0;
+  border-bottom: 1px dotted #E2E8F0;
+}
+.toc-list li.toc-h2 {
+  padding-left: 14px;
+  color: #4B5563;
+  font-size: 8.5pt;
+  border-bottom: none;
+}
+.toc-list a {
+  color: #1B365D;
+  text-decoration: none;
+  font-weight: 600;
+}
+.toc-list li.toc-h2 a { font-weight: 400; color: #374151; }
 h1 {
-  font-size: 15pt;
+  font-size: 14.5pt;
   font-weight: 700;
   color: #111317;
-  border-bottom: 1px solid #D9DEE5;
-  padding-bottom: 4px;
-  margin: 24px 0 10px 0;
+  border-bottom: 1.5px solid #1B365D;
+  padding-bottom: 5px;
+  margin: 20px 0 10px 0;
   break-after: avoid;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.back-toc {
+  font-size: 7.5pt;
+  font-weight: 500;
+  color: #6B7280;
+  text-decoration: none;
+  margin-left: 12px;
+  white-space: nowrap;
 }
 h2 {
-  font-size: 12pt;
+  font-size: 11.5pt;
   font-weight: 700;
   color: #1B365D;
-  margin: 18px 0 8px 0;
+  margin: 16px 0 8px 0;
   break-after: avoid;
 }
 h3 {
-  font-size: 10.5pt;
+  font-size: 10pt;
   font-weight: 600;
   color: #1A1D21;
-  margin: 14px 0 6px 0;
+  margin: 12px 0 6px 0;
   break-after: avoid;
 }
 h4 {
   font-size: 9.5pt;
   font-weight: 600;
   color: #374151;
-  margin: 12px 0 4px 0;
+  margin: 10px 0 4px 0;
   break-after: avoid;
 }
-p { margin: 0 0 9px 0; }
+p { margin: 0 0 8px 0; }
 ul, ol { margin: 0 0 10px 0; padding-left: 18px; }
 li { margin-bottom: 4px; }
-blockquote {
-  margin: 12px 0;
+.callout-rec {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-left: 4px solid #1B365D;
   padding: 10px 14px;
-  background: #F7F8FA;
-  border-left: 3px solid #1B365D;
-  color: #2C313A;
-  font-size: 9.5pt;
+  margin: 10px 0 14px 0;
+  border-radius: 3px;
   break-inside: avoid;
+}
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 10px 0 14px 0;
+  break-inside: avoid;
+}
+.kpi-card {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-top: 3px solid #1B365D;
+  padding: 8px 10px;
+  border-radius: 2px;
+}
+.kpi-card.warn { border-top-color: #B91C1C; background: #FEF2F2; }
+.kpi-card.good { border-top-color: #15803D; background: #F0FDF4; }
+.kpi-label {
+  font-size: 7.5pt;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748B;
+  margin-bottom: 2px;
+}
+.kpi-val {
+  font-size: 11.5pt;
+  font-weight: 700;
+  color: #0F172A;
+}
+.kpi-sub {
+  font-size: 7.5pt;
+  color: #475569;
+  margin-top: 2px;
+}
+blockquote {
+  margin: 10px 0;
+  padding: 9px 13px;
+  background: #F8FAFC;
+  border-left: 3.5px solid #1B365D;
+  color: #2C313A;
+  font-size: 9.2pt;
+  break-inside: avoid;
+}
+blockquote.callout-warn {
+  background: #FEF2F2;
+  border-left-color: #B91C1C;
+  color: #7F1D1D;
 }
 blockquote p:last-child { margin-bottom: 0; }
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 12px 0 16px 0;
-  font-size: 9pt;
+  margin: 10px 0 14px 0;
+  font-size: 8.8pt;
 }
 thead { display: table-header-group; }
 tr { break-inside: avoid; }
 th {
-  background: #F4F6F8;
-  color: #111317;
+  background: #F1F5F9;
+  color: #0F172A;
   font-weight: 600;
   text-align: left;
-  padding: 7px 8px;
+  padding: 6px 8px;
   border-top: 1.5px solid #1B365D;
   border-bottom: 1px solid #B8C0CC;
 }
@@ -235,9 +310,26 @@ td {
 }
 tr:last-child td { border-bottom: 1px solid #B8C0CC; }
 td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.score-bar-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.score-bar {
+  width: 48px;
+  height: 7px;
+  background: #E2E8F0;
+  border-radius: 3px;
+  overflow: hidden;
+  display: inline-block;
+}
+.score-fill {
+  height: 100%;
+  background: #1B365D;
+}
 code {
   font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
-  font-size: 8.5pt;
+  font-size: 8.3pt;
   background: #F4F6F8;
   padding: 1px 4px;
   border-radius: 2px;
@@ -246,7 +338,7 @@ pre {
   background: #F7F8FA;
   border: 1px solid #E5E8ED;
   padding: 10px 12px;
-  font-size: 8.5pt;
+  font-size: 8.3pt;
   overflow-x: auto;
   break-inside: avoid;
 }
@@ -268,25 +360,30 @@ pre code { background: none; padding: 0; }
 hr {
   border: 0;
   border-top: 1px solid #D9DEE5;
-  margin: 18px 0;
+  margin: 16px 0;
 }
 img, svg {
   max-width: 100%;
   height: auto;
   display: block;
-  margin: 12px auto;
+  margin: 10px auto;
   break-inside: avoid;
 }
 .tag {
   font-family: "SF Mono", Menlo, monospace;
-  font-size: 7.5pt;
-  padding: 1px 4px;
-  border: 1px solid #C7CFD9;
-  color: #374151;
-  background: #F9FAFB;
-  border-radius: 2px;
+  font-size: 7.2pt;
+  font-weight: 600;
+  padding: 1px 5px;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  background: #F8FAFC;
+  border-radius: 3px;
   white-space: nowrap;
 }
+.tag-verified { background: #DCFCE7; border-color: #86EFAC; color: #166534; }
+.tag-estimate { background: #DBEAFE; border-color: #93C5FD; color: #1E40AF; }
+.tag-assumption { background: #FEF3C7; border-color: #FCD34D; color: #92400E; }
+.tag-unverified, .tag-stale { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; }
 .page-break { break-before: page; }
 a { color: #1B365D; text-decoration: none; }
 """
@@ -306,11 +403,13 @@ def format_inline(text: str) -> str:
     text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
     text = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", text)
     text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', text)
-    text = re.sub(
-        r"\[(Verified|Estimate|Assumption|Unverified|Stale|Contoh)\]",
-        r'<span class="tag">\1</span>',
-        text,
-    )
+
+    def _tag_repl(m):
+        lbl = m.group(1)
+        cls = f"tag tag-{lbl.lower()}"
+        return f'<span class="{cls}">{lbl}</span>'
+
+    text = re.sub(r"\[(Verified|Estimate|Assumption|Unverified|Stale|Contoh)\]", _tag_repl, text)
     return text
 
 
@@ -324,7 +423,7 @@ def slugify(text: str) -> str:
     return re.sub(r"[\s-]+", "-", s) or "section"
 
 
-def md_to_html(md_text: str, base_dir: Path) -> tuple[str, list[tuple[int, str, str]], bool]:
+def md_to_html(md_text: str, base_dir: Path, add_back_to_toc: bool = False) -> tuple[str, list[tuple[int, str, str]], bool]:
     lines = md_text.splitlines()
     out = []
     toc = []
@@ -342,6 +441,33 @@ def md_to_html(md_text: str, base_dir: Path) -> tuple[str, list[tuple[int, str, 
         line = lines[i]
         stripped = line.strip()
         indent = len(line) - len(line.lstrip(" "))
+
+        # KPI Grid block: <!-- kpi-grid --> ... <!-- /kpi-grid -->
+        # Lines inside: Label | Value | Subtext | tone(optional: good/warn)
+        if stripped == "<!-- kpi-grid -->":
+            close_lists()
+            cards = []
+            i += 1
+            while i < len(lines) and lines[i].strip() != "<!-- /kpi-grid -->":
+                row = lines[i].strip()
+                if row and "|" in row:
+                    parts = [p.strip() for p in row.split("|")]
+                    lbl = html.escape(parts[0])
+                    val = html.escape(parts[1]) if len(parts) > 1 else ""
+                    sub = html.escape(parts[2]) if len(parts) > 2 else ""
+                    tone = parts[3].lower() if len(parts) > 3 and parts[3].lower() in ("good", "warn") else ""
+                    cls = f"kpi-card {tone}".strip()
+                    cards.append(
+                        f'<div class="{cls}">'
+                        f'<div class="kpi-label">{lbl}</div>'
+                        f'<div class="kpi-val">{val}</div>'
+                        f'<div class="kpi-sub">{sub}</div>'
+                        f"</div>"
+                    )
+                i += 1
+            out.append('<div class="kpi-grid">' + "".join(cards) + "</div>")
+            i += 1
+            continue
 
         # Raw SVG block passthrough
         if stripped.startswith("<svg"):
@@ -404,7 +530,8 @@ def md_to_html(md_text: str, base_dir: Path) -> tuple[str, list[tuple[int, str, 
             sec_id = base_id if count == 1 else f"{base_id}-{count}"
             if level <= 2:
                 toc.append((level, raw_title, sec_id))
-            out.append(f'<h{level} id="{sec_id}">{format_inline(raw_title)}</h{level}>')
+            back_link = '<a class="back-toc" href="#toc-top">&#8593; Daftar Isi</a>' if (level == 1 and add_back_to_toc) else ""
+            out.append(f'<h{level} id="{sec_id}"><span>{format_inline(raw_title)}</span>{back_link}</h{level}>')
             i += 1
             continue
 
@@ -420,7 +547,7 @@ def md_to_html(md_text: str, base_dir: Path) -> tuple[str, list[tuple[int, str, 
             i += 1
             continue
 
-        # Markdown table
+        # Markdown table (with automatic score bar if column header is Score (1-5) / Skor (1-5))
         if "|" in stripped and i + 1 < len(lines) and re.match(r"^\|?[\s:|-]+\|[\s:|-]*$", lines[i + 1].strip()):
             close_lists()
             headers = [c.strip() for c in stripped.strip("|").split("|")]
@@ -431,8 +558,11 @@ def md_to_html(md_text: str, base_dir: Path) -> tuple[str, list[tuple[int, str, 
                 rows.append(row)
                 i += 1
             num_cols = set()
-            for col_idx in range(len(headers)):
-                if rows and all(col_idx < len(r) and is_numeric_cell(r[col_idx]) for r in rows):
+            score_col = None
+            for col_idx, h_txt in enumerate(headers):
+                if "score (1-5)" in h_txt.lower() or "skor (1-5)" in h_txt.lower():
+                    score_col = col_idx
+                elif rows and all(col_idx < len(r) and is_numeric_cell(r[col_idx]) for r in rows):
                     num_cols.add(col_idx)
             tbl = ["<table><thead><tr>"]
             for idx, h in enumerate(headers):
@@ -443,21 +573,33 @@ def md_to_html(md_text: str, base_dir: Path) -> tuple[str, list[tuple[int, str, 
                 tbl.append("<tr>")
                 for idx in range(len(headers)):
                     val = r[idx] if idx < len(r) else ""
-                    cls = ' class="num"' if idx in num_cols else ""
-                    tbl.append(f"<td{cls}>{format_inline(val)}</td>")
+                    if idx == score_col and re.fullmatch(r"\d+(?:[.,]\d+)?", val.strip()):
+                        sc = float(val.strip().replace(",", "."))
+                        pct = max(0.0, min(100.0, sc / 5.0 * 100.0))
+                        cell_html = (
+                            f'<span class="score-bar-wrap"><strong>{html.escape(val)}</strong>'
+                            f'<span class="score-bar"><span class="score-fill" style="width:{pct:.0f}%"></span></span></span>'
+                        )
+                        tbl.append(f"<td>{cell_html}</td>")
+                    else:
+                        cls = ' class="num"' if idx in num_cols else ""
+                        tbl.append(f"<td{cls}>{format_inline(val)}</td>")
                 tbl.append("</tr>")
             tbl.append("</tbody></table>")
             out.append("".join(tbl))
             continue
 
-        # Blockquote
+        # Blockquote (highlight warning/kritis blockquotes)
         if stripped.startswith(">"):
             close_lists()
             bq_lines = []
             while i < len(lines) and lines[i].strip().startswith(">"):
                 bq_lines.append(format_inline(lines[i].strip().lstrip(">").strip()))
                 i += 1
-            out.append("<blockquote><p>" + "<br>".join(bq_lines) + "</p></blockquote>")
+            joined = "<br>".join(bq_lines)
+            is_warn = any(k in joined.lower() for k in ("kritis", "warning", "bahaya", "blocker", "shortfall"))
+            cls = ' class="callout-warn"' if is_warn else ""
+            out.append(f"<blockquote{cls}><p>{joined}</p></blockquote>")
             continue
 
         # Unordered or Ordered list (with nesting support)
@@ -487,7 +629,7 @@ def md_to_html(md_text: str, base_dir: Path) -> tuple[str, list[tuple[int, str, 
             i += 1
             continue
 
-        # Paragraph
+        # Paragraph (highlight Recommendation / Rekomendasi callouts)
         close_lists()
         para = [stripped]
         while (
@@ -498,7 +640,11 @@ def md_to_html(md_text: str, base_dir: Path) -> tuple[str, list[tuple[int, str, 
         ):
             i += 1
             para.append(lines[i].strip())
-        out.append(f"<p>{format_inline(' '.join(para))}</p>")
+        para_text = " ".join(para)
+        if re.match(r"^\*\*(Recommendation|Rekomendasi)\*\*:", para_text):
+            out.append(f'<div class="callout-rec">{format_inline(para_text)}</div>')
+        else:
+            out.append(f"<p>{format_inline(para_text)}</p>")
         i += 1
 
     close_lists()
@@ -529,8 +675,8 @@ def build_toc_html(toc: list[tuple[int, str, str]]) -> str:
         cls = ' class="toc-h2"' if level == 2 else ""
         items.append(f'<li{cls}><a href="#{sec_id}">{html.escape(title)}</a></li>')
     return (
-        '<nav class="toc-box">'
-        '<p class="toc-title">Daftar Isi</p>'
+        '<nav id="toc-top" class="toc-box">'
+        '<p class="toc-title">Daftar Isi (Klik untuk Navigasi)</p>'
         f'<ul class="toc-list">{"".join(items)}</ul>'
         "</nav>"
     )
@@ -593,7 +739,7 @@ def build_html(
 <body>
 <header class="{header_cls}">
   <p class="doc-kicker">{html.escape(kicker)}</p>
-  <h1 class="doc-title" style="border:none;margin:0 0 6px 0;padding:0;">{html.escape(title)}</h1>
+  <h1 class="doc-title" style="border:none;margin:0 0 6px 0;padding:0;display:block;">{html.escape(title)}</h1>
   <p class="doc-meta">{html.escape(meta)}</p>
 </header>
 {toc_html}
@@ -645,7 +791,7 @@ def main():
         default_title = proj_dir.name.replace("-", " ").title()
 
     title = args.title or default_title
-    body_html, toc, has_mermaid = md_to_html(md_text, base_dir)
+    body_html, toc, has_mermaid = md_to_html(md_text, base_dir, add_back_to_toc=include_toc)
     full_html = build_html(
         body_html=body_html,
         title=title,

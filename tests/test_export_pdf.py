@@ -14,6 +14,13 @@ class TestExportPdf(unittest.TestCase):
     def test_mermaid_checkbox_nested_list_and_toc(self):
         md = (
             "# Section One\n\n"
+            "**Recommendation**: Proceed with pilot.\n\n"
+            "<!-- kpi-grid -->\n"
+            "Score | 3.6/5.0 | Conditional | good\n"
+            "<!-- /kpi-grid -->\n\n"
+            "| Criterion | Weight | Score (1-5) |\n"
+            "|---|---|---|\n"
+            "| Demand | 100 | 4 |\n\n"
             "## Sub Section\n\n"
             "- [ ] Open task\n"
             "  - Nested item\n"
@@ -23,14 +30,18 @@ class TestExportPdf(unittest.TestCase):
             "  A --> B\n"
             "```\n"
         )
-        body, toc, has_mermaid = export_pdf.md_to_html(md, ROOT)
+        body, toc, has_mermaid = export_pdf.md_to_html(md, ROOT, add_back_to_toc=True)
         self.assertTrue(has_mermaid)
         self.assertEqual(len(toc), 2)
         self.assertIn("&#9744; ", body)
         self.assertIn("&#9745; ", body)
         self.assertNotIn("&amp;#9744;", body)
         self.assertIn('<div class="mermaid">', body)
-        self.assertIn('<span class="tag">Verified</span>', body)
+        self.assertIn("tag-verified", body)
+        self.assertIn("kpi-grid", body)
+        self.assertIn("callout-rec", body)
+        self.assertIn("score-bar", body)
+        self.assertIn('href="#toc-top"', body)
 
     def test_real_pdf_generation_with_sample_report(self):
         sample_md = ROOT / "examples/sample-report/sample-executive-report.md"
