@@ -24,10 +24,10 @@ Busy decision-makers need the answer first, backed by consistent numbers.
    python3 scripts/lint_project.py prps/<project>
    ```
    Fix any `FAIL` or anti-slop warnings before generating PDFs.
-5. **Export PDF** (choose mode: `executive`, `technical`, or `full`):
+5. **Export PDF** (choose `--mode executive|technical|full`, and `--lang id|en` matching the document language):
    ```bash
    python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
-     --project prps/<project> --mode executive \
+     --project prps/<project> --mode executive --lang <id|en> \
      --output prps/<project>/assets/<project>-report.pdf \
      --title "<Project Name>"
    ```
