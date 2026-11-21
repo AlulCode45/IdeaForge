@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/ideaforge-logo.svg" alt="IdeaForge Logo" width="480" />
+</p>
+
 # IdeaForge
 
 [English](README.md) | **Bahasa Indonesia** | [简体中文](README.zh.md)
