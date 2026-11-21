@@ -1,8 +1,8 @@
 # Overview - BengkelKu SaaS (Sample)
 
-> **Catatan Sample**: Studi kasus ilustratif B2B SaaS Indonesia untuk menunjukkan standar analisis `BrainstormingAgent` (model `saas`, 4 grafik SVG otomatis, KPI cards, dan PDF interaktif).
+> **Sample Note**: Illustrative Indonesian B2B SaaS case study demonstrating the `BrainstormingAgent` standard (`saas` model, 4 auto-generated SVG charts, KPI cards, and interactive PDF export).
 
-- **Masalah**: Bengkel motor independen UMKM (2–6 mekanik) masih mencatat stok suku cadang, komisi mekanik, dan pengingat servis berkala secara manual di buku tulis/WhatsApp [Assumption].
-- **Solusi**: Aplikasi kasir + manajemen bengkel berbasis web/mobile ringan dengan pengingat servis otomatis via WhatsApp dan laporan laba-rugi harian [Assumption].
-- **Model Bisnis**: SaaS langganan bulanan IDR 199.000/bengkel/bulan (`ARPU`) dengan uji coba gratis 14 hari [Estimate].
-- **Target 12 Bulan (Base)**: Mencapai 204 bengkel aktif (MRR ~IDR 40,6 juta) dan titik impas operasional di Month 7 [Estimate].
+- **Problem**: Independent motorcycle repair shops (2–6 mechanics) still track spare-part inventory, mechanic commissions, and service reminders manually using paper notebooks and WhatsApp [Assumption].
+- **Solution**: A lightweight web/mobile workshop POS and operations app featuring automated WhatsApp service reminders and daily profit/loss reporting [Assumption].
+- **Business Model**: Monthly SaaS subscription at IDR 199,000/workshop/month (`ARPU`) with a 14-day free trial [Estimate].
+- **12-Month Target (Base)**: Reach 204 active workshops (~IDR 40.6M MRR) and achieve monthly break-even at Month 7 [Estimate].

@@ -96,7 +96,7 @@ BASE_CSS = """
     color: #6B7280;
   }
   @bottom-right {
-    content: "Halaman " counter(page) " dari " counter(pages);
+    content: "__PAGE_LABEL__";
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
     font-size: 8pt;
     color: #6B7280;
@@ -423,7 +423,7 @@ def slugify(text: str) -> str:
     return re.sub(r"[\s-]+", "-", s) or "section"
 
 
-def md_to_html(md_text: str, base_dir: Path, add_back_to_toc: bool = False) -> tuple[str, list[tuple[int, str, str]], bool]:
+def md_to_html(md_text: str, base_dir: Path, add_back_to_toc: bool = False, lang: str = "id") -> tuple[str, list[tuple[int, str, str]], bool]:
     lines = md_text.splitlines()
     out = []
     toc = []
@@ -530,7 +530,8 @@ def md_to_html(md_text: str, base_dir: Path, add_back_to_toc: bool = False) -> t
             sec_id = base_id if count == 1 else f"{base_id}-{count}"
             if level <= 2:
                 toc.append((level, raw_title, sec_id))
-            back_link = '<a class="back-toc" href="#toc-top">&#8593; Daftar Isi</a>' if (level == 1 and add_back_to_toc) else ""
+            back_label = "&#8593; Contents" if lang == "en" else "&#8593; Daftar Isi"
+            back_link = f'<a class="back-toc" href="#toc-top">{back_label}</a>' if (level == 1 and add_back_to_toc) else ""
             out.append(f'<h{level} id="{sec_id}"><span>{format_inline(raw_title)}</span>{back_link}</h{level}>')
             i += 1
             continue
@@ -667,16 +668,17 @@ def load_project_markdown(project_dir: Path, mode: str) -> str:
     return "\n\n<!-- pagebreak -->\n\n".join(parts)
 
 
-def build_toc_html(toc: list[tuple[int, str, str]]) -> str:
+def build_toc_html(toc: list[tuple[int, str, str]], lang: str = "id") -> str:
     if not toc:
         return ""
     items = []
     for level, title, sec_id in toc:
         cls = ' class="toc-h2"' if level == 2 else ""
         items.append(f'<li{cls}><a href="#{sec_id}">{html.escape(title)}</a></li>')
+    toc_heading = "Table of Contents (Click to Navigate)" if lang == "en" else "Daftar Isi (Klik untuk Navigasi)"
     return (
         '<nav id="toc-top" class="toc-box">'
-        '<p class="toc-title">Daftar Isi (Klik untuk Navigasi)</p>'
+        f'<p class="toc-title">{toc_heading}</p>'
         f'<ul class="toc-list">{"".join(items)}</ul>'
         "</nav>"
     )
@@ -721,10 +723,12 @@ def build_html(
     include_toc: bool,
     has_mermaid: bool,
     mermaid_js: str | None,
+    lang: str = "id",
 ) -> str:
     safe_footer = title.replace("\\", "\\\\").replace('"', '\\"')
-    css = BASE_CSS.replace("__FOOTER_TITLE__", safe_footer)
-    toc_html = build_toc_html(toc) if include_toc else ""
+    page_lbl = '"Page " counter(page) " of " counter(pages)' if lang == "en" else '"Halaman " counter(page) " dari " counter(pages)'
+    css = BASE_CSS.replace("__FOOTER_TITLE__", safe_footer).replace('"__PAGE_LABEL__"', page_lbl)
+    toc_html = build_toc_html(toc, lang=lang) if include_toc else ""
     header_cls = "cover-page doc-header" if include_cover else "doc-header"
     page_break_after_cover = '<div class="page-break"></div>' if (include_cover and include_toc and toc_html) else ""
     mermaid_script = build_mermaid_script(mermaid_js) if has_mermaid else ""
@@ -770,6 +774,7 @@ def main():
     ap.add_argument("--toc", dest="toc", action="store_true", default=None, help="Include automatic Table of Contents")
     ap.add_argument("--no-toc", dest="toc", action="store_false", help="Disable Table of Contents")
     ap.add_argument("--mermaid-js", default=os.environ.get("MERMAID_JS"), help="Optional local path to mermaid.min.js")
+    ap.add_argument("--lang", choices=["id", "en"], default="id", help="UI label language for TOC and page footer")
     args = ap.parse_args()
 
     if not args.input and not args.project:
@@ -791,7 +796,7 @@ def main():
         default_title = proj_dir.name.replace("-", " ").title()
 
     title = args.title or default_title
-    body_html, toc, has_mermaid = md_to_html(md_text, base_dir, add_back_to_toc=include_toc)
+    body_html, toc, has_mermaid = md_to_html(md_text, base_dir, add_back_to_toc=include_toc, lang=args.lang)
     full_html = build_html(
         body_html=body_html,
         title=title,
@@ -802,6 +807,7 @@ def main():
         include_toc=include_toc,
         has_mermaid=has_mermaid,
         mermaid_js=args.mermaid_js,
+        lang=args.lang,
     )
 
     out_path = Path(args.output).resolve()

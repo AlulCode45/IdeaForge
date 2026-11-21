@@ -1,26 +1,26 @@
 <svg viewBox="0 0 680 195" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Unit Economics Breakdown">
   <rect x="0" y="0" width="680" height="195" fill="#FFFFFF"/>
-  <text x="40" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">3. Struktur Ekonomi Unit (199rb IDR/unit) &amp; Rasio LTV vs CAC</text>
-  <text x="40" y="46" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9.5" fill="#4B5563">Komposisi Harga Jual per Unit:</text>
+  <text x="40" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">3. Unit Economics (199k IDR/unit) &amp; LTV vs CAC Ratio</text>
+  <text x="40" y="46" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9.5" fill="#4B5563">Unit Price Breakdown:</text>
   <rect x="40.0" y="56" width="66.3" height="30" fill="#64748B"/>
   <text x="73.2" y="75" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#FFFFFF">11%</text>
   <rect x="40" y="96" width="9" height="9" fill="#64748B" rx="1"/>
-  <text x="53" y="104" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#1A1D21">COGS: 22rb IDR</text>
+  <text x="53" y="104" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#1A1D21">COGS: 22k IDR</text>
   <rect x="106.3" y="56" width="15.0" height="30" fill="#D97706"/>
   <rect x="188" y="96" width="9" height="9" fill="#D97706" rx="1"/>
-  <text x="201" y="104" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#1A1D21">Channel Fee: 5rb IDR</text>
+  <text x="201" y="104" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#1A1D21">Channel Fee: 5k IDR</text>
   <rect x="121.3" y="56" width="3.0" height="30" fill="#94A3B8"/>
   <rect x="336" y="96" width="9" height="9" fill="#94A3B8" rx="1"/>
-  <text x="349" y="104" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#1A1D21">Pajak: 995 IDR</text>
+  <text x="349" y="104" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#1A1D21">Tax: 995 IDR</text>
   <rect x="124.3" y="56" width="515.7" height="30" fill="#15803D"/>
   <text x="382.2" y="75" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#FFFFFF">86%</text>
   <rect x="484" y="96" width="9" height="9" fill="#15803D" rx="1"/>
-  <text x="497" y="104" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#1A1D21">Margin Bersih: 171rb IDR</text>
-  <text x="40" y="134" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#111317">LTV vs CAC (Rasio: 13,7x):</text>
+  <text x="497" y="104" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#1A1D21">Net Margin: 171k IDR</text>
+  <text x="40" y="134" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#111317">LTV vs CAC (Rasio: 13.7x):</text>
   <rect x="95" y="144" width="420.0" height="16" fill="#1B365D" rx="2"/>
   <text x="40" y="156" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#374151">LTV</text>
-  <text x="522.0" y="156" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#1B365D">3,8jt IDR</text>
+  <text x="522.0" y="156" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#1B365D">3.8M IDR</text>
   <rect x="95" y="166" width="30.8" height="16" fill="#D97706" rx="2"/>
   <text x="40" y="178" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#374151">CAC</text>
-  <text x="132.8" y="178" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#B45309">280rb IDR</text>
+  <text x="132.8" y="178" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="600" fill="#B45309">280k IDR</text>
 </svg>

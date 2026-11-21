@@ -1,22 +1,22 @@
-# ADR-001: Free Trial 14 Hari vs Freemium Permanen
+# ADR-001: 14-Day Free Trial vs Permanent Freemium
 
 - **Date**: 2026-11-22
 - **Status**: Accepted
 
 ## Context
-Bengkel UMKM sensitif terhadap biaya di awal, tetapi model *freemium* permanen berisiko membebani biaya variabel WhatsApp/server (`IDR 22.000/bengkel/bulan`) tanpa konversi.
+SME workshops are price-sensitive upfront, but a permanent freemium tier would incur ongoing WhatsApp/server variable costs (`IDR 22,000/shop/month`) from non-paying users.
 
 ## Options considered
 | Option | Pros | Cons |
 |---|---|---|
-| A. Freemium permanen (fitur dasar gratis) | Akuisisi cepat | Biaya variabel terus berjalan dari user non-bayar |
-| B. Free Trial 14 hari + Concierge Setup | Biaya terkontrol, memfilter user serius | Butuh onboarding cepat di minggu ke-1 |
+| A. Permanent freemium (basic tier free) | Fast top-of-funnel sign-ups | Ongoing variable cost from non-paying users |
+| B. 14-Day Free Trial + Concierge Setup | Controlled COGS, filters serious buyers | Requires fast Week-1 onboarding |
 
 ## Decision
-Pilih Opsi B: Free Trial 14 hari dengan bantuan setup katalog 100 sparepart populer.
+Select Option B: 14-day free trial with guided setup of the top 100 popular spare parts.
 
 ## Rationale and evidence
-Menjaga gross margin 86,4% dan payback CAC 1,6 bulan pada [11-financial-plan.md](../11-financial-plan.md).
+Protects the 86.4% gross margin and 1.6-month CAC payback in [11-financial-plan.md](../11-financial-plan.md).
 
 ## Consequences and revisit trigger
-Jika konversi trial-to-paid < 25% setelah 30 bengkel uji, pertimbangkan paket Starter terbatas tanpa notifikasi WhatsApp otomatis.
+If trial-to-paid conversion is < 25% after 30 pilot workshops, evaluate a stripped-down Starter tier without automated WhatsApp notifications.

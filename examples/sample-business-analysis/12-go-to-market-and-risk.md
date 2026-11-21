@@ -1,19 +1,19 @@
-# Go-to-Market & Risiko Bisnis - BengkelKu SaaS (Sample)
+# Go-to-Market & Business Risks - BengkelKu SaaS (Sample)
 
-## 1. Alur Eksekusi 90 Hari Pertama
+## 1. First 90-Day Execution Flow
 
 ```mermaid
 flowchart LR
-    P1["Hari 1–14: Concierge Pilot 15 Bengkel"] --> G{"Konversi >= 4 bengkel?"}
-    G -- "Ya" --> P2["Hari 15–45: Kanvas Klaster + Iklan Lokal"]
-    G -- "Tidak" --> R["Revisi Onboarding / Value Metric"]
-    P2 --> P3["Hari 46–90: Target 40+ Bengkel Aktif & Referral"]
+    P1["Days 1–14: 15-Shop Concierge Pilot"] --> G{"Conversion >= 4 shops?"}
+    G -- "Yes" --> P2["Days 15–45: Cluster Outreach + Local Ads"]
+    G -- "No" --> R["Revise Onboarding / Value Metric"]
+    P2 --> P3["Days 46–90: Target 40+ Active Shops & Referrals"]
 ```
 
-## 2. Register Risiko Bisnis
+## 2. Business Risk Register
 
-| Risiko | Kemungkinan | Dampak | Mitigasi |
+| Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
-| *Churn* > 6%/bulan karena malas input stok | Tinggi | Tinggi | Pre-load katalog 100 sparepart populer & sesi onboarding 30 menit |
-| CAC lapangan > IDR 280.000/bengkel | Sedang | Sedang | Program referral "Gratis 1 bulan" untuk bengkel yang mereferensikan rekan |
-| Gangguan integrasi WhatsApp gateway | Rendah | Tinggi | Sediakan antrean retry + fallback notif via email/in-app |
+| Monthly churn > 6% due to tedious inventory setup | High | High | Pre-load top 100 popular spare parts & 30-min guided onboarding |
+| Field acquisition CAC exceeds IDR 280,000/shop | Medium | Medium | "Free 1-month" referral program for workshops referring peers |
+| WhatsApp gateway downtime | Low | High | Implement retry queue + email/in-app notification fallback |

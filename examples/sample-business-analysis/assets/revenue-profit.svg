@@ -1,11 +1,11 @@
 <svg viewBox="0 0 680 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Revenue vs Net Profit">
   <rect x="0" y="0" width="680" height="250" fill="#FFFFFF"/>
-  <text x="72" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">2. Omzet vs Laba Bersih Bulanan — Skenario Dasar (Juta IDR)</text>
+  <text x="72" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">2. Monthly Revenue vs Net Profit — Base Scenario (M IDR)</text>
   <line x1="72" y1="42" x2="72" y2="204" stroke="#B8C0CC" stroke-width="1"/>
   <line x1="72" y1="204.0" x2="656" y2="204.0" stroke="#EEF1F4" stroke-width="1"/>
-  <text x="64" y="207.0" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">-8,8</text>
+  <text x="64" y="207.0" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">-8.8</text>
   <line x1="72" y1="163.5" x2="656" y2="163.5" stroke="#EEF1F4" stroke-width="1"/>
-  <text x="64" y="166.5" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">3,6</text>
+  <text x="64" y="166.5" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">3.6</text>
   <line x1="72" y1="123.0" x2="656" y2="123.0" stroke="#EEF1F4" stroke-width="1"/>
   <text x="64" y="126.0" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">16</text>
   <line x1="72" y1="82.5" x2="656" y2="82.5" stroke="#EEF1F4" stroke-width="1"/>
@@ -49,7 +49,7 @@
   <rect x="614.1" y="42.0" width="16.5" height="133.2" fill="#4B6A9B" rx="1"/>
   <rect x="632.7" y="120.5" width="16.5" height="54.7" fill="#15803D" rx="1"/>
   <text x="630.7" y="217" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#525866">M12</text>
-  <rect x="72" y="233" width="10" height="10" fill="#4B6A9B" rx="1"/><text x="87" y="241" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">Omzet</text>
-  <rect x="147" y="233" width="10" height="10" fill="#15803D" rx="1"/><text x="162" y="241" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">Laba Bersih (+)</text>
-  <rect x="262" y="233" width="10" height="10" fill="#B91C1C" rx="1"/><text x="277" y="241" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">Rugi (-)</text>
+  <rect x="72" y="233" width="10" height="10" fill="#4B6A9B" rx="1"/><text x="87" y="241" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">Revenue</text>
+  <rect x="147" y="233" width="10" height="10" fill="#15803D" rx="1"/><text x="162" y="241" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">Net Profit (+)</text>
+  <rect x="262" y="233" width="10" height="10" fill="#B91C1C" rx="1"/><text x="277" y="241" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">Loss (-)</text>
 </svg>

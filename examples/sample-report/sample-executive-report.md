@@ -1,76 +1,83 @@
-> **Catatan**: Dokumen ini adalah contoh format laporan akhir (*sample*) untuk menilai tata letak, tipografi, tabel, grafik SVG otomatis, dan diagram alur PDF. Angka di bawah dihitung langsung oleh `financial-modeler/scripts/model.py` dari `example_inputs.json`.
+> **Note**: This document is a sample executive report format for evaluating layout, typography, tables, SVG charts, and Mermaid diagrams. Figures below are computed directly by `financial-modeler/scripts/model.py` from `example_inputs.json`.
 
-## 1. Ringkasan Eksekutif
+## 1. Executive Summary
 
-**Rekomendasi**: Lanjutkan ke fase uji pasar terbatas (30 hari) dengan modal awal IDR 35.000.000 (termasuk CAPEX IDR 5.000.000). Pada skenario dasar, titik impas tercapai di Bulan ke-3 dan kas tetap positif di semua skenario, dengan syarat *channel fee* dijaga di bawah 5% dan *repeat order* minimal 2,0x.
+**Recommendation**: Proceed to a 30-day limited market test with IDR 35,000,000 starting cash (including IDR 5,000,000 CAPEX). In the base scenario, break-even is reached in Month 3 and cash stays positive across all scenarios, provided channel fees remain <= 5% and repeat orders reach >= 2.0x.
 
-| Aspek | Ringkasan | Status Bukti |
+<!-- kpi-grid -->
+Decision Score | 3.75 / 5.0 | Conditional Go | good
+Break-Even (Base) | Month 3 | Month-12 Cash: IDR 58.9M | good
+Unit Economics | LTV/CAC 6.6x | Gross Margin 55.0% | good
+Lowest Cash (Pess.) | IDR 243k | Tight buffer at Month 12 | warn
+<!-- /kpi-grid -->
+
+| Aspect | Summary | Evidence Status |
 |---|---|---|
-| Masalah | Konsumen membutuhkan produk dengan harga transparan dan pemesanan ulang yang cepat | [Contoh] |
-| Solusi | Penjualan langsung dengan sistem langganan/repeat order bulanan | [Contoh] |
-| Harga & Margin | Harga IDR 150.000/unit, COGS IDR 60.000/unit, *channel fee* 5%, margin kontribusi 55,0% | [Estimate] |
-| Ekonomi Unit | LTV IDR 165.000, CAC IDR 25.000, rasio LTV/CAC 6,6x, *payback* 0,2 bulan | [Estimate] |
-| Titik Impas | Bulan ke-3 pada skenario dasar; belum tercapai dalam 12 bulan pada skenario pesimis | [Estimate] |
-| Keputusan | Go dengan syarat (Skor: 3,75 / 5,0) | [Contoh] |
+| Problem | Customers need transparent pricing and fast repeat ordering | [Contoh] |
+| Solution | Direct sales with monthly subscription / repeat-order workflow | [Contoh] |
+| Price & Margin | Price IDR 150,000/unit, COGS IDR 60,000/unit, 5% channel fee, 55.0% contribution margin | [Estimate] |
+| Unit Economics | LTV IDR 165,000, CAC IDR 25,000, LTV/CAC 6.6x, payback 0.2 months | [Estimate] |
+| Break-Even | Month 3 in base scenario; not reached within 12 months in pessimistic scenario | [Estimate] |
+| Decision | Go with conditions (Score: 3.75 / 5.0) | [Contoh] |
 
-## 2. Alur Validasi 30 Hari
+## 2. 30-Day Validation Workflow
 
 ```mermaid
 flowchart LR
-    A[Wawancara 10 Target] --> B{WTP >= IDR 150rb?}
-    B -- Ya --> C[Batch Uji 20 Unit]
-    B -- Tidak --> D[Revisi Pricing / Segment]
-    C --> E{CAC <= IDR 25rb?}
-    E -- Ya --> F[Scale Penuh]
-    E -- Tidak --> D
+    A["Interview 10 Targets"] --> B{"WTP >= IDR 150k?"}
+    B -- "Yes" --> C["20-Unit Test Batch"]
+    B -- "No" --> D["Revise Pricing / Segment"]
+    C --> E{"CAC <= IDR 25k?"}
+    E -- "Yes" --> F["Full Scale"]
+    E -- "No" --> D
 ```
 
-## 3. Skor Keputusan (Go / No-Go Scorecard)
+## 3. Go / No-Go Scorecard
 
-| Kriteria | Bobot | Skor (1-5) | Nilai Terbobot | Dasar Penilaian |
+| Criterion | Weight | Score (1-5) | Weighted | Rationale |
 |---|---|---|---|---|
-| Permintaan Pasar | 20% | 4 | 0,80 | Sinyal permintaan stabil pada segmen target |
-| Kualitas Bukti | 15% | 3 | 0,45 | Sebagian asumsi biaya akuisisi belum diuji lapangan |
-| Ekonomi Unit | 20% | 4 | 0,80 | Margin kontribusi 55,0% dan LTV/CAC 6,6x |
-| Kelayakan Eksekusi | 15% | 4 | 0,60 | Operasional dapat dijalankan tim kecil pada tahap awal |
-| Keunggulan Kompetitif | 10% | 3 | 0,30 | Diferensiasi masih bergantung pada eksekusi layanan |
-| Risiko & Kepatuhan | 10% | 4 | 0,40 | Perizinan dasar dan kewajiban PPh UMKM 0,5% terpetakan |
-| Kesiapan Tim | 10% | 4 | 0,40 | Kapasitas tim mencukupi untuk target 90 hari pertama |
-| **Total Skor** | **100%** | | **3,75 / 5,0** | **Go dengan syarat** |
+| Market demand | 20% | 4 | 0.80 | Stable demand signals in target segment |
+| Evidence quality | 15% | 3 | 0.45 | Acquisition cost assumptions not yet field-tested |
+| Unit economics | 20% | 4 | 0.80 | 55.0% contribution margin and 6.6x LTV/CAC |
+| Feasibility | 15% | 4 | 0.60 | Operations manageable by a lean team |
+| Competitive edge | 10% | 3 | 0.30 | Differentiation relies on service execution |
+| Risk & compliance | 10% | 4 | 0.40 | Basic permits and 0.5% UMKM tax mapped |
+| Team readiness | 10% | 4 | 0.40 | Team capacity covers first 90-day milestones |
+| **Total Score** | **100%** | | **3.75 / 5.0** | **Go with conditions** |
 
-## 4. Proyeksi Keuangan (12 Bulan)
+## 4. Financial Projections (12 Months)
 
-Data dihitung oleh `model.py` dengan modal awal IDR 35.000.000, CAPEX awal IDR 5.000.000, biaya tetap IDR 5.000.000/bulan, *channel fee* 5%, PPh UMKM 0,5%, pertumbuhan 10%/bulan, dan *repeat order* 2,0x.
+Computed by `model.py` with IDR 35,000,000 starting cash, IDR 5,000,000 CAPEX, IDR 5,000,000/month fixed costs, 5% channel fee, 0.5% UMKM tax, 10%/month growth, and 2.0x repeat orders.
 
-| Skenario | Unit Bulan 1 | Break-Even | Kas Terendah (IDR) | Kas Bulan 12 (IDR) | Runway |
+| Scenario | Month-1 Units | Break-Even | Lowest Cash (IDR) | Month-12 Cash (IDR) | Runway |
 |---|---|---|---|---|---|
-| Pesimis | 36 | Belum tercapai | 243.297 | 243.297 | 12,2 bulan |
-| Dasar | 60 | Bulan ke-3 | 28.725.500 | 58.851.699 | >12 bulan |
-| Optimis | 84 | Bulan ke-1 | 31.319.000 | 138.506.174 | >12 bulan |
+| Pessimistic | 36 | Not within 12 mo | 243,297 | 243,297 | 12.2 months |
+| Base | 60 | Month 3 | 28,725,500 | 58,851,699 | >12 months |
+| Optimistic | 84 | Month 1 | 31,319,000 | 138,506,174 | >12 months |
 
-![Grafik Proyeksi Saldo Kas 12 Bulan](cash-projection.svg)
+![12-Month Cash Balance Projection](cash-projection.svg)
 
-### Uji Sensitivitas 2-Arah (Skenario Dasar, Kas Bulan ke-12: Harga vs Volume)
+### 2-Way Sensitivity (Base Scenario, Month-12 Cash: Price vs Volume)
 
-| Perubahan Harga \ Volume | 0.7x vol | 0.85x vol | 1x vol | 1.15x vol | 1.3x vol |
+| Price \ Volume | 0.7x vol | 0.85x vol | 1x vol | 1.15x vol | 1.3x vol |
 |---|---|---|---|---|---|
-| -20% | 6.733.923 | 14.605.478 | 22.477.032 | 30.348.587 | 38.220.142 |
-| -10% | 19.465.056 | 30.064.711 | 40.664.366 | 51.264.021 | 61.863.675 |
-| +0% | 32.196.189 | 45.523.944 | 58.851.699 | 72.179.454 | 85.507.209 |
-| +10% | 44.927.323 | 60.983.178 | 77.039.032 | 93.094.887 | 109.150.742 |
-| +20% | 57.658.456 | 76.442.411 | 95.226.366 | 114.010.321 | 132.794.275 |
+| -20% | 6,733,923 | 14,605,478 | 22,477,032 | 30,348,587 | 38,220,142 |
+| -10% | 19,465,056 | 30,064,711 | 40,664,366 | 51,264,021 | 61,863,675 |
+| +0% | 32,196,189 | 45,523,944 | 58,851,699 | 72,179,454 | 85,507,209 |
+| +10% | 44,927,323 | 60,983,178 | 77,039,032 | 93,094,887 | 109,150,742 |
+| +20% | 57,658,456 | 76,442,411 | 95,226,366 | 114,010,321 | 132,794,275 |
 
-## 5. Risiko Utama & Rencana 30 Hari Pertama
+## 5. Top Risks & First 30-Day Plan
 
-| Risiko | Dampak | Mitigasi |
+| Risk | Impact | Mitigation |
 |---|---|---|
-| Volume penjualan di bawah skenario dasar | Cadangan kas menipis hingga IDR 243.297 di bulan ke-12 | Terapkan sistem pre-order sebelum produksi massal |
-| CAC aktual lebih tinggi dari IDR 25.000 | Rasio LTV/CAC turun | Fokus pada kanal organik dan rujukan pelanggan awal |
-| Asumsi repeat order 2,0x tidak tercapai | Biaya akuisisi per unit naik 2x lipat | Lakukan wawancara 10 pembeli pertama di minggu ke-3 |
+| Sales volume below base case | Cash buffer drops to IDR 243,297 by Month 12 | Use pre-order batching before bulk production |
+| Actual CAC exceeds IDR 25,000 | LTV/CAC ratio compresses | Focus on organic and early customer referral channels |
+| 2.0x repeat-order assumption misses | Effective acquisition cost per unit doubles | Interview first 10 buyers in Week 3 |
 
-### Langkah Konkret 30 Hari Pertama
+### Concrete First 30-Day Actions
 
-- [ ] Minggu 1: Wawancara 10 calon pelanggan untuk menguji asumsi harga IDR 150.000.
-- [ ] Minggu 2: Uji penjualan batch kecil (20 unit) untuk mengukur CAC aktual.
-- [ ] Minggu 3: Evaluasi margin bersih dan perbarui `inputs.json` dengan data nyata.
-- [ ] Minggu 4: Keputusan lanjut ke skala penuh atau penyesuaian harga.
+- [ ] Week 1: Interview 10 target customers to test IDR 150,000 price willingness.
+- [ ] Week 2: Run a 20-unit pilot batch to measure actual CAC.
+- [ ] Week 3: Audit net margin and update `inputs.json` with observed data.
+- [ ] Week 4: Decide whether to scale or adjust pricing.

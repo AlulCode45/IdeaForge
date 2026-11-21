@@ -1,10 +1,10 @@
 <svg viewBox="0 0 680 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cash Projection Chart">
   <rect x="0" y="0" width="680" height="270" fill="#FFFFFF"/>
-  <text x="72" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">1. Proyeksi Saldo Kas 12 Bulan (Juta IDR)</text>
+  <text x="72" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">1. 12-Month Cash Balance Projection (M IDR)</text>
   <line x1="72" y1="42" x2="72" y2="222" stroke="#B8C0CC" stroke-width="1"/>
   <line x1="72" y1="222" x2="585" y2="222" stroke="#B8C0CC" stroke-width="1"/>
   <line x1="72" y1="222.0" x2="585" y2="222.0" stroke="#EEF1F4" stroke-width="1"/>
-  <text x="64" y="225.0" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">0,0</text>
+  <text x="64" y="225.0" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">0.0</text>
   <line x1="72" y1="177.0" x2="585" y2="177.0" stroke="#EEF1F4" stroke-width="1"/>
   <text x="64" y="180.0" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">39</text>
   <line x1="72" y1="132.0" x2="585" y2="132.0" stroke="#EEF1F4" stroke-width="1"/>
@@ -15,17 +15,17 @@
   <text x="64" y="45.0" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">157</text>
   <polyline fill="none" stroke="#B91C1C" stroke-width="2.0" stroke-dasharray="5,3" points="72.0,160.5 118.6,170.1 165.3,178.6 211.9,185.9 258.5,192.2 305.2,197.3 351.8,201.3 398.5,204.0 445.1,205.5 491.7,205.7 538.4,204.5 585.0,201.9"/>
   <circle cx="585.0" cy="201.9" r="3" fill="#B91C1C"/>
-  <text x="592.0" y="204.9" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#B91C1C">17,6jt</text>
+  <text x="592.0" y="204.9" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#B91C1C">17.6M</text>
   <line x1="72" y1="256" x2="90" y2="256" stroke="#B91C1C" stroke-width="2.0" stroke-dasharray="5,3"/>
   <text x="96" y="259" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">pessimistic</text>
   <polyline fill="none" stroke="#2563EB" stroke-width="2.2" points="72.0,159.9 118.6,168.3 165.3,174.9 211.9,179.5 258.5,182.0 305.2,182.2 351.8,179.9 398.5,174.9 445.1,166.8 491.7,155.5 538.4,140.5 585.0,121.4"/>
   <circle cx="585.0" cy="121.4" r="3" fill="#2563EB"/>
-  <text x="592.0" y="124.4" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#2563EB">87,9jt</text>
+  <text x="592.0" y="124.4" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#2563EB">87.9M</text>
   <line x1="177" y1="256" x2="195" y2="256" stroke="#2563EB" stroke-width="2.2"/>
   <text x="201" y="259" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">base</text>
   <polyline fill="none" stroke="#1B365D" stroke-width="2.4" points="72.0,159.8 118.6,167.5 165.3,172.7 211.9,175.2 258.5,174.6 305.2,170.5 351.8,162.5 398.5,150.1 445.1,132.5 491.7,109.2 538.4,79.4 585.0,42.0"/>
   <circle cx="585.0" cy="42.0" r="3" fill="#1B365D"/>
-  <text x="592.0" y="45.0" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#1B365D">157,3jt</text>
+  <text x="592.0" y="45.0" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#1B365D">157.3M</text>
   <line x1="282" y1="256" x2="300" y2="256" stroke="#1B365D" stroke-width="2.4"/>
   <text x="306" y="259" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">optimistic</text>
   <text x="72" y="236" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">M1</text>

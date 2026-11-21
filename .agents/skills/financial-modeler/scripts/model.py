@@ -221,10 +221,15 @@ def generate_svg_chart(results: dict, currency: str, months: int, locale: str) -
     }
     fallback_colors = ["#1B365D", "#2563EB", "#B91C1C", "#374151"]
 
+    title_cash = (
+        f"1. {months}-Month Cash Balance Projection ({unit_label})"
+        if locale == "en"
+        else f"1. Proyeksi Saldo Kas {months} Bulan ({unit_label})"
+    )
     lines = [
         f'<svg viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cash Projection Chart">',
         f'  <rect x="0" y="0" width="{w}" height="{h}" fill="#FFFFFF"/>',
-        f'  <text x="{pad_l}" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">1. Proyeksi Saldo Kas {months} Bulan ({unit_label})</text>',
+        f'  <text x="{pad_l}" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">{title_cash}</text>',
         f'  <line x1="{pad_l}" y1="{pad_t}" x2="{pad_l}" y2="{pad_t + plot_h}" stroke="#B8C0CC" stroke-width="1"/>',
         f'  <line x1="{pad_l}" y1="{pad_t + plot_h}" x2="{pad_l + plot_w}" y2="{pad_t + plot_h}" stroke="#B8C0CC" stroke-width="1"/>',
     ]
@@ -284,10 +289,19 @@ def generate_revenue_profit_svg(base_res: dict, currency: str, months: int, loca
     group_w = plot_w / max(1, len(rows))
     bar_w = max(4.0, group_w * 0.34)
 
+    title_rp = (
+        f"2. Monthly Revenue vs Net Profit — Base Scenario ({unit_label})"
+        if locale == "en"
+        else f"2. Omzet vs Laba Bersih Bulanan — Skenario Dasar ({unit_label})"
+    )
+    lbl_rev = "Revenue" if locale == "en" else "Omzet"
+    lbl_prof = "Net Profit (+)" if locale == "en" else "Laba Bersih (+)"
+    lbl_loss = "Loss (-)" if locale == "en" else "Rugi (-)"
+
     lines = [
         f'<svg viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Revenue vs Net Profit">',
         f'  <rect x="0" y="0" width="{w}" height="{h}" fill="#FFFFFF"/>',
-        f'  <text x="{pad_l}" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">2. Omzet vs Laba Bersih Bulanan — Skenario Dasar ({unit_label})</text>',
+        f'  <text x="{pad_l}" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">{title_rp}</text>',
         f'  <line x1="{pad_l}" y1="{pad_t}" x2="{pad_l}" y2="{pad_t + plot_h}" stroke="#B8C0CC" stroke-width="1"/>',
     ]
     for step in range(5):
@@ -312,9 +326,9 @@ def generate_revenue_profit_svg(base_res: dict, currency: str, months: int, loca
         lines.append(f'  <rect x="{gx + bar_w + 2:.1f}" y="{min(py, y0):.1f}" width="{bar_w:.1f}" height="{ph:.1f}" fill="{p_color}" rx="1"/>')
         lines.append(f'  <text x="{gx + bar_w:.1f}" y="{pad_t + plot_h + 13}" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#525866">M{mo}</text>')
 
-    lines.append(f'  <rect x="{pad_l}" y="{h - 17}" width="10" height="10" fill="#4B6A9B" rx="1"/><text x="{pad_l + 15}" y="{h - 9}" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">Omzet</text>')
-    lines.append(f'  <rect x="{pad_l + 75}" y="{h - 17}" width="10" height="10" fill="#15803D" rx="1"/><text x="{pad_l + 90}" y="{h - 9}" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">Laba Bersih (+)</text>')
-    lines.append(f'  <rect x="{pad_l + 190}" y="{h - 17}" width="10" height="10" fill="#B91C1C" rx="1"/><text x="{pad_l + 205}" y="{h - 9}" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">Rugi (-)</text>')
+    lines.append(f'  <rect x="{pad_l}" y="{h - 17}" width="10" height="10" fill="#4B6A9B" rx="1"/><text x="{pad_l + 15}" y="{h - 9}" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">{lbl_rev}</text>')
+    lines.append(f'  <rect x="{pad_l + 75}" y="{h - 17}" width="10" height="10" fill="#15803D" rx="1"/><text x="{pad_l + 90}" y="{h - 9}" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">{lbl_prof}</text>')
+    lines.append(f'  <rect x="{pad_l + 190}" y="{h - 17}" width="10" height="10" fill="#B91C1C" rx="1"/><text x="{pad_l + 205}" y="{h - 9}" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">{lbl_loss}</text>')
     lines.append("</svg>")
     return "\n".join(lines)
 
@@ -328,15 +342,21 @@ def generate_unit_economics_svg(base_res: dict, currency: str, locale: str) -> s
     parts = [
         ("COGS", ub["vc"], "#64748B"),
         ("Channel Fee", ub["channel_fee"], "#D97706"),
-        ("Pajak", ub["tax"], "#94A3B8"),
-        ("Margin Bersih", ub["margin"], "#15803D"),
+        ("Tax" if locale == "en" else "Pajak", ub["tax"], "#94A3B8"),
+        ("Net Margin" if locale == "en" else "Margin Bersih", ub["margin"], "#15803D"),
     ]
+    title_ue = (
+        f"3. Unit Economics ({fmt_short(price, currency, locale)}/unit) &amp; LTV vs CAC Ratio"
+        if locale == "en"
+        else f"3. Struktur Ekonomi Unit ({fmt_short(price, currency, locale)}/unit) &amp; Rasio LTV vs CAC"
+    )
+    sub_ue = "Unit Price Breakdown:" if locale == "en" else "Komposisi Harga Jual per Unit:"
 
     lines = [
         f'<svg viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Unit Economics Breakdown">',
         f'  <rect x="0" y="0" width="{w}" height="{h}" fill="#FFFFFF"/>',
-        f'  <text x="40" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">3. Struktur Ekonomi Unit ({fmt_short(price, currency, locale)}/unit) &amp; Rasio LTV vs CAC</text>',
-        f'  <text x="40" y="46" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9.5" fill="#4B5563">Komposisi Harga Jual per Unit:</text>',
+        f'  <text x="40" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">{title_ue}</text>',
+        f'  <text x="40" y="46" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9.5" fill="#4B5563">{sub_ue}</text>',
     ]
     cx = float(bar_x)
     lx = 40
@@ -380,11 +400,21 @@ def generate_sensitivity_heatmap_svg(title: str, row_labels: list[str], col_labe
     max_pos = max([v for v in flat if v > 0] or [1.0])
     min_neg = min([v for v in flat if v < 0] or [-1.0])
 
+    title_sh = (
+        f"4. Ending Cash Sensitivity Heatmap ({title})"
+        if locale == "en"
+        else f"4. Peta Sensitivitas Kas Bulan Akhir ({title})"
+    )
+    sub_sh = (
+        "Green = positive cash | Red = cash deficit (danger zone)"
+        if locale == "en"
+        else "Hijau/Biru = kas positif aman | Merah = defisit kas (bahaya)"
+    )
     lines = [
         f'<svg viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sensitivity Heatmap">',
         f'  <rect x="0" y="0" width="{w}" height="{h}" fill="#FFFFFF"/>',
-        f'  <text x="40" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">4. Peta Sensitivitas Kas Bulan Akhir ({title})</text>',
-        f'  <text x="40" y="38" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#6B7280">Hijau/Biru = kas positif aman | Merah = defisit kas (bahaya)</text>',
+        f'  <text x="40" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">{title_sh}</text>',
+        f'  <text x="40" y="38" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" fill="#6B7280">{sub_sh}</text>',
     ]
     for ci, cl in enumerate(col_labels):
         cx = start_x + ci * cell_w + cell_w / 2

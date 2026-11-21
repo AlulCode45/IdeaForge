@@ -1,24 +1,24 @@
-# Riset Pasar - BengkelKu SaaS (Sample)
+# Market Research - BengkelKu SaaS (Sample)
 
-- **Tanggal Riset**: 2026-11-22
-- **Geografi**: Indonesia (fokus awal Jawa Timur & Jabodetabek)
+- **Research Date**: 2026-11-22
+- **Geography**: Indonesia (initial focus: East Java & Greater Jakarta)
 
-## 1. Triangulasi Ukuran Pasar (TAM / SAM / SOM)
+## 1. Market Size Triangulation (TAM / SAM / SOM)
 
-| Lapisan | Top-Down [Estimate] | Bottom-Up [Estimate] | Catatan |
+| Tier | Top-Down [Estimate] | Bottom-Up [Estimate] | Notes |
 |---|---|---|---|
-| **TAM** | ~120.000 bengkel motor independen di Indonesia x IDR 2,388 juta/tahun = ~IDR 286,5 miliar/tahun | 120.000 bengkel x IDR 199.000/bln x 12 = IDR 286,5 miliar/tahun | Selaras (rasio 1,0x) |
-| **SAM** | Bengkel urban 2–6 stall yang siap digital (~25% TAM) = IDR 71,6 miliar/tahun | 30.000 bengkel urban x IDR 199.000 x 12 = IDR 71,6 miliar/tahun | Target pasar yang terjangkau digital |
-| **SOM (Tahun 1)** | 0,7% SAM = ~IDR 500 juta ARR | 204 bengkel aktif di Bulan ke-12 x IDR 199.000 x 12 = IDR 487,1 juta ARR | Sesuai proyeksi skenario dasar `model.py` |
+| **TAM** | ~120,000 independent motorcycle workshops in Indonesia x IDR 2.388M/yr = ~IDR 286.5B/yr | 120,000 shops x IDR 199,000/mo x 12 = IDR 286.5B/yr | Aligned (1.0x ratio) |
+| **SAM** | Urban 2–6 bay workshops ready for digitization (~25% TAM) = IDR 71.6B/yr | 30,000 urban shops x IDR 199,000 x 12 = IDR 71.6B/yr | Digitally reachable segment |
+| **SOM (Year 1)** | 0.7% SAM = ~IDR 500M ARR | 204 active shops at Month 12 x IDR 199,000 x 12 = IDR 487.1M ARR | Matches `model.py` base scenario |
 
-## 2. Sinyal Permintaan & Segmen
+## 2. Demand Signals & Target Segments
 
-- **Segmen Primer**: Pemilik bengkel motor independen (usia 25–45 tahun, 2–6 mekanik, omzet IDR 30–120 juta/bulan) yang sering kehilangan margin akibat stok sparepart tidak tercatat [Assumption].
-- **Pemicu Pembelian**: Kebocoran stok oli/kampas rem, kerumitan hitung bagi hasil mekanik tiap minggu, dan keinginan meningkatkan *repeat service* pelanggan [Assumption].
+- **Primary Segment**: Independent workshop owners (age 25–45, 2–6 mechanics, IDR 30M–120M monthly revenue) losing margin due to untracked spare-part shrinkage [Assumption].
+- **Buying Triggers**: Missing oil/brake-pad stock, weekly mechanic commission disputes, and desire to increase repeat customer visits [Assumption].
 
-## Sources (Ilustratif)
+## Sources (Illustrative)
 
-| Sumber | Grade | Tanggal Akses | Catatan |
+| Source | Grade | Access Date | Notes |
 |---|---|---|---|
-| Data populasi bengkel UMKM Jawa Timur (ilustratif) | C (Sample) | (accessed 2026-11-22) | Angka simulasi untuk contoh format |
-| Benchmark harga POS UMKM Indonesia (Rp 150rb–350rb/bln) | C (Sample) | (accessed 2026-11-22) | Referensi posisi harga IDR 199.000 |
+| East Java SME workshop population estimate (illustrative) | C (Sample) | (accessed 2026-11-22) | Simulated sample figure |
+| Indonesia SME POS pricing benchmark (IDR 150k–350k/mo) | C (Sample) | (accessed 2026-11-22) | Reference for IDR 199,000 pricing |

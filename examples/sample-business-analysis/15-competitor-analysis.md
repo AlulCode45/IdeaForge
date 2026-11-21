@@ -1,16 +1,16 @@
-# Analisa Kompetitor - BengkelKu SaaS (Sample)
+# Competitor Analysis - BengkelKu SaaS (Sample)
 
-## 1. Matriks Kompetitor
+## 1. Competitor Matrix
 
-| Kompetitor | Segmen | Harga / Bulan | Keunggulan | Kelemahan untuk Bengkel |
+| Competitor | Segment | Price / Month | Strengths | Weaknesses for Workshops |
 |---|---|---|---|---|
-| Buku Tulis + Excel | DIY / Status Quo | IDR 0 [Verified] | Gratis, tanpa kurva belajar | Rawan selisih stok & tidak ada pengingat servis |
-| POS Retail Umum | Horizontal SaaS | IDR 150.000–300.000 [Estimate] | Kasir & QRIS matang | Tidak ada fitur nomor polisi, riwayat servis, atau komisi mekanik |
-| ERP Bengkel Enterprise | Vertical Legacy | IDR 750.000–2.000.000 [Estimate] | Fitur akuntansi lengkap | Terlalu mahal & kompleks untuk bengkel 2–6 stall |
+| Paper Notebook + Excel | DIY / Status Quo | IDR 0 [Verified] | Free, zero learning curve | Stock discrepancies, no service reminders |
+| General Retail POS | Horizontal SaaS | IDR 150,000–300,000 [Estimate] | Mature cashier & QRIS | Lacks license-plate history, service packages, or mechanic commissions |
+| Enterprise Workshop ERP | Vertical Legacy | IDR 750,000–2,000,000 [Estimate] | Full accounting suite | Too expensive & complex for 2–6 bay shops |
 
-## 2. Peluang ERRC (Blue Ocean)
+## 2. ERRC Grid (Blue Ocean)
 
-- **Eliminate**: Modul akuntansi ERP yang rumit dan biaya setup awal tinggi.
-- **Reduce**: Waktu input nota servis menjadi < 20 detik lewat template paket servis.
-- **Raise**: Akurasi hitung komisi mekanik otomatis dan pengingat servis via WhatsApp.
-- **Create**: Katalog part motor populer siap pakai (pre-loaded) saat registrasi pertama.
+- **Eliminate**: Complex ERP accounting modules and high upfront setup fees.
+- **Reduce**: Service invoice entry time to < 20 seconds via pre-built service package templates.
+- **Raise**: Automated mechanic commission accuracy and WhatsApp service reminders.
+- **Create**: Pre-loaded catalog of top 100 popular motorcycle spare parts upon first sign-up.
