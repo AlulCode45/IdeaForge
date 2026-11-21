@@ -47,15 +47,31 @@
 | `business` | 商业与财务可行性评估（不含深层技术规格） | `prps/YYYY-MM-DD-<slug>/`（`00`, `07`–`19`） |
 | `full` | 端到端产品 + 商业 + 财务 + 合规全套分析 | `prps/YYYY-MM-DD-<slug>/`（`00`–`19`） |
 
-```text
-需求分流与脚手架 (init_project.py)
-  └─> 技术 PRP (00–06)
-        └─> 市场调研 (07) -> 竞品分析 (15) -> 客户探索 (14)
-              └─> SWOT/TOWS (08) -> 机会分析 (09) -> 管理与运营 (10)
-                    └─> 定价策略与财务建模 (11)
-                          └─> 合规与法务 (16) -> GTM 与商业风险 (12)
-                                └─> 证据审计与 Linter (13) -> Go/No-Go 评分卡 (17)
-                                      └─> 高管摘要与 PDF (18) -> 复盘追踪 (19)
+```mermaid
+flowchart TD
+    A["1. 需求接入与脚手架 (init_project.py)"] --> B{"选择交付轨道"}
+    B -- "quick" --> Q["快速简报 (ideas/&lt;slug&gt;/)"]
+    B -- "tech" --> T["技术 PRP (00–06)"]
+    B -- "business" --> M["市场调研 (07)"]
+    B -- "full" --> T --> M
+
+    subgraph Discovery["2. 市场与客户探索"]
+        M --> C["竞品分析 (15)"] --> D["客户探索 (14)"]
+    end
+
+    subgraph Strategy["3. 战略与财务建模"]
+        D --> S["SWOT / TOWS (08) & 机会分析 (09)"] --> MG["管理与运营 (10)"] --> F["定价与可计算财务 (11)"]
+    end
+
+    subgraph Risk["4. 合规与市场进入"]
+        F --> L["合规与法务 (16)"] --> G["GTM 与商业风险 (12)"]
+    end
+
+    subgraph Decision["5. 审计、决策与交付"]
+        G --> E["证据审计与 Linter (13)"] --> SC["Go/No-Go 评分卡 (17)"] --> EX["高管摘要与 PDF (18)"] --> R["复盘追踪 (19)"]
+    end
+
+    T -. "tech 轨道" .-> E
 ```
 
 ---

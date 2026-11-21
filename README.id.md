@@ -47,15 +47,31 @@ Workspace terstruktur untuk **AI Brainstorming Partner & Strategic Analysis Agen
 | `business` | Kelayakan bisnis & finansial tanpa spek teknis | `prps/YYYY-MM-DD-<slug>/` (`00`, `07`–`19`) |
 | `full` | Produk + bisnis + finansial + kepatuhan lengkap | `prps/YYYY-MM-DD-<slug>/` (`00`–`19`) |
 
-```text
-Intake & Scaffold (init_project.py)
-  └─> PRP Teknis (00–06)
-        └─> Riset Pasar (07) -> Kompetitor (15) -> Customer Discovery (14)
-              └─> SWOT/TOWS (08) -> Peluang (09) -> Manajemen (10)
-                    └─> Pricing & Keuangan Terhitung (11)
-                          └─> Kepatuhan & Legal (16) -> GTM & Risiko Bisnis (12)
-                                └─> Audit Bukti & Linter (13) -> Scorecard Go/No-Go (17)
-                                      └─> Executive Summary & PDF (18) -> Retrospective (19)
+```mermaid
+flowchart TD
+    A["1. Intake & Scaffold (init_project.py)"] --> B{"Pilih Track"}
+    B -- "quick" --> Q["Quick Brief (ideas/&lt;slug&gt;/)"]
+    B -- "tech" --> T["PRP Teknis (00–06)"]
+    B -- "business" --> M["Riset Pasar (07)"]
+    B -- "full" --> T --> M
+
+    subgraph Discovery["2. Riset Pasar & Pelanggan"]
+        M --> C["Analisa Kompetitor (15)"] --> D["Customer Discovery (14)"]
+    end
+
+    subgraph Strategy["3. Strategi & Keuangan"]
+        D --> S["SWOT / TOWS (08) & Peluang (09)"] --> MG["Rencana Manajemen (10)"] --> F["Pricing & Keuangan Terhitung (11)"]
+    end
+
+    subgraph Risk["4. Kepatuhan & GTM"]
+        F --> L["Kepatuhan & Legal (16)"] --> G["GTM & Risiko Bisnis (12)"]
+    end
+
+    subgraph Decision["5. Audit, Keputusan & Laporan"]
+        G --> E["Audit Bukti & Linter (13)"] --> SC["Scorecard Go/No-Go (17)"] --> EX["Executive Summary & PDF (18)"] --> R["Retrospective (19)"]
+    end
+
+    T -. "track tech" .-> E
 ```
 
 ---

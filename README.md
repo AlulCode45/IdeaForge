@@ -47,15 +47,31 @@ A structured, enterprise-grade workspace for an **AI Brainstorming Partner & Str
 | `business` | Commercial & financial feasibility without code specs | `prps/YYYY-MM-DD-<slug>/` (`00`, `07`–`19`) |
 | `full` | End-to-end product, business, finance, & compliance | `prps/YYYY-MM-DD-<slug>/` (`00`–`19`) |
 
-```text
-Intake & Scaffold (init_project.py)
-  └─> Technical PRP (00–06)
-        └─> Market Research (07) -> Competitor Analysis (15) -> Customer Discovery (14)
-              └─> SWOT/TOWS (08) -> Opportunity (09) -> Management (10)
-                    └─> Pricing & Computed Finance (11)
-                          └─> Compliance & Legal (16) -> GTM & Business Risk (12)
-                                └─> Evidence Audit & Linter (13) -> Go/No-Go Scorecard (17)
-                                      └─> Executive Summary & PDF (18) -> Retrospective (19)
+```mermaid
+flowchart TD
+    A["1. Intake & Scaffold (init_project.py)"] --> B{"Select Track"}
+    B -- "quick" --> Q["Quick Brief (ideas/&lt;slug&gt;/)"]
+    B -- "tech" --> T["Technical PRP (00–06)"]
+    B -- "business" --> M["Market Research (07)"]
+    B -- "full" --> T --> M
+
+    subgraph Discovery["2. Market & Customer Discovery"]
+        M --> C["Competitor Analysis (15)"] --> D["Customer Discovery (14)"]
+    end
+
+    subgraph Strategy["3. Strategy & Finance"]
+        D --> S["SWOT / TOWS (08) & Opportunity (09)"] --> MG["Management Plan (10)"] --> F["Pricing & Computed Finance (11)"]
+    end
+
+    subgraph Risk["4. Compliance & GTM"]
+        F --> L["Compliance & Legal (16)"] --> G["GTM & Business Risk (12)"]
+    end
+
+    subgraph Decision["5. Audit, Decision & Delivery"]
+        G --> E["Evidence Audit & Linter (13)"] --> SC["Go/No-Go Scorecard (17)"] --> EX["Executive Summary & PDF (18)"] --> R["Retrospective (19)"]
+    end
+
+    T -. "tech track" .-> E
 ```
 
 ---
