@@ -4,5 +4,5 @@ Follow all guidelines, engagement tracks, skill routing, quality gates, and Git 
 
 - **Skills directory**: `.agents/skills/*/SKILL.md` (run `python3 scripts/install_skills.py --target claude` if you also want them mirrored into `.claude/skills/`).
 - **Templates**: `templates/`
-- **Deterministic scripts**: `scripts/init_project.py`, `scripts/lint_project.py`, `.agents/skills/financial-modeler/scripts/model.py`, `.agents/skills/executive-reporter/scripts/export_pdf.py`.
+- **Deterministic scripts**: `scripts/init_project.py`, `scripts/lint_project.py`, `.agents/skills/financial-modeler/scripts/model.py`, `.agents/skills/executive-reporter/scripts/export_pdf.py`, `.agents/skills/executive-reporter/scripts/export_web.py`.
 - **Web research**: Use your available web search / fetch tools (`WebSearch`, `WebFetch`, MCP browser, etc.) when running `market-researcher`, `competitor-analyst`, or `compliance-checker`.

@@ -114,8 +114,93 @@ class TestProjectTools(unittest.TestCase):
                 capture_output=True,
             )
             self.assertTrue((ws / ".claude/skills/project-intake/SKILL.md").exists())
+            self.assertTrue((ws / ".claude/skills/prd-writer/SKILL.md").exists())
             self.assertTrue((ws / ".gemini/skills/financial-modeler/scripts/model.py").exists())
             self.assertTrue((ws / ".codex/skills/decision-scorecard/SKILL.md").exists())
+
+    def test_init_and_lint_prd_project(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ws = Path(tmp)
+            self._setup_workspace(ws)
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(INIT_SCRIPT),
+                    "--slug",
+                    "checkout-v2",
+                    "--title",
+                    "Checkout v2",
+                    "--track",
+                    "prd",
+                    "--date",
+                    "2026-11-26",
+                    "--base-dir",
+                    str(ws),
+                ],
+                check=True,
+                capture_output=True,
+            )
+            proj = ws / "prds/2026-11-26-checkout-v2"
+            self.assertTrue((proj / "README.md").exists())
+            self.assertTrue((proj / "CHANGELOG.md").exists())
+            self.assertTrue((proj / "PRD.md").exists())
+            self.assertTrue((proj / "13-assumption-register.md").exists())
+            self.assertFalse((proj / "model/inputs.json").exists())
+            self.assertIn("2026-11-26-checkout-v2", (ws / "prds/INDEX.md").read_text(encoding="utf-8"))
+
+            lint_proc = subprocess.run(
+                [sys.executable, str(LINT_SCRIPT), str(proj), "--strict"],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(lint_proc.returncode, 0, lint_proc.stdout + lint_proc.stderr)
+            self.assertIn("PRD.md includes all required PRD sections.", lint_proc.stdout)
+            self.assertIn("PRD.md includes structured Given/When/Then acceptance criteria.", lint_proc.stdout)
+
+    def test_lint_catches_prd_issues(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ws = Path(tmp)
+            self._setup_workspace(ws)
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(INIT_SCRIPT),
+                    "--slug",
+                    "bad-prd",
+                    "--title",
+                    "Bad PRD",
+                    "--track",
+                    "prd",
+                    "--date",
+                    "2026-11-26",
+                    "--base-dir",
+                    str(ws),
+                ],
+                check=True,
+                capture_output=True,
+            )
+            proj = ws / "prds/2026-11-26-bad-prd"
+            (proj / "PRD.md").write_text(
+                "# Product Requirements Document - Bad PRD\n\n"
+                "## 1. Problem Statement\n"
+                "This revolutionary feature — 90% faster.\n\n"
+                "## 2. Functional Requirements\n"
+                "| ID | Priority | Description |\n"
+                "|---|---|---|\n"
+                "| FR-001 | P0 | First requirement |\n"
+                "| FR-001 | P0 | Duplicate requirement |\n",
+                encoding="utf-8",
+            )
+            lint_proc = subprocess.run(
+                [sys.executable, str(LINT_SCRIPT), str(proj)],
+                capture_output=True,
+                text=True,
+            )
+            self.assertNotEqual(lint_proc.returncode, 0)
+            self.assertIn("missing required PRD sections", lint_proc.stdout)
+            self.assertIn("duplicate requirement/story IDs: FR-001", lint_proc.stdout)
+            self.assertIn("missing structured Given/When/Then", lint_proc.stdout)
+            self.assertIn("Editorial slop detected in PRD.md", lint_proc.stdout)
 
 
 if __name__ == "__main__":

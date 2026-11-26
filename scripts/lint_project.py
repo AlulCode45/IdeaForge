@@ -139,15 +139,92 @@ def check_stale_dates(proj_dir: Path, max_age_days: int, findings: list[tuple[st
         findings.append(("PASS", f"No unmarked stale source dates (>{max_age_days}d)."))
 
 
+def _find_prd_files(proj_dir: Path) -> list[Path]:
+    prd_files: list[Path] = []
+    root_prd = proj_dir / "PRD.md"
+    if root_prd.exists():
+        prd_files.append(root_prd)
+    sub_prds = proj_dir / "prds"
+    if sub_prds.is_dir():
+        prd_files.extend(sorted(sub_prds.glob("*.md")))
+    return prd_files
+
+
+def check_prd(proj_dir: Path, findings: list[tuple[str, str]]) -> None:
+    prd_files = _find_prd_files(proj_dir)
+    if not prd_files:
+        return
+
+    required_sections = [
+        ("Problem Statement", re.compile(r"\b(problem|masalah)\b", re.I)),
+        ("Non-Goals / Out of Scope", re.compile(r"\b(non-goals?|out of scope|di luar cakupan|bukan tujuan)\b", re.I)),
+        ("Success Metrics", re.compile(r"\b(success metrics?|metrik keberhasilan|kpi)\b", re.I)),
+        ("User Stories", re.compile(r"\b(user stor(?:y|ies)|cerita pengguna)\b", re.I)),
+        ("Functional Requirements", re.compile(r"\b(functional requirements?|kebutuhan fungsional)\b", re.I)),
+        ("Edge Cases / Error Handling", re.compile(r"\b(edge cases?|error handling|penanganan error|kasus tepi)\b", re.I)),
+        ("Rollout / Test Criteria", re.compile(r"\b(rollout|test criteria|verification|kriteria pengujian|pengujian)\b", re.I)),
+    ]
+    def_table_re = re.compile(r"^\|\s*(FR-\d+|NFR-\d+|US-\d+|EC-\d+|TC-\d+)\s*\|")
+    def_heading_re = re.compile(r"^#{2,4}\s+(FR-\d+|NFR-\d+|US-\d+|EC-\d+|TC-\d+)\b")
+
+    for prd_path in prd_files:
+        rel_name = str(prd_path.relative_to(proj_dir))
+        text = prd_path.read_text(encoding="utf-8")
+        headings = "\n".join(
+            ln.strip() for ln in text.splitlines() if re.match(r"^#{1,4}\s+", ln.strip())
+        )
+
+        # 1. Required sections
+        missing = [label for label, pat in required_sections if not pat.search(headings)]
+        if missing:
+            findings.append(("FAIL", f"{rel_name} missing required PRD sections: {', '.join(missing)}"))
+        else:
+            findings.append(("PASS", f"{rel_name} includes all required PRD sections."))
+
+        # 2. Functional Requirement IDs & uniqueness
+        fr_ids = re.findall(r"\bFR-\d+\b", text)
+        if not fr_ids:
+            findings.append(("FAIL", f"{rel_name} has no functional requirement IDs (e.g., FR-001)."))
+        else:
+            findings.append(("PASS", f"{rel_name} defines {len(set(fr_ids))} functional requirement ID(s)."))
+
+        seen_defs: dict[str, int] = {}
+        for ln in text.splitlines():
+            s = ln.strip()
+            m = def_table_re.match(s) or def_heading_re.match(s)
+            if m:
+                req_id = m.group(1)
+                seen_defs[req_id] = seen_defs.get(req_id, 0) + 1
+        dupes = sorted(k for k, cnt in seen_defs.items() if cnt > 1)
+        if dupes:
+            findings.append(("FAIL", f"{rel_name} has duplicate requirement/story IDs: {', '.join(dupes)}"))
+        else:
+            findings.append(("PASS", f"{rel_name} has unique requirement/story IDs."))
+
+        # 3. Given / When / Then acceptance criteria (EN or ID)
+        has_en_gwt = all(re.search(rf"\b{kw}\b", text, re.I) for kw in ("given", "when", "then"))
+        has_id_gwt = all(re.search(rf"\b{kw}\b", text, re.I) for kw in ("diberikan", "ketika", "maka"))
+        if has_en_gwt or has_id_gwt:
+            findings.append(("PASS", f"{rel_name} includes structured Given/When/Then acceptance criteria."))
+        else:
+            findings.append(("FAIL", f"{rel_name} missing structured Given/When/Then (or Diberikan/Ketika/Maka) acceptance criteria."))
+
+
 def check_evidence_labels(proj_dir: Path, findings: list[tuple[str, str]]) -> None:
     num_claim_re = re.compile(r"(?:IDR|Rp|USD|\$)\s*\d|\d+(?:[.,]\d+)?%")
-    for fname in ("07-market-research.md", "11-financial-plan.md", "15-competitor-analysis.md", "18-executive-summary.md"):
-        p = proj_dir / fname
-        if not p.exists():
+    targets = [
+        proj_dir / fname
+        for fname in ("07-market-research.md", "11-financial-plan.md", "15-competitor-analysis.md", "18-executive-summary.md")
+    ] + _find_prd_files(proj_dir)
+    seen: set[Path] = set()
+    for p in targets:
+        if p in seen or not p.exists():
             continue
+        seen.add(p)
         text = p.read_text(encoding="utf-8")
         if num_claim_re.search(text) and not any(tag in text for tag in EVIDENCE_TAGS):
-            findings.append(("WARN", f"{fname} has numeric/currency claims but zero evidence tags ({', '.join(EVIDENCE_TAGS)})."))
+            rel = str(p.relative_to(proj_dir))
+            findings.append(("WARN", f"{rel} has numeric/currency claims but zero evidence tags ({', '.join(EVIDENCE_TAGS)})."))
 
 
 def check_financial_consistency(proj_dir: Path, findings: list[tuple[str, str]]) -> None:
@@ -169,20 +246,24 @@ def check_financial_consistency(proj_dir: Path, findings: list[tuple[str, str]])
 
 
 def check_anti_slop(proj_dir: Path, findings: list[tuple[str, str]]) -> None:
-    exec_path = proj_dir / "18-executive-summary.md"
-    if not exec_path.exists():
-        return
-    text = exec_path.read_text(encoding="utf-8")
-    issues = []
-    if "\u2014" in text:
-        issues.append("em-dash (—)")
-    for term in SLOP_TERMS:
-        if term in text.lower():
-            issues.append(f"hype term '{term}'")
-    if issues:
-        findings.append(("WARN", f"Editorial slop detected in 18-executive-summary.md: {', '.join(issues)}"))
-    else:
-        findings.append(("PASS", "18-executive-summary.md passes anti-slop check."))
+    targets = [proj_dir / "18-executive-summary.md"] + _find_prd_files(proj_dir)
+    seen: set[Path] = set()
+    for path in targets:
+        if path in seen or not path.exists():
+            continue
+        seen.add(path)
+        rel = str(path.relative_to(proj_dir))
+        text = path.read_text(encoding="utf-8")
+        issues = []
+        if "\u2014" in text:
+            issues.append("em-dash (—)")
+        for term in SLOP_TERMS:
+            if term in text.lower():
+                issues.append(f"hype term '{term}'")
+        if issues:
+            findings.append(("WARN", f"Editorial slop detected in {rel}: {', '.join(issues)}"))
+        else:
+            findings.append(("PASS", f"{rel} passes anti-slop check."))
 
 
 def check_index_registration(proj_dir: Path, index_path: Path, findings: list[tuple[str, str]]) -> None:
@@ -213,6 +294,7 @@ def main():
 
     check_core_files(proj_dir, findings)
     check_links(proj_dir, findings)
+    check_prd(proj_dir, findings)
     check_scorecard(proj_dir, findings)
     check_stale_dates(proj_dir, args.max_age_days, findings)
     check_evidence_labels(proj_dir, findings)

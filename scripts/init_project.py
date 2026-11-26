@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Initialize a structured project folder under prps/ or a quick brief under ideas/.
+"""Initialize a structured project folder under prps/, a standalone PRD under prds/, or a quick brief under ideas/.
 
 Usage:
   python3 scripts/init_project.py --slug kasir-umkm --title "Kasir UMKM SaaS" --track full --model-type saas
+  python3 scripts/init_project.py --slug checkout-v2 --title "Checkout v2" --track prd
 """
 import argparse
 import re
@@ -11,6 +12,10 @@ from datetime import date
 from pathlib import Path
 
 TRACK_FILES = {
+    "prd": [
+        "PRD.md",
+        "13-assumption-register.md",
+    ],
     "tech": [
         "00-overview.md",
         "01-users-and-flows.md",
@@ -99,7 +104,7 @@ def main():
     ap = argparse.ArgumentParser(description="Initialize an IdeaForge project or quick brief.")
     ap.add_argument("--slug", required=True, help="Lowercase hyphenated project slug")
     ap.add_argument("--title", required=True, help="Human-readable project title")
-    ap.add_argument("--track", choices=["quick", "tech", "business", "full"], default="full", help="Engagement track")
+    ap.add_argument("--track", choices=["quick", "prd", "tech", "business", "full"], default="full", help="Engagement track")
     ap.add_argument("--date", default=date.today().isoformat(), help="ISO date YYYY-MM-DD")
     ap.add_argument("--currency", default="IDR", help="Default currency (e.g., IDR, USD)")
     ap.add_argument("--jurisdiction", default="Indonesia", help="Default legal jurisdiction")
@@ -137,27 +142,32 @@ def main():
         return
 
     folder_name = f"{args.date}-{slug}"
-    proj_dir = root / "prps" / folder_name
-    for sub in ("decisions", "model", "assets"):
+    is_prd = args.track == "prd"
+    base_folder = "prds" if is_prd else "prps"
+    proj_dir = root / base_folder / folder_name
+    subfolders = ("decisions", "assets") if is_prd else ("decisions", "model", "assets")
+    for sub in subfolders:
         (proj_dir / sub).mkdir(parents=True, exist_ok=True)
 
     # README.md
     readme_path = proj_dir / "README.md"
     if not readme_path.exists() or args.force:
         checklist = "\n".join(f"- [ ] `{f}`" for f in TRACK_FILES[args.track])
+        model_line = "" if is_prd else f"- **Model Type**: `{args.model_type}`\n"
+        model_folder_line = "" if is_prd else "- `model/` — `inputs.json` and `summary.json` for `financial-modeler`\n"
         readme_path.write_text(
             f"# {args.title}\n\n"
             f"- **Track**: `{args.track}`\n"
             f"- **Created**: {args.date}\n"
             f"- **Currency**: {args.currency}\n"
             f"- **Jurisdiction**: {args.jurisdiction}\n"
-            f"- **Model Type**: `{args.model_type}`\n"
-            f"- **Confidentiality**: Local-only (never push `prps/` to `origin` without explicit approval)\n\n"
+            f"{model_line}"
+            f"- **Confidentiality**: Local-only (never push `{base_folder}/` to `origin` without explicit approval)\n\n"
             f"## Documents ({args.track} track)\n\n"
             f"{checklist}\n\n"
             "## Folders\n"
             "- `decisions/` — Architecture & strategic Decision Records (`ADR-NNN-<slug>.md`)\n"
-            "- `model/` — `inputs.json` and `summary.json` for `financial-modeler`\n"
+            f"{model_folder_line}"
             "- `assets/` — SVG charts, illustrations, and exported PDFs\n",
             encoding="utf-8",
         )
@@ -182,6 +192,17 @@ def main():
             text = f"# Assumption Register - {args.title}\n\nLast reviewed: {args.date}\n"
         ar_path.write_text(text, encoding="utf-8")
 
+    # PRD.md for standalone prd track
+    if is_prd:
+        prd_path = proj_dir / "PRD.md"
+        if not prd_path.exists() or args.force:
+            tpl = templates_dir / "prd.md"
+            if tpl.exists():
+                text = tpl.read_text(encoding="utf-8").replace("<Project>", args.title).replace("YYYY-MM-DD", args.date)
+            else:
+                text = f"# Product Requirements Document (PRD) - {args.title}\n\nDate: {args.date}\n"
+            prd_path.write_text(text, encoding="utf-8")
+
     # model/inputs.json for business/full tracks
     if args.track in ("business", "full"):
         inputs_dest = proj_dir / "model" / "inputs.json"
@@ -191,8 +212,9 @@ def main():
             if src_path.exists():
                 shutil.copyfile(src_path, inputs_dest)
 
-    update_index(root / "prps" / "INDEX.md", args.title, f"prps/{folder_name}", args.track, args.date)
-    print(f"Initialized project: {proj_dir}")
+    update_index(root / base_folder / "INDEX.md", args.title, f"{base_folder}/{folder_name}", args.track, args.date)
+    label = "PRD project" if is_prd else "project"
+    print(f"Initialized {label}: {proj_dir}")
 
 
 if __name__ == "__main__":

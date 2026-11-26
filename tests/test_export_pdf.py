@@ -67,6 +67,56 @@ class TestExportPdf(unittest.TestCase):
             self.assertGreater(out_pdf.stat().st_size, 5000)
             self.assertIn("PDF generated:", proc.stdout)
 
+    def test_export_prd_project_mode(self):
+        init_script = ROOT / "scripts/init_project.py"
+        with tempfile.TemporaryDirectory() as tmp:
+            ws = Path(tmp)
+            (ws / "templates").mkdir()
+            for tpl in (ROOT / "templates").glob("*.md"):
+                (ws / "templates" / tpl.name).write_text(tpl.read_text(encoding="utf-8"), encoding="utf-8")
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(init_script),
+                    "--slug",
+                    "checkout-v2",
+                    "--title",
+                    "Checkout v2",
+                    "--track",
+                    "prd",
+                    "--date",
+                    "2026-11-26",
+                    "--base-dir",
+                    str(ws),
+                ],
+                check=True,
+                capture_output=True,
+            )
+            proj = ws / "prds/2026-11-26-checkout-v2"
+            out_pdf = proj / "assets/checkout-v2-prd.pdf"
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    str(EXPORT_SCRIPT),
+                    "--project",
+                    str(proj),
+                    "--mode",
+                    "prd",
+                    "--lang",
+                    "en",
+                    "--output",
+                    str(out_pdf),
+                    "--title",
+                    "Checkout v2 PRD",
+                ],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            self.assertTrue(out_pdf.exists())
+            self.assertGreater(out_pdf.stat().st_size, 5000)
+            self.assertIn("PDF generated:", proc.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -12,11 +12,12 @@ Workspace terstruktur untuk **AI Brainstorming Partner & Strategic Analysis Agen
 
 ## Keunggulan Utama
 
-- **Engagement Tracks Sesuai Kebutuhan**: Tidak *one-size-fits-all*. Setiap permintaan diklasifikasikan ke track `quick` (ringkasan 1–2 halaman), `tech` (PRP teknis & arsitektur), `business` (studi kelayakan komersial), atau `full` (lengkap) via `project-intake` dan `scripts/init_project.py`.
+- **Engagement Tracks Sesuai Kebutuhan**: Tidak *one-size-fits-all*. Setiap permintaan diklasifikasikan ke track `quick` (ringkasan 1–2 halaman), `prd` (Product Requirements Document siap coding-agent), `tech` (PRP teknis & arsitektur), `business` (studi kelayakan komersial), atau `full` (lengkap) via `project-intake` dan `scripts/init_project.py`.
 - **Alur Bertahap dengan Checkpoint**: Analisis berjalan langkah demi langkah; agent merangkum hasil, menjalankan *red-team* singkat, dan meminta persetujuan sebelum lanjut ke tahap berikutnya.
-- **Standar Bukti & Linter Otomatis**: Setiap angka dilabeli `[Verified]`, `[Estimate]`, `[Assumption]`, atau `[Unverified]`, sumber diberi grade `A`/`B`/`C` beserta tanggal akses, dan `scripts/lint_project.py` memvalidasi link, aritmatika scorecard, data kedaluwarsa, serta anti-*AI slop*.
+- **Standar Bukti & Linter Otomatis**: Setiap angka dilabeli `[Verified]`, `[Estimate]`, `[Assumption]`, atau `[Unverified]`, sumber diberi grade `A`/`B`/`C` beserta tanggal akses, dan `scripts/lint_project.py` memvalidasi link, aritmatika scorecard, kelengkapan PRD (section, ID FR, Given/When/Then), data kedaluwarsa, serta anti-*AI slop*.
 - **Model Keuangan Terhitung (Transactional & SaaS)**: `model.py` menghitung 3 skenario (pesimis, dasar, optimis), CAPEX, *channel fee*, pajak, *runway* eksak, LTV/CAC, *payback period*, sensitivitas 2-arah, dan grafik SVG otomatis.
-- **Export PDF Editorial + Mermaid**: `export_pdf.py` mengekspor satu file Markdown atau folder PRP (`--mode executive|technical|full`) menjadi PDF A4 dengan cover, daftar isi (TOC) otomatis, header tabel berulang, grafik SVG, dan diagram Mermaid.
+- **Export PDF Editorial + Mermaid**: `export_pdf.py` mengekspor satu file Markdown, folder PRD, atau folder PRP (`--mode executive|technical|full|prd`) menjadi PDF A4 dengan cover, daftar isi (TOC) otomatis, header tabel berulang, grafik SVG, dan diagram Mermaid.
+- **Web GUI Interaktif & Local Portfolio Hub**: `export_web.py` mengekspor laporan, PRD, atau PRP menjadi file HTML interaktif mandiri (*sidebar* navigasi, pencarian instan, Dark/Light mode, filter tag bukti, checklist interaktif, panel Quality Gate, dan **Simulator Finansial What-If** real-time) ATAU menjalankan dashboard lokal live (`--serve`) untuk seluruh `prps/`, `prds/`, dan `ideas/`.
 
 ---
 
@@ -51,6 +52,7 @@ Workspace terstruktur untuk **AI Brainstorming Partner & Strategic Analysis Agen
 | Track | Kapan Dipakai | Lokasi Output |
 |---|---|---|
 | `quick` | Eksplorasi awal / catatan cepat 1–2 halaman | `ideas/<slug>/YYYY-MM-DD-brief.md` |
+| `prd` | PRD produk/fitur mandiri yang siap dieksekusi coding agent | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `13-assumption-register.md`) |
 | `tech` | Spesifikasi produk & arsitektur software | `prps/YYYY-MM-DD-<slug>/` (`00`–`06`, `13`, `17`) |
 | `business` | Kelayakan bisnis & finansial tanpa spek teknis | `prps/YYYY-MM-DD-<slug>/` (`00`, `07`–`19`) |
 | `full` | Produk + bisnis + finansial + kepatuhan lengkap | `prps/YYYY-MM-DD-<slug>/` (`00`–`19`) |
@@ -59,6 +61,7 @@ Workspace terstruktur untuk **AI Brainstorming Partner & Strategic Analysis Agen
 flowchart TD
     A["1. Intake & Scaffold (init_project.py)"] --> B{"Pilih Track"}
     B -- "quick" --> Q["Quick Brief (ideas/&lt;slug&gt;/)"]
+    B -- "prd" --> P["Product PRD (prds/&lt;slug&gt;/PRD.md)"]
     B -- "tech" --> T["PRP Teknis (00–06)"]
     B -- "business" --> M["Riset Pasar (07)"]
     B -- "full" --> T --> M
@@ -79,20 +82,22 @@ flowchart TD
         G --> E["Audit Bukti & Linter (13)"] --> SC["Scorecard Go/No-Go (17)"] --> EX["Executive Summary & PDF (18)"] --> R["Retrospective (19)"]
     end
 
+    P -. "lint & PDF (--mode prd)" .-> E
     T -. "track tech" .-> E
 ```
 
 ---
 
-## Daftar 20 Skill Modular (`.agents/skills/`)
+## Daftar 21 Skill Modular (`.agents/skills/`)
 
 ### 1. Intake, Ideasi & Scoping Produk
 | Skill | Fungsi Utama | Output Utama |
 |---|---|---|
-| `project-intake` | Triase track (`quick`/`tech`/`business`/`full`), catat batasan, scaffold folder | Scaffold project |
+| `project-intake` | Triase track (`quick`/`prd`/`tech`/`business`/`full`), catat batasan, scaffold folder | Scaffold project |
 | `ideation-facilitator` | Eksplorasi kreatif (*First Principles*, *SCAMPER*, *HMW*, *3-Horizon*) | Opsi & arah ide |
 | `business-validator` | Validasi cepat (*Lean Canvas*, ICP, eksperimen dengan *Pass/Kill criteria*) | Ringkasan validasi |
 | `project-scoper` | Pemecahan ide menjadi MVP (*MoSCoW*), arsitektur ringkas, & task | Scope MVP & tugas |
+| `prd-writer` | Penyusunan PRD siap coding-agent: problem, goals/non-goals, user stories + Given/When/Then AC, ID FR/NFR, edge cases, API outline, analytics, rollout & test | `prds/<slug>/PRD.md` atau `prps/<project>/PRD.md` |
 | `prp-writer` | Penyusunan PRP detail berurutan lengkap dengan diagram Mermaid | `prps/<project>/00`–`06` |
 | `tech-feasibility-estimator` | Build-vs-buy, estimasi effort (man-days), infra/AI API COGS, & security | Update `03`, `06`, `inputs.json` |
 | `idea-logger` | Pengarsipan catatan brainstorming ke folder topik masing-masing | `ideas/<topic-slug>/` |
@@ -126,9 +131,10 @@ flowchart TD
 
 ## Menjalankan Skrip & Test Secara Langsung
 
-### 1. Inisialisasi Project (`init_project.py`)
+### 1. Inisialisasi Project atau PRD Mandiri (`init_project.py`)
 ```bash
 python3 scripts/init_project.py --slug kasir-bengkel --title "Kasir Bengkel SaaS" --track full --model-type saas
+python3 scripts/init_project.py --slug checkout-v2 --title "Checkout v2" --track prd
 ```
 
 ### 2. Model Keuangan (`model.py`)
@@ -143,6 +149,7 @@ python3 .agents/skills/financial-modeler/scripts/model.py \
 ### 3. Audit Kualitas Otomatis (`lint_project.py`)
 ```bash
 python3 scripts/lint_project.py prps/<project-slug>
+python3 scripts/lint_project.py prds/<prd-slug>
 ```
 
 ### 4. Export Laporan ke PDF (`export_pdf.py`)
@@ -153,7 +160,7 @@ python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
   --output examples/sample-report/sample-executive-report.pdf \
   --title "Contoh Laporan Analisa Bisnis (Sample)" --toc
 ```
-Atau gabungkan folder PRP berdasarkan mode (`executive`, `technical`, atau `full`):
+Atau gabungkan folder PRP / PRD berdasarkan mode (`executive`, `technical`, `full`, atau `prd`):
 ```bash
 python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
   --project prps/<project-slug> --mode executive \
@@ -162,7 +169,22 @@ python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
 ```
 Lihat contoh hasilnya di [examples/sample-report/sample-executive-report.pdf](examples/sample-report/sample-executive-report.pdf).
 
-### 5. Menjalankan Unit & Integration Tests
+### 5. Export Web GUI Interaktif atau Jalankan Dashboard Lokal (`export_web.py`)
+Export file HTML interaktif mandiri (bisa langsung dibuka offline, lengkap dengan Simulator Finansial What-If):
+```bash
+python3 .agents/skills/executive-reporter/scripts/export_web.py \
+  --input examples/sample-report/sample-executive-report.md \
+  --output examples/sample-report/sample-executive-report.html \
+  --title "Sample Business Analysis Report" \
+  --model-inputs .agents/skills/financial-modeler/scripts/example_inputs.json --lang id
+```
+Atau jalankan Local Portfolio Hub Dashboard (`http://127.0.0.1:8765`) untuk menjelajahi seluruh `prps/`, `prds/`, & `ideas/`:
+```bash
+python3 .agents/skills/executive-reporter/scripts/export_web.py --serve --port 8765 --lang id
+```
+Lihat contoh hasilnya di [examples/sample-report/sample-executive-report.html](examples/sample-report/sample-executive-report.html).
+
+### 6. Menjalankan Unit & Integration Tests
 ```bash
 python3 -m unittest discover -s tests -v
 ```
@@ -177,13 +199,14 @@ IdeaForge/
 ├── README.md / README.id.md / README.zh.md
 ├── LICENSE
 ├── scripts/
-│   ├── init_project.py                 # Scaffold folder prps/ atau ideas/ + update INDEX.md
-│   └── lint_project.py                 # Validator link, aritmatika scorecard, tag bukti, & anti-slop
+│   ├── init_project.py                 # Scaffold folder prps/, prds/, atau ideas/ + update INDEX.md
+│   └── lint_project.py                 # Validator link, scorecard, PRD, tag bukti, & anti-slop
 ├── tests/                              # Suite unit & integration test (unittest)
-├── .agents/skills/                     # 20 skill modular (SKILL.md + scripts/)
-├── templates/                          # Template baku dokumen
+├── .agents/skills/                     # 21 skill modular (SKILL.md + scripts/)
+├── templates/                          # Template baku dokumen (termasuk prd.md)
 ├── examples/sample-report/             # Contoh laporan Markdown, grafik SVG, & PDF
 ├── ideas/                              # Catatan brainstorming lokal (per folder topik)
+├── prds/                               # Dokumen PRD mandiri lokal + INDEX.md
 └── prps/                               # Dokumen PRP & analisa lengkap lokal + INDEX.md
 ```
 
@@ -192,7 +215,7 @@ IdeaForge/
 ## Aturan Git & Privasi Data
 
 - **Tooling** (`.agents/skills/`, `scripts/`, `templates/`, `tests/`, `examples/`, `AGENTS.md`, `README*.md`): commit dan push ke `origin` (`main`).
-- **Data Proyek & Klien** (`prps/` dan `ideas/`): bersifat lokal secara default. **Jangan** di-push ke repository publik `origin` tanpa persetujuan eksplisit pengguna.
+- **Data Proyek & Klien** (`prps/`, `prds/`, dan `ideas/`): bersifat lokal secara default. **Jangan** di-push ke repository publik `origin` tanpa persetujuan eksplisit pengguna.
 
 ---
 

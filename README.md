@@ -12,11 +12,12 @@ A structured, enterprise-grade workspace for an **AI Brainstorming Partner & Str
 
 ## Why Use IdeaForge?
 
-- **Right-Sized Engagement Tracks**: Avoid over-engineering. Triage every request into `quick` (1–2 page brief), `tech` (product/architecture PRP), `business` (commercial feasibility), or `full` (end-to-end) using `project-intake` and `scripts/init_project.py`.
+- **Right-Sized Engagement Tracks**: Avoid over-engineering. Triage every request into `quick` (1–2 page brief), `prd` (coding-agent-ready Product Requirements Document), `tech` (product/architecture PRP), `business` (commercial feasibility), or `full` (end-to-end) using `project-intake` and `scripts/init_project.py`.
 - **Staged Pipeline with Checkpoints**: Work progresses step by step; the agent summarizes findings, runs a short red-team check, and waits for your approval before moving to the next stage.
-- **Evidence Discipline & Automated Linter**: Every numeric claim is labeled `[Verified]`, `[Estimate]`, `[Assumption]`, or `[Unverified]`, sources are graded `A`/`B`/`C` with access dates, and `scripts/lint_project.py` automatically catches broken links, scorecard math errors, stale sources, and editorial slop.
+- **Evidence Discipline & Automated Linter**: Every numeric claim is labeled `[Verified]`, `[Estimate]`, `[Assumption]`, or `[Unverified]`, sources are graded `A`/`B`/`C` with access dates, and `scripts/lint_project.py` automatically catches broken links, scorecard math errors, PRD structure/ID/Given-When-Then gaps, stale sources, and editorial slop.
 - **Computed Financial Modeling (Transactional & SaaS)**: `model.py` computes 3 scenarios (pessimistic, base, optimistic), CAPEX, channel fees, taxes, exact cash runway, LTV/CAC, payback period, 2-way sensitivity matrices, and clean SVG cash curves—never prose guesses.
-- **Editorial PDF Export with Mermaid**: `export_pdf.py` compiles single Markdown files or full PRP folders (`--mode executive|technical|full`) into A4 PDFs with cover styling, automatic Table of Contents, repeating table headers, embedded SVG charts, and Mermaid diagram rendering.
+- **Editorial PDF Export with Mermaid**: `export_pdf.py` compiles single Markdown files, PRD folders, or full PRP folders (`--mode executive|technical|full|prd`) into A4 PDFs with cover styling, automatic Table of Contents, repeating table headers, embedded SVG charts, and Mermaid diagram rendering.
+- **Interactive Web GUI & Local Portfolio Hub**: `export_web.py` exports any report, PRD, or PRP into a self-contained single-file interactive HTML app (sidebar navigation, instant search, Dark/Light mode, evidence tag filter, interactive checklists, quality-gate drawer, and live What-If Financial Simulator sliders) OR launches a live local Portfolio Hub (`--serve`) across all `prps/`, `prds/`, and `ideas/`.
 
 ---
 
@@ -51,6 +52,7 @@ A structured, enterprise-grade workspace for an **AI Brainstorming Partner & Str
 | Track | Best For | Output Location |
 |---|---|---|
 | `quick` | Early exploration, 1–2 page structured note | `ideas/<slug>/YYYY-MM-DD-brief.md` |
+| `prd` | Standalone, coding-agent-ready product/feature PRD | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `13-assumption-register.md`) |
 | `tech` | Software/product specification & architecture | `prps/YYYY-MM-DD-<slug>/` (`00`–`06`, `13`, `17`) |
 | `business` | Commercial & financial feasibility without code specs | `prps/YYYY-MM-DD-<slug>/` (`00`, `07`–`19`) |
 | `full` | End-to-end product, business, finance, & compliance | `prps/YYYY-MM-DD-<slug>/` (`00`–`19`) |
@@ -59,6 +61,7 @@ A structured, enterprise-grade workspace for an **AI Brainstorming Partner & Str
 flowchart TD
     A["1. Intake & Scaffold (init_project.py)"] --> B{"Select Track"}
     B -- "quick" --> Q["Quick Brief (ideas/&lt;slug&gt;/)"]
+    B -- "prd" --> P["Product PRD (prds/&lt;slug&gt;/PRD.md)"]
     B -- "tech" --> T["Technical PRP (00–06)"]
     B -- "business" --> M["Market Research (07)"]
     B -- "full" --> T --> M
@@ -79,20 +82,22 @@ flowchart TD
         G --> E["Evidence Audit & Linter (13)"] --> SC["Go/No-Go Scorecard (17)"] --> EX["Executive Summary & PDF (18)"] --> R["Retrospective (19)"]
     end
 
+    P -. "lint & PDF (--mode prd)" .-> E
     T -. "tech track" .-> E
 ```
 
 ---
 
-## 20 Modular Skills (`.agents/skills/`)
+## 21 Modular Skills (`.agents/skills/`)
 
 ### 1. Intake, Ideation & Product Scoping
 | Skill | Purpose | Primary Output |
 |---|---|---|
-| `project-intake` | Triage track (`quick`/`tech`/`business`/`full`), capture constraints, scaffold folder | Project scaffold |
+| `project-intake` | Triage track (`quick`/`prd`/`tech`/`business`/`full`), capture constraints, scaffold folder | Project scaffold |
 | `ideation-facilitator` | Divergent exploration (*First Principles*, *SCAMPER*, *HMW*, *3-Horizon*) | Structured options |
 | `business-validator` | Rapid validation (*Lean Canvas*, ICP, experiments with Pass/Kill criteria) | Validation verdict |
 | `project-scoper` | MVP scoping (*MoSCoW*), pragmatic architecture, and task breakdown | MVP scope & tasks |
+| `prd-writer` | Coding-agent-ready PRD: problem, goals/non-goals, user stories + Given/When/Then AC, FR/NFR IDs, edge cases, API outline, analytics, rollout & tests | `prds/<slug>/PRD.md` or `prps/<project>/PRD.md` |
 | `prp-writer` | Detailed sequential PRP with Mermaid flows, architecture, & ERD | `prps/<project>/00`–`06` |
 | `tech-feasibility-estimator` | Build-vs-buy, effort (man-days), infra/AI API COGS, & security baseline | Updates `03`, `06`, `inputs.json` |
 | `idea-logger` | Archive brainstorming notes into topic folders | `ideas/<topic-slug>/` |
@@ -126,9 +131,10 @@ flowchart TD
 
 ## CLI Scripts & Tests
 
-### 1. Initialize a Project (`init_project.py`)
+### 1. Initialize a Project or Standalone PRD (`init_project.py`)
 ```bash
 python3 scripts/init_project.py --slug auto-shop-saas --title "Auto Shop SaaS" --track full --model-type saas
+python3 scripts/init_project.py --slug checkout-v2 --title "Checkout v2" --track prd
 ```
 
 ### 2. Run Financial Model (`model.py`)
@@ -143,6 +149,7 @@ python3 .agents/skills/financial-modeler/scripts/model.py \
 ### 3. Lint Project Quality Gates (`lint_project.py`)
 ```bash
 python3 scripts/lint_project.py prps/<project-slug>
+python3 scripts/lint_project.py prds/<prd-slug>
 ```
 
 ### 4. Export Report to PDF (`export_pdf.py`)
@@ -153,7 +160,7 @@ python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
   --output examples/sample-report/sample-executive-report.pdf \
   --title "Sample Business Analysis Report" --toc
 ```
-Full PRP project folder (`--mode executive | technical | full`):
+Full PRP or standalone PRD folder (`--mode executive | technical | full | prd`):
 ```bash
 python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
   --project prps/<project-slug> --mode executive \
@@ -162,7 +169,22 @@ python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
 ```
 See the sample output at [examples/sample-report/sample-executive-report.pdf](examples/sample-report/sample-executive-report.pdf).
 
-### 5. Run Unit & Integration Tests
+### 5. Export Interactive Web GUI or Launch Local Hub (`export_web.py`)
+Self-contained interactive HTML report (offline-ready, includes What-If Financial Simulator):
+```bash
+python3 .agents/skills/executive-reporter/scripts/export_web.py \
+  --input examples/sample-report/sample-executive-report.md \
+  --output examples/sample-report/sample-executive-report.html \
+  --title "Sample Business Analysis Report" \
+  --model-inputs .agents/skills/financial-modeler/scripts/example_inputs.json --lang en
+```
+Or launch the live local Portfolio Hub dashboard (`http://127.0.0.1:8765`):
+```bash
+python3 .agents/skills/executive-reporter/scripts/export_web.py --serve --port 8765
+```
+See the sample interactive output at [examples/sample-report/sample-executive-report.html](examples/sample-report/sample-executive-report.html).
+
+### 6. Run Unit & Integration Tests
 ```bash
 python3 -m unittest discover -s tests -v
 ```
@@ -177,13 +199,14 @@ IdeaForge/
 ├── README.md / README.id.md / README.zh.md
 ├── LICENSE
 ├── scripts/
-│   ├── init_project.py                 # Deterministic project/brief scaffolding
-│   └── lint_project.py                 # Links, scorecard math, evidence tags, & anti-slop linter
+│   ├── init_project.py                 # Deterministic project/PRD/brief scaffolding
+│   └── lint_project.py                 # Links, scorecard math, PRD checks, evidence tags, & anti-slop linter
 ├── tests/                              # Python unittest suite
-├── .agents/skills/                     # 20 modular skills (SKILL.md + scripts/)
-├── templates/                          # Standardized templates (scorecard, ADR, experiment, etc.)
+├── .agents/skills/                     # 21 modular skills (SKILL.md + scripts/)
+├── templates/                          # Standardized templates (PRD, scorecard, ADR, experiment, etc.)
 ├── examples/sample-report/             # Sample report, generated SVG chart, & PDF
 ├── ideas/                              # Local brainstorming briefs (grouped by topic)
+├── prds/                               # Local standalone PRDs + INDEX.md
 └── prps/                               # Local PRP & feasibility folders + INDEX.md
 ```
 
@@ -192,7 +215,7 @@ IdeaForge/
 ## Git & Data Privacy Rules
 
 - **Tooling** (`.agents/skills/`, `scripts/`, `templates/`, `tests/`, `examples/`, `AGENTS.md`, `README*.md`): commit and push to `origin` (`main`).
-- **Project & Client Data** (`prps/` and `ideas/`): kept local by default. **Never** push `prps/` or `ideas/` to a public `origin` without explicit user confirmation.
+- **Project & Client Data** (`prps/`, `prds/`, and `ideas/`): kept local by default. **Never** push `prps/`, `prds/`, or `ideas/` to a public `origin` without explicit user confirmation.
 
 ---
 

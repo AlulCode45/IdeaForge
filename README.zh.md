@@ -12,11 +12,12 @@
 
 ## 核心优势
 
-- **按需分级的交付轨道（Engagement Tracks）**：拒绝千篇一律。通过 `project-intake` 与 `scripts/init_project.py`，将需求精准分流为 `quick`（1–2 页简报）、`tech`（产品/架构 PRP）、`business`（商业可行性分析）或 `full`（全链路）。
+- **按需分级的交付轨道（Engagement Tracks）**：拒绝千篇一律。通过 `project-intake` 与 `scripts/init_project.py`，将需求精准分流为 `quick`（1–2 页简报）、`prd`（面向编码智能体的产品需求文档 PRD）、`tech`（产品/架构 PRP）、`business`（商业可行性分析）或 `full`（全链路）。
 - **分阶段推进与人工确认节点（Checkpoints）**：每个阶段完成后自动总结核心发现、执行简短的红队压力测试（Red-team），并在获得您的确认后才进入下一阶段。
-- **证据分级与自动化质量检查（Linter）**：所有数据强制标注 `[Verified]`、`[Estimate]`、`[Assumption]` 或 `[Unverified]`，来源标注 `A`/`B`/`C` 评级与访问日期；`scripts/lint_project.py` 自动校验相对链接、评分卡算术、过期引用与文案质量。
+- **证据分级与自动化质量检查（Linter）**：所有数据强制标注 `[Verified]`、`[Estimate]`、`[Assumption]` 或 `[Unverified]`，来源标注 `A`/`B`/`C` 评级与访问日期；`scripts/lint_project.py` 自动校验相对链接、评分卡算术、PRD 结构/需求编号/Given-When-Then 验收标准、过期引用与文案质量。
 - **可计算财务模型（支持交易型与 SaaS 模式）**：`model.py` 自动计算悲观/基准/乐观三情景、CAPEX、渠道费率、税率、精确现金跑道（Runway）、LTV/CAC、回本周期、双向敏感性矩阵，并生成 SVG 现金流曲线图。
-- **排版级 PDF 导出与 Mermaid 支持**：`export_pdf.py` 支持将单篇 Markdown 或完整 PRP 文件夹（`--mode executive|technical|full`）导出为 A4 PDF，自动生成封面与目录（TOC）、跨页重复表头、SVG 图表及 Mermaid 流程图。
+- **排版级 PDF 导出与 Mermaid 支持**：`export_pdf.py` 支持将单篇 Markdown、PRD 目录或完整 PRP 文件夹（`--mode executive|technical|full|prd`）导出为 A4 PDF，自动生成封面与目录（TOC）、跨页重复表头、SVG 图表及 Mermaid 流程图。
+- **交互式 Web GUI 与本地项目中心**：`export_web.py` 可将任意报告、PRD 或 PRP 导出为离线可用的单文件交互式 HTML（侧边栏导航、实时搜索、明暗主题切换、证据标签过滤、交互式任务清单、Linter 质量门禁面板与 What-If 财务模拟器），也可通过 `--serve` 启动本地实时工作台浏览所有 `prps/`、`prds/` 与 `ideas/`。
 
 ---
 
@@ -51,6 +52,7 @@
 | 轨道 | 适用场景 | 输出位置 |
 |---|---|---|
 | `quick` | 早期灵感探索、1–2 页结构化简报 | `ideas/<slug>/YYYY-MM-DD-brief.md` |
+| `prd` | 独立、面向编码智能体的产品/功能需求文档（PRD） | `prds/YYYY-MM-DD-<slug>/`（`PRD.md`, `13-assumption-register.md`） |
 | `tech` | 软件产品需求与系统架构设计 | `prps/YYYY-MM-DD-<slug>/`（`00`–`06`, `13`, `17`） |
 | `business` | 商业与财务可行性评估（不含深层技术规格） | `prps/YYYY-MM-DD-<slug>/`（`00`, `07`–`19`） |
 | `full` | 端到端产品 + 商业 + 财务 + 合规全套分析 | `prps/YYYY-MM-DD-<slug>/`（`00`–`19`） |
@@ -59,6 +61,7 @@
 flowchart TD
     A["1. 需求接入与脚手架 (init_project.py)"] --> B{"选择交付轨道"}
     B -- "quick" --> Q["快速简报 (ideas/&lt;slug&gt;/)"]
+    B -- "prd" --> P["产品 PRD (prds/&lt;slug&gt;/PRD.md)"]
     B -- "tech" --> T["技术 PRP (00–06)"]
     B -- "business" --> M["市场调研 (07)"]
     B -- "full" --> T --> M
@@ -79,20 +82,22 @@ flowchart TD
         G --> E["证据审计与 Linter (13)"] --> SC["Go/No-Go 评分卡 (17)"] --> EX["高管摘要与 PDF (18)"] --> R["复盘追踪 (19)"]
     end
 
+    P -. "lint 与 PDF (--mode prd)" .-> E
     T -. "tech 轨道" .-> E
 ```
 
 ---
 
-## 20 个模块化技能（`.agents/skills/`）
+## 21 个模块化技能（`.agents/skills/`）
 
 ### 1. 需求接入、创意发散与产品规划
 | 技能 | 核心职责 | 主要输出 |
 |---|---|---|
-| `project-intake` | 分流轨道（`quick`/`tech`/`business`/`full`）、确认约束并初始化目录 | 项目脚手架 |
+| `project-intake` | 分流轨道（`quick`/`prd`/`tech`/`business`/`full`）、确认约束并初始化目录 | 项目脚手架 |
 | `ideation-facilitator` | 结构化发散思维（第一性原理、SCAMPER、HMW、三地平线） | 创意方向与选项 |
 | `business-validator` | 快速商业验证（精益画布、ICP、含通过/淘汰标准的实验设计） | 验证结论 |
 | `project-scoper` | MVP 范围界定（MoSCoW）、务实架构与任务拆解 | MVP 清单与任务 |
+| `prd-writer` | 编写面向编码智能体的 PRD：问题、目标/非目标、用户故事与 Given/When/Then 验收标准、FR/NFR 编号、边界情况、API 契约、埋点与灰度测试 | `prds/<slug>/PRD.md` 或 `prps/<project>/PRD.md` |
 | `prp-writer` | 编写分章节的详细 PRP，含 Mermaid 流程图、架构图与 ERD | `prps/<project>/00`–`06` |
 | `tech-feasibility-estimator` | 自研与采购评估、人天工作量估算、云/AI API 成本及安全基线 | 更新 `03`、`06`、`inputs.json` |
 | `idea-logger` | 将头脑风暴纪要按主题归档至 `ideas/` | `ideas/<topic-slug>/` |
@@ -126,9 +131,10 @@ flowchart TD
 
 ## 命令行工具与测试
 
-### 1. 初始化项目（`init_project.py`）
+### 1. 初始化项目或独立 PRD（`init_project.py`）
 ```bash
 python3 scripts/init_project.py --slug auto-shop-saas --title "汽修店 SaaS" --track full --model-type saas
+python3 scripts/init_project.py --slug checkout-v2 --title "Checkout v2" --track prd
 ```
 
 ### 2. 运行财务模型（`model.py`）
@@ -143,6 +149,7 @@ python3 .agents/skills/financial-modeler/scripts/model.py \
 ### 3. 自动化质量审计（`lint_project.py`）
 ```bash
 python3 scripts/lint_project.py prps/<project-slug>
+python3 scripts/lint_project.py prds/<prd-slug>
 ```
 
 ### 4. 导出 PDF 报告（`export_pdf.py`）
@@ -153,7 +160,7 @@ python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
   --output examples/sample-report/sample-executive-report.pdf \
   --title "商业分析报告示例" --toc
 ```
-或按模式（`executive`、`technical`、`full`）导出整个 PRP 项目文件夹：
+或按模式（`executive`、`technical`、`full`、`prd`）导出整个 PRP / PRD 文件夹：
 ```bash
 python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
   --project prps/<project-slug> --mode executive \
@@ -162,7 +169,22 @@ python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
 ```
 示例报告效果请查看 [examples/sample-report/sample-executive-report.pdf](examples/sample-report/sample-executive-report.pdf)。
 
-### 5. 运行单元测试与集成测试
+### 5. 导出交互式 Web GUI 或启动本地看板（`export_web.py`）
+导出离线可用的单文件交互式 HTML（内置 What-If 财务模拟器）：
+```bash
+python3 .agents/skills/executive-reporter/scripts/export_web.py \
+  --input examples/sample-report/sample-executive-report.md \
+  --output examples/sample-report/sample-executive-report.html \
+  --title "Sample Business Analysis Report" \
+  --model-inputs .agents/skills/financial-modeler/scripts/example_inputs.json --lang en
+```
+或启动本地实时 Portfolio Hub 看板（`http://127.0.0.1:8765`）：
+```bash
+python3 .agents/skills/executive-reporter/scripts/export_web.py --serve --port 8765
+```
+示例交互页面请查看 [examples/sample-report/sample-executive-report.html](examples/sample-report/sample-executive-report.html)。
+
+### 6. 运行单元测试与集成测试
 ```bash
 python3 -m unittest discover -s tests -v
 ```
@@ -177,13 +199,14 @@ IdeaForge/
 ├── README.md / README.id.md / README.zh.md
 ├── LICENSE
 ├── scripts/
-│   ├── init_project.py                 # 项目/简报脚手架生成脚本
-│   └── lint_project.py                 # 链接、评分卡算术、证据标签与反空话检查器
+│   ├── init_project.py                 # 项目/PRD/简报脚手架生成脚本
+│   └── lint_project.py                 # 链接、评分卡算术、PRD 校验、证据标签与反空话检查器
 ├── tests/                              # Python unittest 测试套件
-├── .agents/skills/                     # 20 个模块化技能（SKILL.md + scripts/）
-├── templates/                          # 标准化文档模板（评分卡、ADR、实验卡等）
+├── .agents/skills/                     # 21 个模块化技能（SKILL.md + scripts/）
+├── templates/                          # 标准化文档模板（含 PRD、评分卡、ADR、实验卡等）
 ├── examples/sample-report/             # 示例报告、自动生成的 SVG 图表与 PDF
 ├── ideas/                              # 本地头脑风暴简报（按主题分目录）
+├── prds/                               # 本地独立 PRD 目录 + INDEX.md
 └── prps/                               # 本地 PRP 与可行性分析目录 + INDEX.md
 ```
 
@@ -192,7 +215,7 @@ IdeaForge/
 ## Git 与数据隐私规范
 
 - **工具链文件**（`.agents/skills/`、`scripts/`、`templates/`、`tests/`、`examples/`、`AGENTS.md`、`README*.md`）：提交并推送至 `origin`（`main`）。
-- **项目与客户数据**（`prps/` 与 `ideas/`）：默认仅保留在本地。未经用户明确确认，**切勿**将 `prps/` 或 `ideas/` 推送至公开远程仓库。
+- **项目与客户数据**（`prps/`、`prds/` 与 `ideas/`）：默认仅保留在本地。未经用户明确确认，**切勿**将 `prps/`、`prds/` 或 `ideas/` 推送至公开远程仓库。
 
 ---
 

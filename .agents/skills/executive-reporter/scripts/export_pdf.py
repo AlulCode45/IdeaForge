@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Export a Markdown report or PRP folder to an interactive, visual, print-ready PDF.
+"""Export a Markdown report, PRD folder, or PRP folder to an interactive, visual, print-ready PDF.
 
 Uses only Python stdlib + headless Chromium (Brave / Chrome) --print-to-pdf.
 Usage:
   python3 export_pdf.py --input report.md --output report.pdf [--title "Title"] [--toc]
-  python3 export_pdf.py --project prps/<slug> --output prps/<slug>/assets/report.pdf [--mode executive|technical|full]
+  python3 export_pdf.py --project prps/<slug> --output prps/<slug>/assets/report.pdf [--mode executive|technical|full|prd]
+  python3 export_pdf.py --project prds/<slug> --output prds/<slug>/assets/prd.pdf --mode prd
 """
 import argparse
 import html
@@ -50,10 +51,18 @@ SECTION_MODES = {
         "13-assumption-register.md",
         "19-retrospective.md",
     ],
+    "prd": [
+        "PRD.md",
+        "00-overview.md",
+        "01-users-and-flows.md",
+        "02-requirements.md",
+        "13-assumption-register.md",
+    ],
     "technical": [
         "00-overview.md",
         "01-users-and-flows.md",
         "02-requirements.md",
+        "PRD.md",
         "03-architecture.md",
         "04-data-model.md",
         "05-roadmap-and-tasks.md",
@@ -67,6 +76,7 @@ SECTION_MODES = {
         "00-overview.md",
         "01-users-and-flows.md",
         "02-requirements.md",
+        "PRD.md",
         "03-architecture.md",
         "04-data-model.md",
         "05-roadmap-and-tasks.md",
@@ -490,13 +500,13 @@ def md_to_html(md_text: str, base_dir: Path, add_back_to_toc: bool = False, lang
         # Fenced code block (including mermaid)
         if stripped.startswith("```"):
             close_lists()
-            lang = stripped[3:].strip().lower()
+            fence_lang = stripped[3:].strip().lower()
             code_lines = []
             i += 1
             while i < len(lines) and not lines[i].strip().startswith("```"):
                 code_lines.append(lines[i])
                 i += 1
-            if lang == "mermaid":
+            if fence_lang == "mermaid":
                 has_mermaid = True
                 src = html.escape("\n".join(code_lines))
                 out.append(f'<div class="mermaid-block"><div class="mermaid">{src}</div></div>')
@@ -658,13 +668,17 @@ def load_project_markdown(project_dir: Path, mode: str) -> str:
         p = project_dir / fname
         if p.exists():
             parts.append(p.read_text(encoding="utf-8").strip())
-    if mode in ("technical", "full"):
+    if mode in ("prd", "technical", "full"):
+        sub_prds = project_dir / "prds"
+        if sub_prds.is_dir():
+            for prd_doc in sorted(sub_prds.glob("*.md")):
+                parts.append(prd_doc.read_text(encoding="utf-8").strip())
         decisions_dir = project_dir / "decisions"
         if decisions_dir.is_dir():
             for adr in sorted(decisions_dir.glob("ADR-*.md")):
                 parts.append(adr.read_text(encoding="utf-8").strip())
     if not parts:
-        raise FileNotFoundError(f"No PRP markdown files found in {project_dir}")
+        raise FileNotFoundError(f"No PRD/PRP markdown files found in {project_dir}")
     return "\n\n<!-- pagebreak -->\n\n".join(parts)
 
 
@@ -763,12 +777,12 @@ def count_pdf_pages(pdf_path: Path) -> int:
 def main():
     ap = argparse.ArgumentParser(description="Export Markdown or PRP folder to PDF.")
     ap.add_argument("--input", help="Path to a Markdown file")
-    ap.add_argument("--project", help="Path to a prps/<project> folder")
+    ap.add_argument("--project", help="Path to a prps/<project> or prds/<project> folder")
     ap.add_argument("--output", required=True, help="Output PDF path")
     ap.add_argument("--title", help="Document title")
-    ap.add_argument("--kicker", default="Strategic Analysis Report", help="Top label above title")
+    ap.add_argument("--kicker", default=None, help="Top label above title")
     ap.add_argument("--meta", default=f"Tanggal: {date.today().isoformat()}", help="Subtitle metadata")
-    ap.add_argument("--mode", choices=["executive", "technical", "full"], default="executive", help="Section profile for --project")
+    ap.add_argument("--mode", choices=["executive", "technical", "full", "prd"], default="executive", help="Section profile for --project")
     ap.add_argument("--cover", dest="cover", action="store_true", default=None, help="Include cover header styling")
     ap.add_argument("--no-cover", dest="cover", action="store_false", help="Disable cover header styling")
     ap.add_argument("--toc", dest="toc", action="store_true", default=None, help="Include automatic Table of Contents")
@@ -796,11 +810,12 @@ def main():
         default_title = proj_dir.name.replace("-", " ").title()
 
     title = args.title or default_title
+    kicker = args.kicker if args.kicker is not None else ("Product Requirements Document (PRD)" if args.mode == "prd" else "Strategic Analysis Report")
     body_html, toc, has_mermaid = md_to_html(md_text, base_dir, add_back_to_toc=include_toc, lang=args.lang)
     full_html = build_html(
         body_html=body_html,
         title=title,
-        kicker=args.kicker,
+        kicker=kicker,
         meta=args.meta,
         toc=toc,
         include_cover=include_cover,

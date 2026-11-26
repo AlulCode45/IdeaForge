@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Business Analysis Report — IdeaForge Web</title>
+<style>
+:root {
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --surface-alt: #F1F5F9;
+  --border: #E2E8F0;
+  --border-strong: #CBD5E1;
+  --text: #0F172A;
+  --text-muted: #475569;
+  --text-subtle: #64748B;
+  --accent: #1B365D;
+  --accent-bright: #2563EB;
+  --accent-soft: #EFF6FF;
+  --accent-border: #BFDBFE;
+  --good-bg: #F0FDF4;
+  --good-text: #166534;
+  --good-border: #86EFAC;
+  --warn-bg: #FEF2F2;
+  --warn-text: #991B1B;
+  --warn-border: #FCA5A5;
+  --amber-bg: #FEF3C7;
+  --amber-text: #92400E;
+  --amber-border: #FCD34D;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
+  --radius: 8px;
+  --sidebar-w: 276px;
+  --topbar-h: 58px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+[data-theme="dark"] {
+  --bg: #0B1120;
+  --surface: #111827;
+  --surface-alt: #1E293B;
+  --border: #1F2937;
+  --border-strong: #334155;
+  --text: #F1F5F9;
+  --text-muted: #CBD5E1;
+  --text-subtle: #94A3B8;
+  --accent: #60A5FA;
+  --accent-bright: #3B82F6;
+  --accent-soft: rgba(37, 99, 235, 0.14);
+  --accent-border: rgba(96, 165, 250, 0.35);
+  --good-bg: rgba(22, 101, 52, 0.22);
+  --good-text: #86EFAC;
+  --good-border: rgba(134, 239, 172, 0.35);
+  --warn-bg: rgba(153, 27, 27, 0.24);
+  --warn-text: #FCA5A5;
+  --warn-border: rgba(252, 165, 165, 0.35);
+  --amber-bg: rgba(146, 64, 14, 0.25);
+  --amber-text: #FCD34D;
+  --amber-border: rgba(252, 211, 77, 0.35);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.28);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Topbar */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--topbar-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.topbar-left, .topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.brand-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  background: var(--accent-bright);
+  display: inline-block;
+}
+.topbar-title {
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.topbar-kicker {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+  white-space: nowrap;
+}
+.search-wrap {
+  position: relative;
+  width: 240px;
+  max-width: 34vw;
+}
+.search-input {
+  width: 100%;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 7px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+}
+.search-input:focus {
+  border-color: var(--accent-bright);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 7px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.btn:hover { background: var(--surface-alt); }
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #FFFFFF;
+}
+.btn-primary:hover { filter: brightness(1.08); background: var(--accent); }
+.btn-sm { height: 29px; padding: 0 10px; font-size: 12px; }
+.menu-btn { display: none; }
+
+/* App Shell */
+.shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  min-height: calc(100vh - var(--topbar-h));
+}
+.sidebar {
+  position: sticky;
+  top: var(--topbar-h);
+  height: calc(100vh - var(--topbar-h));
+  overflow-y: auto;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 16px 14px 28px;
+}
+.sidebar-section { margin-bottom: 18px; }
+.sidebar-heading {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-subtle);
+  margin: 0 0 8px 8px;
+}
+.nav-list { list-style: none; margin: 0; padding: 0; }
+.nav-item { margin-bottom: 2px; }
+.nav-btn {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  text-decoration: none;
+}
+.nav-btn:hover { background: var(--surface-alt); color: var(--text); }
+.nav-btn.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+.nav-sub {
+  padding-left: 18px;
+  font-size: 12.5px;
+  font-weight: 400;
+}
+.view-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 7px;
+  background: var(--surface-alt);
+  margin-bottom: 14px;
+}
+.view-toggle button {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 6px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.view-toggle button.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Main Content */
+.main {
+  padding: 26px 34px 64px;
+  max-width: 980px;
+  width: 100%;
+  margin: 0 auto;
+}
+.hero-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-sm);
+}
+.hero-title {
+  margin: 0 0 6px 0;
+  font-size: 24px;
+  line-height: 1.25;
+  color: var(--text);
+  border: none;
+  padding: 0;
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--text-subtle);
+}
+
+/* Evidence Filter Bar */
+.toolbar-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin-bottom: 18px;
+}
+.pill-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.pill-label { font-size: 12px; font-weight: 600; color: var(--text-subtle); margin-right: 4px; }
+.filter-pill {
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.filter-pill.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #FFFFFF;
+}
+.lint-pill {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--good-border);
+  background: var(--good-bg);
+  color: var(--good-text);
+  cursor: pointer;
+}
+.lint-pill.has-warn {
+  border-color: var(--amber-border);
+  background: var(--amber-bg);
+  color: var(--amber-text);
+}
+.lint-pill.has-fail {
+  border-color: var(--warn-border);
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+.lint-drawer {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  font-size: 13px;
+}
+.lint-drawer.open { display: block; }
+.lint-row { display: flex; gap: 10px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+.lint-row:last-child { border-bottom: none; }
+
+/* Document Article */
+.doc-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px 30px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow-sm);
+}
+.doc-panel.hidden { display: none; }
+.doc-panel h1 {
+  font-size: 21px;
+  margin: 0 0 14px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--accent);
+  color: var(--text);
+}
+.doc-panel h2 {
+  font-size: 17px;
+  margin: 24px 0 10px 0;
+  color: var(--accent);
+}
+.doc-panel h3 { font-size: 15px; margin: 18px 0 8px 0; color: var(--text); }
+.doc-panel h4 { font-size: 14px; margin: 14px 0 6px 0; color: var(--text-muted); }
+.doc-panel p { margin: 0 0 11px 0; }
+.doc-panel ul, .doc-panel ol { margin: 0 0 12px 0; padding-left: 22px; }
+.doc-panel li { margin-bottom: 5px; }
+.doc-panel a { color: var(--accent-bright); text-decoration: none; }
+.doc-panel a:hover { text-decoration: underline; }
+.doc-panel hr { border: 0; border-top: 1px solid var(--border); margin: 20px 0; }
+
+/* Callouts & KPI Grid */
+.callout-rec {
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  border-left: 4px solid var(--accent);
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 12px 0 16px 0;
+}
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 10px;
+  margin: 14px 0 18px 0;
+}
+.kpi-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+.kpi-card.good { border-top-color: #16A34A; background: var(--good-bg); }
+.kpi-card.warn { border-top-color: #DC2626; background: var(--warn-bg); }
+.kpi-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-subtle);
+  margin-bottom: 4px;
+}
+.kpi-val {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.kpi-sub { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+
+blockquote {
+  margin: 12px 0;
+  padding: 10px 15px;
+  background: var(--surface-alt);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  color: var(--text-muted);
+}
+blockquote.callout-warn {
+  background: var(--warn-bg);
+  border-left-color: #DC2626;
+  color: var(--warn-text);
+}
+
+/* Tables */
+.table-wrap { overflow-x: auto; margin: 14px 0 18px 0; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+th {
+  background: var(--surface-alt);
+  color: var(--text);
+  font-weight: 600;
+  text-align: left;
+  padding: 8px 10px;
+  border-top: 2px solid var(--accent);
+  border-bottom: 1px solid var(--border-strong);
+}
+td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.score-bar-wrap { display: inline-flex; align-items: center; gap: 8px; }
+.score-bar {
+  width: 56px;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  display: inline-block;
+}
+.score-fill { height: 100%; background: var(--accent-bright); }
+
+/* Code & Diagrams */
+code {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  background: var(--surface-alt);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+pre {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 12.5px;
+}
+pre code { background: none; padding: 0; }
+.svg-figure, .img-figure {
+  margin: 16px 0;
+  padding: 12px;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  text-align: center;
+}
+.svg-figure svg, .img-figure img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.svg-figure figcaption { font-size: 12px; color: #475569; margin-top: 6px; }
+.mermaid-block {
+  margin: 16px 0;
+  padding: 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow-x: auto;
+  text-align: center;
+}
+.mermaid-fallback {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+/* Evidence Tags */
+.tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.tag-verified { background: var(--good-bg); border-color: var(--good-border); color: var(--good-text); }
+.tag-estimate { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent); }
+.tag-assumption { background: var(--amber-bg); border-color: var(--amber-border); color: var(--amber-text); }
+.tag-unverified, .tag-stale { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn-text); }
+
+/* Interactive Checklists */
+li.task-item { list-style: none; margin-left: -18px; }
+li.task-item label { display: inline-flex; align-items: flex-start; gap: 8px; cursor: pointer; }
+li.task-item input[type="checkbox"] { margin-top: 4px; accent-color: var(--accent-bright); width: 15px; height: 15px; }
+li.task-item.is-done span { text-decoration: line-through; color: var(--text-subtle); }
+
+/* Highlight search/filter */
+.evidence-dim { opacity: 0.28; transition: opacity 0.15s ease; }
+.evidence-hit { outline: 2px solid var(--accent-bright); outline-offset: 2px; border-radius: 4px; }
+mark.search-hl { background: #FDE047; color: #0F172A; padding: 0 2px; border-radius: 2px; }
+
+/* Financial What-If Simulator */
+.sim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 16px 0 20px 0;
+}
+.sim-control {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+.sim-control-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.sim-control-val { font-family: var(--font-mono); color: var(--accent); }
+.sim-control input[type="range"] { width: 100%; accent-color: var(--accent-bright); cursor: pointer; }
+.sim-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.sim-chart-box {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  margin: 14px 0 18px 0;
+}
+.sim-chart-box svg { width: 100%; height: auto; display: block; }
+
+/* Portfolio Hub */
+.hub-wrap { max-width: 1120px; margin: 0 auto; padding: 28px 24px 64px; }
+.hub-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin: 18px 0 22px 0;
+}
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 16px;
+}
+.hub-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.14s ease, border-color 0.14s ease;
+}
+.hub-card:hover { transform: translateY(-2px); border-color: var(--accent-bright); }
+.hub-card-title { font-size: 16px; font-weight: 700; margin: 4px 0; color: var(--text); }
+.hub-card-path { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-subtle); }
+.hub-card-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.hub-card-actions { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 10px; border-top: 1px solid var(--border); }
+
+@media (max-width: 900px) {
+  .menu-btn { display: inline-flex; }
+  .shell { grid-template-columns: 1fr; }
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: var(--topbar-h);
+    width: 280px;
+    z-index: 50;
+    transform: translateX(-105%);
+    transition: transform 0.2s ease;
+    box-shadow: var(--shadow-md);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .main { padding: 18px 16px 48px; }
+  .doc-panel { padding: 18px 16px; }
+  .search-wrap { width: 150px; }
+}
+
+@media print {
+  .topbar, .sidebar, .toolbar-strip, .lint-drawer, .sim-actions, .sim-grid { display: none !important; }
+  .shell { display: block; }
+  .main { max-width: 100%; padding: 0; }
+  .doc-panel { display: block !important; border: none; box-shadow: none; padding: 0; page-break-after: always; }
+  body { background: #FFFFFF; color: #111317; font-size: 10pt; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left">
+    <button type="button" id="menu-toggle" class="btn btn-sm menu-btn" aria-label="Menu">&#9776;</button>
+    <span class="brand-mark"><span class="brand-dot"></span>IdeaForge</span>
+    <span class="topbar-kicker">Strategic Analysis Report</span>
+    <span class="topbar-title">Sample Business Analysis Report</span>
+  </div>
+  <div class="topbar-right">
+    <div class="search-wrap">
+      <input id="search-input" class="search-input" type="search" placeholder="Search documents or text... (/)" autocomplete="off">
+    </div>
+    
+    <button type="button" class="btn btn-sm btn-primary" onclick="window.print()">Print / PDF</button>
+    <button type="button" id="theme-toggle" class="btn btn-sm">Theme</button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside id="sidebar" class="sidebar">
+    <div class="view-toggle"><button type="button" id="mode-tab">By Document</button><button type="button" id="mode-all">Full View</button></div>
+    <div class="sidebar-section">
+      <p class="sidebar-heading">Documents</p>
+      <ul class="nav-list"><li class="nav-item"><button type="button" class="nav-btn" data-doc-target="doc-1-sample-executive-report"><span>Sample Executive Report</span></button></li><li class="nav-item"><button type="button" class="nav-btn" data-doc-target="sim-panel"><span>&#9881; Financial Simulator</span></button></li></ul>
+    </div>
+    <div class="sidebar-section"><p class="sidebar-heading">On This Page</p><ul class="nav-list"><li class="nav-item"><a class="nav-btn nav-sub" data-sec-doc="doc-1-sample-executive-report" href="#1-executive-summary">1. Executive Summary</a></li><li class="nav-item"><a class="nav-btn nav-sub" data-sec-doc="doc-1-sample-executive-report" href="#2-30-day-validation-workflow">2. 30-Day Validation Workflow</a></li><li class="nav-item"><a class="nav-btn nav-sub" data-sec-doc="doc-1-sample-executive-report" href="#3-go-no-go-scorecard">3. Go / No-Go Scorecard</a></li><li class="nav-item"><a class="nav-btn nav-sub" data-sec-doc="doc-1-sample-executive-report" href="#4-financial-projections-12-months">4. Financial Projections (12 Months)</a></li><li class="nav-item"><a class="nav-btn nav-sub" data-sec-doc="doc-1-sample-executive-report" href="#5-top-risks-first-30-day-plan">5. Top Risks &amp; First 30-Day Plan</a></li></ul></div>
+  </aside>
+
+  <main class="main">
+    <section class="hero-card">
+      <h1 class="hero-title">Sample Business Analysis Report</h1>
+      <div class="hero-meta">
+        <span>Strategic Analysis Report</span>
+        <span>&middot;</span>
+        <span>Date: 2026-11-26</span>
+        <span>&middot;</span>
+        <span>1 docs</span>
+      </div>
+    </section>
+
+    <div class="toolbar-strip">
+      <div class="pill-group">
+        <span class="pill-label">Evidence Filter:</span>
+        <button type="button" class="filter-pill active" data-ev-filter="all">All</button><button type="button" class="filter-pill" data-ev-filter="estimate">Estimate (3)</button>
+      </div>
+      
+    </div>
+    
+
+    <article id="doc-1-sample-executive-report" class="doc-panel"><blockquote><p><strong>Note</strong>: This document is a sample executive report format for evaluating layout, typography, tables, SVG charts, and Mermaid diagrams. Figures below are computed directly by <code>financial-modeler/scripts/model.py</code> from <code>example_inputs.json</code>.</p></blockquote>
+<h2 id="1-executive-summary"><span>1. Executive Summary</span></h2>
+<div class="callout-rec"><strong>Recommendation</strong>: Proceed to a 30-day limited market test with IDR 35,000,000 starting cash (including IDR 5,000,000 CAPEX). In the base scenario, break-even is reached in Month 3 and cash stays positive across all scenarios, provided channel fees remain &lt;= 5% and repeat orders reach &gt;= 2.0x.</div>
+<div class="kpi-grid"><div class="kpi-card good"><div class="kpi-label">Decision Score</div><div class="kpi-val">3.75 / 5.0</div><div class="kpi-sub">Conditional Go</div></div><div class="kpi-card good"><div class="kpi-label">Break-Even (Base)</div><div class="kpi-val">Month 3</div><div class="kpi-sub">Month-12 Cash: IDR 58.9M</div></div><div class="kpi-card good"><div class="kpi-label">Unit Economics</div><div class="kpi-val">LTV/CAC 6.6x</div><div class="kpi-sub">Gross Margin 55.0%</div></div><div class="kpi-card warn"><div class="kpi-label">Lowest Cash (Pess.)</div><div class="kpi-val">IDR 243k</div><div class="kpi-sub">Tight buffer at Month 12</div></div></div>
+<div class="table-wrap"><table><thead><tr><th>Aspect</th><th>Summary</th><th>Evidence Status</th></tr></thead><tbody><tr><td>Problem</td><td>Customers need transparent pricing and fast repeat ordering</td><td><span class="tag tag-contoh">Contoh</span></td></tr><tr><td>Solution</td><td>Direct sales with monthly subscription / repeat-order workflow</td><td><span class="tag tag-contoh">Contoh</span></td></tr><tr><td>Price &amp; Margin</td><td>Price IDR 150,000/unit, COGS IDR 60,000/unit, 5% channel fee, 55.0% contribution margin</td><td><span class="tag tag-estimate">Estimate</span></td></tr><tr><td>Unit Economics</td><td>LTV IDR 165,000, CAC IDR 25,000, LTV/CAC 6.6x, payback 0.2 months</td><td><span class="tag tag-estimate">Estimate</span></td></tr><tr><td>Break-Even</td><td>Month 3 in base scenario; not reached within 12 months in pessimistic scenario</td><td><span class="tag tag-estimate">Estimate</span></td></tr><tr><td>Decision</td><td>Go with conditions (Score: 3.75 / 5.0)</td><td><span class="tag tag-contoh">Contoh</span></td></tr></tbody></table></div>
+<h2 id="2-30-day-validation-workflow"><span>2. 30-Day Validation Workflow</span></h2>
+<div class="mermaid-block"><div class="mermaid">flowchart LR
+    A[&quot;Interview 10 Targets&quot;] --&gt; B{&quot;WTP &gt;= IDR 150k?&quot;}
+    B -- &quot;Yes&quot; --&gt; C[&quot;20-Unit Test Batch&quot;]
+    B -- &quot;No&quot; --&gt; D[&quot;Revise Pricing / Segment&quot;]
+    C --&gt; E{&quot;CAC &lt;= IDR 25k?&quot;}
+    E -- &quot;Yes&quot; --&gt; F[&quot;Full Scale&quot;]
+    E -- &quot;No&quot; --&gt; D</div></div>
+<h2 id="3-go-no-go-scorecard"><span>3. Go / No-Go Scorecard</span></h2>
+<div class="table-wrap"><table><thead><tr><th>Criterion</th><th>Weight</th><th>Score (1-5)</th><th>Weighted</th><th>Rationale</th></tr></thead><tbody><tr><td>Market demand</td><td>20%</td><td><span class="score-bar-wrap"><strong>4</strong><span class="score-bar"><span class="score-fill" style="width:80%"></span></span></span></td><td>0.80</td><td>Stable demand signals in target segment</td></tr><tr><td>Evidence quality</td><td>15%</td><td><span class="score-bar-wrap"><strong>3</strong><span class="score-bar"><span class="score-fill" style="width:60%"></span></span></span></td><td>0.45</td><td>Acquisition cost assumptions not yet field-tested</td></tr><tr><td>Unit economics</td><td>20%</td><td><span class="score-bar-wrap"><strong>4</strong><span class="score-bar"><span class="score-fill" style="width:80%"></span></span></span></td><td>0.80</td><td>55.0% contribution margin and 6.6x LTV/CAC</td></tr><tr><td>Feasibility</td><td>15%</td><td><span class="score-bar-wrap"><strong>4</strong><span class="score-bar"><span class="score-fill" style="width:80%"></span></span></span></td><td>0.60</td><td>Operations manageable by a lean team</td></tr><tr><td>Competitive edge</td><td>10%</td><td><span class="score-bar-wrap"><strong>3</strong><span class="score-bar"><span class="score-fill" style="width:60%"></span></span></span></td><td>0.30</td><td>Differentiation relies on service execution</td></tr><tr><td>Risk &amp; compliance</td><td>10%</td><td><span class="score-bar-wrap"><strong>4</strong><span class="score-bar"><span class="score-fill" style="width:80%"></span></span></span></td><td>0.40</td><td>Basic permits and 0.5% UMKM tax mapped</td></tr><tr><td>Team readiness</td><td>10%</td><td><span class="score-bar-wrap"><strong>4</strong><span class="score-bar"><span class="score-fill" style="width:80%"></span></span></span></td><td>0.40</td><td>Team capacity covers first 90-day milestones</td></tr><tr><td><strong>Total Score</strong></td><td><strong>100%</strong></td><td></td><td><strong>3.75 / 5.0</strong></td><td><strong>Go with conditions</strong></td></tr></tbody></table></div>
+<h2 id="4-financial-projections-12-months"><span>4. Financial Projections (12 Months)</span></h2>
+<p>Computed by <code>model.py</code> with IDR 35,000,000 starting cash, IDR 5,000,000 CAPEX, IDR 5,000,000/month fixed costs, 5% channel fee, 0.5% UMKM tax, 10%/month growth, and 2.0x repeat orders.</p>
+<div class="table-wrap"><table><thead><tr><th>Scenario</th><th class="num">Month-1 Units</th><th>Break-Even</th><th class="num">Lowest Cash (IDR)</th><th class="num">Month-12 Cash (IDR)</th><th>Runway</th></tr></thead><tbody><tr><td>Pessimistic</td><td class="num">36</td><td>Not within 12 mo</td><td class="num">243,297</td><td class="num">243,297</td><td>12.2 months</td></tr><tr><td>Base</td><td class="num">60</td><td>Month 3</td><td class="num">28,725,500</td><td class="num">58,851,699</td><td>&gt;12 months</td></tr><tr><td>Optimistic</td><td class="num">84</td><td>Month 1</td><td class="num">31,319,000</td><td class="num">138,506,174</td><td>&gt;12 months</td></tr></tbody></table></div>
+<figure class="svg-figure"><svg viewBox="0 0 680 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cash Projection Chart">
+  <rect x="0" y="0" width="680" height="270" fill="#FFFFFF"/>
+  <text x="72" y="22" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" fill="#111317">1. 12-Month Cash Balance Projection (M IDR)</text>
+  <line x1="72" y1="42" x2="72" y2="222" stroke="#B8C0CC" stroke-width="1"/>
+  <line x1="72" y1="222" x2="585" y2="222" stroke="#B8C0CC" stroke-width="1"/>
+  <line x1="72" y1="222.0" x2="585" y2="222.0" stroke="#EEF1F4" stroke-width="1"/>
+  <text x="64" y="225.0" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">0.0</text>
+  <line x1="72" y1="177.0" x2="585" y2="177.0" stroke="#EEF1F4" stroke-width="1"/>
+  <text x="64" y="180.0" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">35</text>
+  <line x1="72" y1="132.0" x2="585" y2="132.0" stroke="#EEF1F4" stroke-width="1"/>
+  <text x="64" y="135.0" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">69</text>
+  <line x1="72" y1="87.0" x2="585" y2="87.0" stroke="#EEF1F4" stroke-width="1"/>
+  <text x="64" y="90.0" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">104</text>
+  <line x1="72" y1="42.0" x2="585" y2="42.0" stroke="#EEF1F4" stroke-width="1"/>
+  <text x="64" y="45.0" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">139</text>
+  <polyline fill="none" stroke="#B91C1C" stroke-width="2.0" stroke-dasharray="5,3" points="72.0,187.2 118.6,191.2 165.3,195.1 211.9,198.8 258.5,202.4 305.2,205.8 351.8,209.0 398.5,211.9 445.1,214.7 491.7,217.3 538.4,219.6 585.0,221.7"/>
+  <circle cx="585.0" cy="221.7" r="3" fill="#B91C1C"/>
+  <text x="592.0" y="224.7" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#B91C1C">243k</text>
+  <line x1="72" y1="256" x2="90" y2="256" stroke="#B91C1C" stroke-width="2.0" stroke-dasharray="5,3"/>
+  <text x="96" y="259" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">pessimistic</text>
+  <polyline fill="none" stroke="#2563EB" stroke-width="2.2" points="72.0,184.1 118.6,184.7 165.3,184.6 211.9,183.9 258.5,182.5 305.2,180.3 351.8,177.3 398.5,173.2 445.1,168.2 491.7,161.9 538.4,154.4 585.0,145.5"/>
+  <circle cx="585.0" cy="145.5" r="3" fill="#2563EB"/>
+  <text x="592.0" y="148.5" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#2563EB">58.9M</text>
+  <line x1="177" y1="256" x2="195" y2="256" stroke="#2563EB" stroke-width="2.2"/>
+  <text x="201" y="259" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">base</text>
+  <polyline fill="none" stroke="#1B365D" stroke-width="2.4" points="72.0,181.3 118.6,178.5 165.3,174.4 211.9,168.9 258.5,161.7 305.2,152.7 351.8,141.6 398.5,128.0 445.1,111.7 491.7,92.2 538.4,69.2 585.0,42.0"/>
+  <circle cx="585.0" cy="42.0" r="3" fill="#1B365D"/>
+  <text x="592.0" y="45.0" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="8.5" font-weight="600" fill="#1B365D">138.5M</text>
+  <line x1="282" y1="256" x2="300" y2="256" stroke="#1B365D" stroke-width="2.4"/>
+  <text x="306" y="259" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#1A1D21">optimistic</text>
+  <text x="72" y="236" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">M1</text>
+  <text x="305.2" y="236" text-anchor="middle" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">M6</text>
+  <text x="585" y="236" text-anchor="end" font-family="-apple-system, Helvetica Neue, Arial, sans-serif" font-size="9" fill="#525866">M12</text>
+</svg><figcaption>12-Month Cash Balance Projection</figcaption></figure>
+<h3 id="2-way-sensitivity-base-scenario-month-12-cash-price-vs-volume"><span>2-Way Sensitivity (Base Scenario, Month-12 Cash: Price vs Volume)</span></h3>
+<div class="table-wrap"><table><thead><tr><th class="num">Price \ Volume</th><th class="num">0.7x vol</th><th class="num">0.85x vol</th><th class="num">1x vol</th><th class="num">1.15x vol</th><th class="num">1.3x vol</th></tr></thead><tbody><tr><td class="num">-20%</td><td class="num">6,733,923</td><td class="num">14,605,478</td><td class="num">22,477,032</td><td class="num">30,348,587</td><td class="num">38,220,142</td></tr><tr><td class="num">-10%</td><td class="num">19,465,056</td><td class="num">30,064,711</td><td class="num">40,664,366</td><td class="num">51,264,021</td><td class="num">61,863,675</td></tr><tr><td class="num">+0%</td><td class="num">32,196,189</td><td class="num">45,523,944</td><td class="num">58,851,699</td><td class="num">72,179,454</td><td class="num">85,507,209</td></tr><tr><td class="num">+10%</td><td class="num">44,927,323</td><td class="num">60,983,178</td><td class="num">77,039,032</td><td class="num">93,094,887</td><td class="num">109,150,742</td></tr><tr><td class="num">+20%</td><td class="num">57,658,456</td><td class="num">76,442,411</td><td class="num">95,226,366</td><td class="num">114,010,321</td><td class="num">132,794,275</td></tr></tbody></table></div>
+<h2 id="5-top-risks-first-30-day-plan"><span>5. Top Risks &amp; First 30-Day Plan</span></h2>
+<div class="table-wrap"><table><thead><tr><th>Risk</th><th>Impact</th><th>Mitigation</th></tr></thead><tbody><tr><td>Sales volume below base case</td><td>Cash buffer drops to IDR 243,297 by Month 12</td><td>Use pre-order batching before bulk production</td></tr><tr><td>Actual CAC exceeds IDR 25,000</td><td>LTV/CAC ratio compresses</td><td>Focus on organic and early customer referral channels</td></tr><tr><td>2.0x repeat-order assumption misses</td><td>Effective acquisition cost per unit doubles</td><td>Interview first 10 buyers in Week 3</td></tr></tbody></table></div>
+<h3 id="concrete-first-30-day-actions"><span>Concrete First 30-Day Actions</span></h3>
+<ul>
+<li class="task-item"><label><input type="checkbox" class="task-cb" data-task-key="doc-1-sample-executive-report-cb-1"><span>Week 1: Interview 10 target customers to test IDR 150,000 price willingness.</span></label></li>
+<li class="task-item"><label><input type="checkbox" class="task-cb" data-task-key="doc-1-sample-executive-report-cb-2"><span>Week 2: Run a 20-unit pilot batch to measure actual CAC.</span></label></li>
+<li class="task-item"><label><input type="checkbox" class="task-cb" data-task-key="doc-1-sample-executive-report-cb-3"><span>Week 3: Audit net margin and update <code>inputs.json</code> with observed data.</span></label></li>
+<li class="task-item"><label><input type="checkbox" class="task-cb" data-task-key="doc-1-sample-executive-report-cb-4"><span>Week 4: Decide whether to scale or adjust pricing.</span></label></li>
+</ul></article><section id="sim-panel" class="doc-panel"><h1>Financial Simulator (Transactional)</h1><p>Adjust key assumptions below to simulate 12-month cash flow, break-even, and unit economics in real time.</p><div class="sim-actions"><button type="button" id="sim-reset" class="btn btn-sm">Reset Defaults</button><button type="button" id="sim-copy" class="btn btn-sm btn-primary">Copy inputs.json</button></div><div class="sim-grid"><div class="sim-control"><div class="sim-control-head"><span>Price / ARPU (IDR)</span><span class="sim-control-val" id="sim-price-val"></span></div><input id="sim-price" type="range" min="60000" max="300000" step="3000" value="150000.0"></div><div class="sim-control"><div class="sim-control-head"><span>Month-1 Units</span><span class="sim-control-val" id="sim-volume-val"></span></div><input id="sim-volume" type="range" min="12" max="180" step="1.0" value="60.0"></div><div class="sim-control"><div class="sim-control-head"><span>Unit Variable Cost (IDR)</span><span class="sim-control-val" id="sim-vc-val"></span></div><input id="sim-vc" type="range" min="0.0" max="150000" step="1200" value="60000.0"></div><div class="sim-control"><div class="sim-control-head"><span>Monthly Fixed Costs (IDR)</span><span class="sim-control-val" id="sim-fixed-val"></span></div><input id="sim-fixed" type="range" min="0.0" max="12500000" step="100000" value="5000000.0"></div><div class="sim-control"><div class="sim-control-head"><span>CAC (IDR)</span><span class="sim-control-val" id="sim-cac-val"></span></div><input id="sim-cac" type="range" min="0.0" max="225000" step="500" value="25000.0"></div><div class="sim-control"><div class="sim-control-head"><span>Monthly Growth Rate</span><span class="sim-control-val" id="sim-growth-val"></span></div><input id="sim-growth" type="range" min="0.0" max="0.4" step="0.01" value="0.1"></div><div class="sim-control"><div class="sim-control-head"><span>Repeat Orders / Customer</span><span class="sim-control-val" id="sim-repeat-val"></span></div><input id="sim-repeat" type="range" min="1.0" max="6.0" step="0.1" value="2.0"></div></div><div id="sim-kpis" class="kpi-grid"></div><div id="sim-chart" class="sim-chart-box"></div><div class="table-wrap"><table><thead><tr><th>Month</th><th class="num">Units</th><th class="num">Revenue (IDR)</th><th class="num">Net Profit (IDR)</th><th class="num">Cash (IDR)</th></tr></thead><tbody id="sim-table-body"></tbody></table></div></section>
+  </main>
+</div>
+
+<script>window.__IDEAFORGE_DATA__ = {"projectId": "sample-executive-report", "locale": "en", "labels": {"hub_title": "IdeaForge Portfolio Hub", "hub_subtitle": "Interactive workspace dashboard for all PRPs, PRDs, and Quick Briefs.", "back_hub": "Portfolio Hub", "search_placeholder": "Search documents or text... (/)", "documents": "Documents", "sections": "On This Page", "all_view": "Full View", "tab_view": "By Document", "simulator": "Financial Simulator", "quality_gates": "Quality Gates", "print_pdf": "Print / PDF", "download_html": "Download HTML", "theme_toggle": "Theme", "evidence_filter": "Evidence Filter", "all_tags": "All", "reset_sim": "Reset Defaults", "copy_json": "Copy inputs.json", "copied": "Copied!", "no_results": "No matching content found.", "open_web": "Open Web GUI", "export_pdf_btn": "Download PDF", "empty_hub": "No projects found in prps/, prds/, or ideas/ yet. Run init_project.py to scaffold one.", "files_unit": "docs", "score_label": "Score", "breakeven": "Break-Even (Base)", "ending_cash": "Month-12 Cash", "lowest_cash": "Lowest Cash", "gross_margin": "Contribution Margin", "ltv_cac": "LTV / CAC Ratio", "payback": "CAC Payback", "runway": "Runway (Base)", "month_prefix": "Month", "not_reached": "Not within 12 mo", "scenario_pess": "Pessimistic", "scenario_base": "Base", "scenario_opt": "Optimistic", "sim_subtitle": "Adjust key assumptions below to simulate 12-month cash flow, break-even, and unit economics in real time."}, "modelInputs": {"model_type": "transactional", "currency": "IDR", "price": 150000, "unit_variable_cost": 60000, "channel_fee_rate": 0.05, "tax_rate": 0.005, "capex": 5000000, "monthly_fixed_costs": 5000000, "starting_cash": 35000000, "month1_units": 60, "monthly_growth": 0.1, "cac": 25000, "repeat_orders_per_customer": 2.0, "scenario_multipliers": {"pessimistic": {"units": 0.6, "growth": 0.5, "cost": 1.1}, "base": {"units": 1.0, "growth": 1.0, "cost": 1.0}, "optimistic": {"units": 1.4, "growth": 1.4, "cost": 0.95}}}};</script>
+<script>
+(function() {
+  const CFG = window.__IDEAFORGE_DATA__ || {};
+  const LABELS = CFG.labels || {};
+  const STORAGE_THEME = 'ideaforge-theme';
+
+  // Theme
+  const savedTheme = localStorage.getItem(STORAGE_THEME) ||
+    (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', savedTheme);
+
+  const themeBtn = document.getElementById('theme-toggle');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem(STORAGE_THEME, next);
+    });
+  }
+
+  // Mobile sidebar drawer
+  const menuBtn = document.getElementById('menu-toggle');
+  const sidebar = document.getElementById('sidebar');
+  if (menuBtn && sidebar) {
+    menuBtn.addEventListener('click', () => sidebar.classList.toggle('open'));
+  }
+
+  // Lint drawer toggle
+  const lintBtn = document.getElementById('lint-toggle');
+  const lintDrawer = document.getElementById('lint-drawer');
+  if (lintBtn && lintDrawer) {
+    lintBtn.addEventListener('click', () => lintDrawer.classList.toggle('open'));
+  }
+
+  // Document switching & view mode (By Document vs Full View)
+  const panels = Array.from(document.querySelectorAll('.doc-panel'));
+  const navBtns = Array.from(document.querySelectorAll('[data-doc-target]'));
+  const tocLinks = Array.from(document.querySelectorAll('[data-sec-doc]'));
+  const btnTab = document.getElementById('mode-tab');
+  const btnAll = document.getElementById('mode-all');
+  let viewMode = panels.length > 2 ? 'tab' : 'all';
+  let activeDocId = panels.length ? panels[0].id : null;
+
+  function applyViewMode() {
+    if (btnTab) btnTab.classList.toggle('active', viewMode === 'tab');
+    if (btnAll) btnAll.classList.toggle('active', viewMode === 'all');
+    panels.forEach(p => {
+      if (viewMode === 'all') {
+        p.classList.remove('hidden');
+      } else {
+        p.classList.toggle('hidden', p.id !== activeDocId);
+      }
+    });
+    navBtns.forEach(b => b.classList.toggle('active', b.dataset.docTarget === activeDocId));
+    tocLinks.forEach(a => {
+      a.parentElement.style.display = (viewMode === 'all' || a.dataset.secDoc === activeDocId) ? '' : 'none';
+    });
+  }
+
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeDocId = btn.dataset.docTarget;
+      applyViewMode();
+      const target = document.getElementById(activeDocId);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (sidebar) sidebar.classList.remove('open');
+    });
+  });
+  if (btnTab) btnTab.addEventListener('click', () => { viewMode = 'tab'; applyViewMode(); });
+  if (btnAll) btnAll.addEventListener('click', () => { viewMode = 'all'; applyViewMode(); });
+  if (panels.length) applyViewMode();
+
+  // Interactive Checklists (persisted in localStorage)
+  const docKeyPrefix = 'ideaforge-cb:' + (CFG.projectId || 'doc') + ':';
+  document.querySelectorAll('.task-cb').forEach(cb => {
+    const k = docKeyPrefix + cb.dataset.taskKey;
+    const saved = localStorage.getItem(k);
+    if (saved !== null) {
+      cb.checked = saved === '1';
+      cb.closest('li').classList.toggle('is-done', cb.checked);
+    }
+    cb.addEventListener('change', () => {
+      localStorage.setItem(k, cb.checked ? '1' : '0');
+      cb.closest('li').classList.toggle('is-done', cb.checked);
+    });
+  });
+
+  // Evidence Tag Filter
+  const filterPills = Array.from(document.querySelectorAll('[data-ev-filter]'));
+  filterPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const tag = pill.dataset.evFilter;
+      filterPills.forEach(p => p.classList.toggle('active', p === pill));
+      const blocks = document.querySelectorAll('.doc-panel p, .doc-panel li, .doc-panel tr');
+      if (tag === 'all') {
+        blocks.forEach(b => b.classList.remove('evidence-dim', 'evidence-hit'));
+        return;
+      }
+      if (viewMode === 'tab') { viewMode = 'all'; applyViewMode(); }
+      let firstHit = null;
+      blocks.forEach(b => {
+        if (b.tagName === 'TR' && b.querySelector('th')) return;
+        const match = b.querySelector('.tag-' + tag);
+        b.classList.toggle('evidence-hit', !!match);
+        b.classList.toggle('evidence-dim', !match);
+        if (match && !firstHit) firstHit = b;
+      });
+      if (firstHit) firstHit.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+
+  // Instant Search ('/' shortcut)
+  const searchInput = document.getElementById('search-input');
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement !== searchInput && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
+      e.preventDefault();
+      if (searchInput) searchInput.focus();
+    } else if (e.key === 'Escape' && document.activeElement === searchInput) {
+      searchInput.value = '';
+      searchInput.dispatchEvent(new Event('input'));
+      searchInput.blur();
+    }
+  });
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.trim().toLowerCase();
+      // Portfolio hub card filtering
+      const hubCards = document.querySelectorAll('.hub-card');
+      if (hubCards.length) {
+        hubCards.forEach(c => {
+          const ok = !q || c.textContent.toLowerCase().includes(q);
+          c.style.display = ok ? '' : 'none';
+        });
+        return;
+      }
+      if (!q) {
+        panels.forEach(p => p.querySelectorAll('p, li, tr').forEach(el => { el.style.display = ''; }));
+        applyViewMode();
+        return;
+      }
+      panels.forEach(p => {
+        const hit = p.textContent.toLowerCase().includes(q);
+        p.classList.toggle('hidden', !hit);
+      });
+    });
+  }
+
+  // Portfolio hub track filter pills
+  document.querySelectorAll('[data-track-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tr = btn.dataset.trackFilter;
+      document.querySelectorAll('[data-track-filter]').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.hub-card').forEach(c => {
+        c.style.display = (tr === 'all' || c.dataset.track === tr) ? '' : 'none';
+      });
+    });
+  });
+
+  // Interactive Financial What-If Simulator (mirrors model.py exact math)
+  const simRoot = document.getElementById('sim-panel');
+  if (simRoot && CFG.modelInputs) {
+    const baseInputs = JSON.parse(JSON.stringify(CFG.modelInputs));
+    const locale = CFG.locale || (String(baseInputs.currency || 'IDR').toUpperCase() === 'IDR' ? 'id' : 'en');
+    const currency = baseInputs.currency || 'IDR';
+    const isSaas = String(baseInputs.model_type || 'transactional').toLowerCase() === 'saas';
+    const months = 12;
+
+    const state = {
+      price: Number(baseInputs.price || 0),
+      volume: Number(isSaas ? (baseInputs.month1_new_customers ?? baseInputs.month1_units ?? 10) : (baseInputs.month1_units ?? 50)),
+      vc: Number(baseInputs.unit_variable_cost || 0),
+      fixed: Number(baseInputs.monthly_fixed_costs || 0),
+      cac: Number(baseInputs.cac || 0),
+      growth: Number(baseInputs.monthly_growth || 0.1),
+      churn: Number(baseInputs.monthly_churn_rate || 0.05),
+      repeat: Math.max(1, Number(baseInputs.repeat_orders_per_customer || 1)),
+    };
+
+    function fmtNum(v, dec = 0) {
+      const n = Number(v || 0);
+      const s = n.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+      return locale === 'id' ? s.replace(/,/g, 'X').replace(/\./g, ',').replace(/X/g, '.') : s;
+    }
+    function fmtShort(v) {
+      const av = Math.abs(v);
+      if (av >= 1e9) return fmtNum(v / 1e9, 1) + (locale === 'id' ? 'M ' : 'B ') + currency;
+      if (av >= 1e6) return fmtNum(v / 1e6, 1) + (locale === 'id' ? 'jt ' : 'M ') + currency;
+      if (av >= 1e3) return fmtNum(v / 1e3, 0) + (locale === 'id' ? 'rb ' : 'k ') + currency;
+      return fmtNum(v, 0) + ' ' + currency;
+    }
+
+    function runScenario(mult) {
+      const price = state.price;
+      const growth = state.growth * (mult.growth ?? 1);
+      const costMult = mult.cost ?? 1;
+      const vc = state.vc * costMult;
+      const fixed = state.fixed * costMult;
+      const capex = Number(baseInputs.capex || 0);
+      const feeRate = Number(baseInputs.channel_fee_rate || 0);
+      const taxRate = Number(baseInputs.tax_rate || 0);
+      const taxProfRate = Number(baseInputs.tax_on_profit_rate || 0);
+      const cac = state.cac;
+      let cash = Number(baseInputs.starting_cash || 0) - capex;
+      let breakeven = null;
+      let exhausted = cash <= 0 ? 0 : null;
+      let finalProfit = 0;
+      const rows = [];
+
+      if (isSaas) {
+        let active = Number(baseInputs.starting_active_customers || 0);
+        let newCust = state.volume * (mult.units ?? 1);
+        const churn = Math.min(0.99, Math.max(0, state.churn * (mult.churn ?? 1)));
+        for (let mo = 1; mo <= months; mo++) {
+          active = Math.max(0, active - active * churn + newCust);
+          const rev = active * price;
+          const gp = rev - active * vc - rev * feeRate;
+          const ebt = gp - fixed - newCust * cac;
+          const tax = rev * taxRate + Math.max(0, ebt) * taxProfRate;
+          const net = ebt - tax;
+          cash += net;
+          finalProfit = net;
+          if (breakeven === null && net >= 0) breakeven = mo;
+          if (exhausted === null && cash <= 0) exhausted = mo;
+          rows.push({ mo, vol: Math.round(active), rev: Math.round(rev), net: Math.round(net), cash: Math.round(cash) });
+          newCust *= (1 + growth);
+        }
+        const unitMargin = price * (1 - feeRate) - vc;
+        const ltv = churn > 0 ? unitMargin / churn : null;
+        return {
+          rows, breakeven, exhausted, finalProfit,
+          lowestCash: Math.min(...rows.map(r => r.cash)),
+          endingCash: rows[rows.length - 1].cash,
+          grossMarginPct: price > 0 ? (unitMargin / price) * 100 : 0,
+          ltvCac: (cac > 0 && ltv !== null) ? ltv / cac : null,
+          payback: (unitMargin > 0 && cac > 0) ? cac / unitMargin : null,
+        };
+      } else {
+        let units = state.volume * (mult.units ?? 1);
+        const repeat = Math.max(1, state.repeat);
+        for (let mo = 1; mo <= months; mo++) {
+          const rev = units * price;
+          const gp = rev - units * vc - rev * feeRate;
+          const acq = (units / repeat) * cac;
+          const ebt = gp - fixed - acq;
+          const tax = rev * taxRate + Math.max(0, ebt) * taxProfRate;
+          const net = ebt - tax;
+          cash += net;
+          finalProfit = net;
+          if (breakeven === null && net >= 0) breakeven = mo;
+          if (exhausted === null && cash <= 0) exhausted = mo;
+          rows.push({ mo, vol: Math.round(units), rev: Math.round(rev), net: Math.round(net), cash: Math.round(cash) });
+          units *= (1 + growth);
+        }
+        const unitMargin = price * (1 - feeRate) - vc;
+        const ltv = unitMargin * repeat;
+        return {
+          rows, breakeven, exhausted, finalProfit,
+          lowestCash: Math.min(...rows.map(r => r.cash)),
+          endingCash: rows[rows.length - 1].cash,
+          grossMarginPct: price > 0 ? (unitMargin / price) * 100 : 0,
+          ltvCac: cac > 0 ? ltv / cac : null,
+          payback: (unitMargin > 0 && cac > 0) ? cac / (unitMargin * repeat) : null,
+        };
+      }
+    }
+
+    function renderSimChart(resMap) {
+      const w = 720, h = 250, pl = 74, pr = 92, pt = 28, pb = 42;
+      const pw = w - pl - pr, ph = h - pt - pb;
+      const all = Object.values(resMap).flatMap(r => r.rows.map(x => x.cash)).concat([0]);
+      const minV = Math.min(...all), maxV = Math.max(Math.max(...all), minV + 1);
+      const xPos = idx => pl + (idx / (months - 1)) * pw;
+      const yPos = v => pt + ph - ((v - minV) / (maxV - minV)) * ph;
+      const colors = { optimistic: '#1B365D', base: '#2563EB', pessimistic: '#DC2626' };
+      const labels = {
+        optimistic: LABELS.scenario_opt || 'Optimistic',
+        base: LABELS.scenario_base || 'Base',
+        pessimistic: LABELS.scenario_pess || 'Pessimistic',
+      };
+      let svg = `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"><rect width="${w}" height="${h}" fill="#FFFFFF"/>`;
+      for (let s = 0; s <= 4; s++) {
+        const v = minV + (maxV - minV) * (s / 4);
+        const y = yPos(v).toFixed(1);
+        svg += `<line x1="${pl}" y1="${y}" x2="${pl + pw}" y2="${y}" stroke="#EEF2F6"/>`;
+        svg += `<text x="${pl - 8}" y="${Number(y) + 3}" text-anchor="end" font-size="9.5" fill="#64748B" font-family="sans-serif">${fmtShort(v)}</text>`;
+      }
+      if (minV < 0 && maxV > 0) {
+        const y0 = yPos(0).toFixed(1);
+        svg += `<line x1="${pl}" y1="${y0}" x2="${pl + pw}" y2="${y0}" stroke="#64748B" stroke-dasharray="4,3"/>`;
+      }
+      let lxLegend = pl;
+      ['optimistic', 'base', 'pessimistic'].forEach(key => {
+        const r = resMap[key];
+        if (!r) return;
+        const pts = r.rows.map((row, idx) => `${xPos(idx).toFixed(1)},${yPos(row.cash).toFixed(1)}`).join(' ');
+        const dash = key === 'pessimistic' ? ' stroke-dasharray="5,3"' : '';
+        svg += `<polyline fill="none" stroke="${colors[key]}" stroke-width="2.4"${dash} points="${pts}"/>`;
+        const last = r.rows[r.rows.length - 1];
+        const cx = xPos(months - 1).toFixed(1), cy = yPos(last.cash).toFixed(1);
+        svg += `<circle cx="${cx}" cy="${cy}" r="3.5" fill="${colors[key]}"/>`;
+        svg += `<text x="${Number(cx) + 7}" y="${Number(cy) + 3}" font-size="9.5" font-weight="600" fill="${colors[key]}" font-family="sans-serif">${fmtShort(last.cash)}</text>`;
+        svg += `<line x1="${lxLegend}" y1="${h - 12}" x2="${lxLegend + 18}" y2="${h - 12}" stroke="${colors[key]}" stroke-width="2.4"${dash}/>`;
+        svg += `<text x="${lxLegend + 24}" y="${h - 9}" font-size="10" fill="#1E293B" font-family="sans-serif">${labels[key]}</text>`;
+        lxLegend += 120;
+      });
+      for (let m = 1; m <= months; m += 2) {
+        svg += `<text x="${xPos(m - 1).toFixed(1)}" y="${pt + ph + 15}" text-anchor="middle" font-size="9.5" fill="#64748B" font-family="sans-serif">M${m}</text>`;
+      }
+      svg += '</svg>';
+      return svg;
+    }
+
+    function updateSim() {
+      const mults = baseInputs.scenario_multipliers || {
+        pessimistic: { units: 0.7, growth: 0.6, cost: 1.1, churn: 1.3 },
+        base: { units: 1.0, growth: 1.0, cost: 1.0, churn: 1.0 },
+        optimistic: { units: 1.3, growth: 1.3, cost: 0.95, churn: 0.8 },
+      };
+      const resMap = {
+        pessimistic: runScenario(mults.pessimistic || { units: 0.7, growth: 0.6, cost: 1.1 }),
+        base: runScenario(mults.base || { units: 1, growth: 1, cost: 1 }),
+        optimistic: runScenario(mults.optimistic || { units: 1.3, growth: 1.3, cost: 0.95 }),
+      };
+      const base = resMap.base;
+      const pess = resMap.pessimistic;
+      const beTxt = base.breakeven ? `${LABELS.month_prefix || 'Month'} ${base.breakeven}` : (LABELS.not_reached || 'Not within 12 mo');
+      const ltvTxt = base.ltvCac !== null ? `${base.ltvCac.toFixed(1)}x` : 'N/A';
+      const pbTxt = base.payback !== null ? `${base.payback.toFixed(1)} mo` : 'N/A';
+      const kpiHtml = `
+        <div class="kpi-card ${base.breakeven ? 'good' : 'warn'}"><div class="kpi-label">${LABELS.breakeven || 'Break-Even'}</div><div class="kpi-val">${beTxt}</div><div class="kpi-sub">Pess: ${pess.breakeven ? 'M' + pess.breakeven : '-'}</div></div>
+        <div class="kpi-card ${base.endingCash > 0 ? 'good' : 'warn'}"><div class="kpi-label">${LABELS.ending_cash || 'Month-12 Cash'}</div><div class="kpi-val">${fmtShort(base.endingCash)}</div><div class="kpi-sub">${LABELS.lowest_cash || 'Lowest'}: ${fmtShort(base.lowestCash)}</div></div>
+        <div class="kpi-card ${base.grossMarginPct >= 40 ? 'good' : ''}"><div class="kpi-label">${LABELS.gross_margin || 'Margin'}</div><div class="kpi-val">${base.grossMarginPct.toFixed(1)}%</div><div class="kpi-sub">${LABELS.payback || 'Payback'}: ${pbTxt}</div></div>
+        <div class="kpi-card ${(base.ltvCac || 0) >= 3 ? 'good' : 'warn'}"><div class="kpi-label">${LABELS.ltv_cac || 'LTV / CAC'}</div><div class="kpi-val">${ltvTxt}</div><div class="kpi-sub">Pess M12: ${fmtShort(pess.endingCash)}</div></div>
+      `;
+      document.getElementById('sim-kpis').innerHTML = kpiHtml;
+      document.getElementById('sim-chart').innerHTML = renderSimChart(resMap);
+      const tbody = base.rows.map(r =>
+        `<tr><td>M${r.mo}</td><td class="num">${fmtNum(r.vol)}</td><td class="num">${fmtNum(r.rev)}</td><td class="num">${fmtNum(r.net)}</td><td class="num"><strong>${fmtNum(r.cash)}</strong></td></tr>`
+      ).join('');
+      document.getElementById('sim-table-body').innerHTML = tbody;
+    }
+
+    function bindSlider(id, key, fmtFn) {
+      const el = document.getElementById(id);
+      const lbl = document.getElementById(id + '-val');
+      if (!el) return;
+      const sync = () => {
+        state[key] = Number(el.value);
+        if (lbl) lbl.textContent = fmtFn(state[key]);
+        updateSim();
+      };
+      el.addEventListener('input', sync);
+      if (lbl) lbl.textContent = fmtFn(state[key]);
+    }
+
+    bindSlider('sim-price', 'price', v => fmtNum(v) + ' ' + currency);
+    bindSlider('sim-volume', 'volume', v => fmtNum(v));
+    bindSlider('sim-vc', 'vc', v => fmtNum(v) + ' ' + currency);
+    bindSlider('sim-fixed', 'fixed', v => fmtNum(v) + ' ' + currency);
+    bindSlider('sim-cac', 'cac', v => fmtNum(v) + ' ' + currency);
+    bindSlider('sim-growth', 'growth', v => (v * 100).toFixed(0) + '%');
+    if (isSaas) bindSlider('sim-churn', 'churn', v => (v * 100).toFixed(1) + '%');
+    else bindSlider('sim-repeat', 'repeat', v => v.toFixed(1) + 'x');
+
+    const resetBtn = document.getElementById('sim-reset');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        const defaults = {
+          'sim-price': Number(baseInputs.price || 0),
+          'sim-volume': Number(isSaas ? (baseInputs.month1_new_customers ?? baseInputs.month1_units ?? 10) : (baseInputs.month1_units ?? 50)),
+          'sim-vc': Number(baseInputs.unit_variable_cost || 0),
+          'sim-fixed': Number(baseInputs.monthly_fixed_costs || 0),
+          'sim-cac': Number(baseInputs.cac || 0),
+          'sim-growth': Number(baseInputs.monthly_growth || 0.1),
+          'sim-churn': Number(baseInputs.monthly_churn_rate || 0.05),
+          'sim-repeat': Math.max(1, Number(baseInputs.repeat_orders_per_customer || 1)),
+        };
+        Object.entries(defaults).forEach(([id, val]) => {
+          const el = document.getElementById(id);
+          if (el) { el.value = val; el.dispatchEvent(new Event('input')); }
+        });
+      });
+    }
+
+    const copyBtn = document.getElementById('sim-copy');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        const updated = JSON.parse(JSON.stringify(baseInputs));
+        updated.price = state.price;
+        if (isSaas) {
+          updated.month1_new_customers = state.volume;
+          updated.monthly_churn_rate = state.churn;
+        } else {
+          updated.month1_units = state.volume;
+          updated.repeat_orders_per_customer = state.repeat;
+        }
+        updated.unit_variable_cost = state.vc;
+        updated.monthly_fixed_costs = state.fixed;
+        updated.cac = state.cac;
+        updated.monthly_growth = state.growth;
+        const jsonStr = JSON.stringify(updated, null, 2);
+        if (navigator.clipboard) navigator.clipboard.writeText(jsonStr);
+        const orig = copyBtn.textContent;
+        copyBtn.textContent = LABELS.copied || 'Copied!';
+        setTimeout(() => { copyBtn.textContent = orig; }, 1600);
+      });
+    }
+
+    updateSim();
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function fallbackAll() {
+    document.querySelectorAll('.mermaid').forEach(function(el) {
+      if (!el.querySelector('svg')) {
+        el.className = 'mermaid-fallback';
+      }
+    });
+  }
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+  s.onload = function() {
+    if (window.mermaid) {
+      window.mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+    } else {
+      fallbackAll();
+    }
+  };
+  s.onerror = fallbackAll;
+  document.head.appendChild(s);
+  setTimeout(fallbackAll, 6000);
+})();
+</script>
+
+</body>
+</html>

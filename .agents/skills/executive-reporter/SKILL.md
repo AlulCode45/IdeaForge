@@ -24,14 +24,26 @@ Busy decision-makers need the answer first, backed by consistent numbers.
    python3 scripts/lint_project.py prps/<project>
    ```
    Fix any `FAIL` or anti-slop warnings before generating PDFs.
-5. **Export PDF** (choose `--mode executive|technical|full`, and `--lang id|en` matching the document language):
-   ```bash
-   python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
-     --project prps/<project> --mode executive --lang <id|en> \
-     --output prps/<project>/assets/<project>-report.pdf \
-     --title "<Project Name>"
-   ```
-   Verify the printed byte size and page count.
+5. **Export PDF & Interactive Web GUI** (choose `--mode executive|technical|full|prd`, and `--lang id|en` matching the document language):
+   - **Editorial PDF** (`export_pdf.py`):
+     ```bash
+     python3 .agents/skills/executive-reporter/scripts/export_pdf.py \
+       --project prps/<project> --mode executive --lang <id|en> \
+       --output prps/<project>/assets/<project>-report.pdf \
+       --title "<Project Name>"
+     ```
+     For standalone PRDs, use `--project prds/<project> --mode prd`. Verify the printed byte size and page count.
+   - **Interactive Web GUI** (`export_web.py` — self-contained static HTML with sidebar navigation, instant search, dark/light mode, evidence tag filter, interactive checklists, quality-gate drawer, and live What-If Financial Simulator when `model/inputs.json` exists):
+     ```bash
+     python3 .agents/skills/executive-reporter/scripts/export_web.py \
+       --project prps/<project> --mode executive --lang <id|en> \
+       --output prps/<project>/assets/<project>-web.html \
+       --title "<Project Name>"
+     ```
+   - **Live Local Portfolio Hub** (browse all `prps/`, `prds/`, `ideas/` live in browser with 1-click HTML & PDF download):
+     ```bash
+     python3 .agents/skills/executive-reporter/scripts/export_web.py --serve --port 8765 --lang <id|en>
+     ```
 6. **Optional Handoff Formats** (when requested):
    - **Slide Deck Outline** (`assets/pitch-outline.md`): 10-slide structure (Problem, Solution, Market, Traction/Discovery, Business Model, Competition, GTM, Financials, Risks, Ask).
    - **Action Backlog** (`assets/action-backlog.md`): Epic/Task list ready to import into Jira, Linear, or GitHub Issues.

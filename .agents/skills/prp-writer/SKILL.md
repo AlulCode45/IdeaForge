@@ -22,7 +22,7 @@ python3 scripts/init_project.py --slug <project-slug> --title "<Project Name>" -
 
 - `00-overview.md` — Executive summary, goals, metrics, non-goals
 - `01-users-and-flows.md` — Personas, journeys, Mermaid user flows
-- `02-requirements.md` — Functional (MoSCoW + acceptance criteria) & non-functional
+- `02-requirements.md` — Functional (MoSCoW + acceptance criteria) & non-functional (or use `prd-writer` to author a full `PRD.md` / `prds/<feature>.md` alongside this)
 - `03-architecture.md` — System architecture, tech stack, sequence diagrams (use `tech-feasibility-estimator` for infra COGS & effort)
 - `04-data-model.md` — ERD & schema definitions
 - `05-roadmap-and-tasks.md` — Phased milestones & actionable tasks
