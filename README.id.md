@@ -47,15 +47,17 @@ Workspace terstruktur untuk **AI Brainstorming Partner & Strategic Analysis Agen
 
 ---
 
-## Engagement Tracks & Alur Kerja (Pipeline)
+## Engagement Tracks (Modular Super PRD)
+
+Mulai ringkas dari **Core PRD** siap *coding agent* di `prds/YYYY-MM-DD-<slug>/`, lalu naik kelas kapan saja di folder yang sama (`--upgrade <dir> --add tech|business|full`) tanpa pindah folder (`prps/` tetap kompatibel untuk proyek lama):
 
 | Track | Kapan Dipakai | Lokasi Output |
 |---|---|---|
 | `quick` | Eksplorasi awal / catatan cepat 1–2 halaman | `ideas/<slug>/YYYY-MM-DD-brief.md` |
-| `prd` | PRD produk/fitur mandiri yang siap dieksekusi coding agent | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `13-assumption-register.md`) |
-| `tech` | Spesifikasi produk & arsitektur software | `prps/YYYY-MM-DD-<slug>/` (`00`–`06`, `13`, `17`) |
-| `business` | Kelayakan bisnis & finansial tanpa spek teknis | `prps/YYYY-MM-DD-<slug>/` (`00`, `07`–`19`) |
-| `full` | Produk + bisnis + finansial + kepatuhan lengkap | `prps/YYYY-MM-DD-<slug>/` (`00`–`19`) |
+| `prd` *(default)* | Core PRD siap *coding agent* (masalah, alur visual, *user stories* + AC, FR/NFR, API) | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `13-assumption-register.md`) |
+| `tech` | Core PRD + Modul Teknis (arsitektur, ERD, roadmap, risiko teknis, scorecard) | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `03`–`06`, `13`, `17`) |
+| `business` | Core PRD + Kelayakan Bisnis & Model Finansial Terhitung | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `07`–`19`, `model/inputs.json`) |
+| `full` | Super PRD Lengkap (Core + Teknis + Bisnis + Finansial + Legal + Scorecard) | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `03`–`19`, `model/inputs.json`) |
 
 ```mermaid
 flowchart TD

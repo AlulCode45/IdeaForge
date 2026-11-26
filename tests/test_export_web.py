@@ -125,7 +125,7 @@ class TestExportWeb(unittest.TestCase):
                 check=True,
                 capture_output=True,
             )
-            prp_dir = ws / "prps/2026-11-26-bengkel-saas"
+            prp_dir = ws / "prds/2026-11-26-bengkel-saas"
             (prp_dir / "00-overview.md").write_text("# Overview\n\nTarget launch Q1 [Assumption].\n", encoding="utf-8")
             prp_html = prp_dir / "assets/bengkel-web.html"
             subprocess.run(

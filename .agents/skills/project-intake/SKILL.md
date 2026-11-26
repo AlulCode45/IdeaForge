@@ -11,15 +11,17 @@ description: >-
 
 Route every new request to the right depth before generating heavy documents.
 
-## Engagement Tracks
+## Engagement Tracks (Modular Super PRD)
+
+Every product/project starts in `prds/YYYY-MM-DD-<slug>/` with a coding-agent-ready `PRD.md` and can be upgraded progressively in-place (`--upgrade <dir> --add tech|business|full`) without moving folders (`prps/` remains legacy-compatible):
 
 | Track | When to use | Output location |
 |---|---|---|
 | `quick` | Early exploration, 1–2 page note, rapid validation | `ideas/<slug>/YYYY-MM-DD-brief.md` |
-| `prd` | Standalone product/feature PRD (coding-agent ready) | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `13-assumption-register.md`) |
-| `tech` | Software/architecture spec without full business case | `prps/YYYY-MM-DD-<slug>/` (`00`–`06`, `13`, `17`) |
-| `business` | Commercial/business feasibility without deep code spec | `prps/YYYY-MM-DD-<slug>/` (`00`, `07`–`19`) |
-| `full` | End-to-end product + business + financial + compliance | `prps/YYYY-MM-DD-<slug>/` (`00`–`19`) |
+| `prd` *(default)* | Core PRD (problem, visual flows, stories + AC, FR/NFR, API) | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `13-assumption-register.md`) |
+| `tech` | Core PRD + architecture, ERD, roadmap, tech risks, scorecard | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `03`–`06`, `13`, `17`) |
+| `business` | Core PRD + market, competitors, strategy, financial model, compliance | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `07`–`19`, `model/inputs.json`) |
+| `full` | Complete Super PRD (Core + Technical + Business + Finance + Compliance) | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `03`–`19`, `model/inputs.json`) |
 
 ## Workflow
 

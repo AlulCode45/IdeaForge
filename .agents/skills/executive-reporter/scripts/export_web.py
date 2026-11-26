@@ -433,19 +433,68 @@ def make_interactive_checkboxes(html_body: str, doc_id: str) -> str:
     return "\n".join(out_lines)
 
 
-def _friendly_doc_label(path: Path) -> str:
+DOC_LABEL_MAP = {
+    "id": {
+        "18-executive-summary": "Ringkasan Eksekutif",
+        "prd": "Dokumen Produk (PRD)",
+        "00-overview": "Ikhtisar Proyek",
+        "01-users-and-flows": "Pengguna & Alur",
+        "02-requirements": "Kebutuhan Produk",
+        "03-architecture": "Arsitektur & Teknis",
+        "04-data-model": "Model Data (ERD)",
+        "05-roadmap-and-tasks": "Peta Jalan & Tugas",
+        "06-risks-and-mitigation": "Risiko Teknis",
+        "07-market-research": "Riset Pasar",
+        "15-competitor-analysis": "Analisis Kompetitor",
+        "14-customer-discovery": "Riset Pelanggan",
+        "08-swot": "Analisis SWOT",
+        "09-opportunity-analysis": "Analisis Peluang",
+        "10-management-plan": "Rencana Operasional",
+        "11-financial-plan": "Rencana Keuangan",
+        "16-compliance-and-legal": "Kepatuhan & Legal",
+        "12-go-to-market-and-risk": "Go-to-Market & Risiko",
+        "13-assumption-register": "Register Asumsi",
+        "17-scorecard-and-decision": "Keputusan & Scorecard",
+        "19-retrospective": "Retrospektif",
+        "readme": "Ikhtisar",
+    },
+    "en": {
+        "18-executive-summary": "Executive Summary",
+        "prd": "Product Requirements (PRD)",
+        "00-overview": "Project Overview",
+        "01-users-and-flows": "Users & Flows",
+        "02-requirements": "Requirements",
+        "03-architecture": "System Architecture",
+        "04-data-model": "Data Model (ERD)",
+        "05-roadmap-and-tasks": "Roadmap & Tasks",
+        "06-risks-and-mitigation": "Technical Risks",
+        "07-market-research": "Market Research",
+        "15-competitor-analysis": "Competitor Analysis",
+        "14-customer-discovery": "Customer Discovery",
+        "08-swot": "SWOT Analysis",
+        "09-opportunity-analysis": "Opportunity Analysis",
+        "10-management-plan": "Operations & Team",
+        "11-financial-plan": "Financial Plan",
+        "16-compliance-and-legal": "Compliance & Legal",
+        "12-go-to-market-and-risk": "Go-to-Market & Risk",
+        "13-assumption-register": "Assumption Register",
+        "17-scorecard-and-decision": "Decision & Scorecard",
+        "19-retrospective": "Retrospective",
+        "readme": "Overview",
+    },
+}
+
+
+def _friendly_doc_label(path: Path, lang: str = "id") -> str:
     stem = path.stem
-    if stem.upper() == "PRD":
-        return "PRD"
-    if stem.upper() == "README":
-        return "Overview"
+    mapped = DOC_LABEL_MAP.get(lang, DOC_LABEL_MAP["id"]).get(stem.lower())
+    if mapped:
+        return mapped
     cleaned = re.sub(r"^\d+-", "", stem).replace("-", " ").replace("_", " ").strip()
-    prefix_m = re.match(r"^(\d+)-", stem)
-    title = cleaned.title() if cleaned else stem
-    return f"{prefix_m.group(1)} {title}" if prefix_m else title
+    return cleaned.title() if cleaned else stem
 
 
-def load_project_documents(project_dir: Path, mode: str) -> list[dict]:
+def load_project_documents(project_dir: Path, mode: str, lang: str = "id") -> list[dict]:
     """Load ordered markdown documents from a prps/, prds/, or ideas/ folder."""
     files: list[Path] = []
     seen: set[Path] = set()
@@ -490,8 +539,8 @@ def load_project_documents(project_dir: Path, mode: str) -> list[dict]:
             {
                 "id": doc_id,
                 "filename": fpath.name,
-                "label": _friendly_doc_label(fpath),
-                "title": first_h1 or _friendly_doc_label(fpath),
+                "label": _friendly_doc_label(fpath, lang=lang),
+                "title": first_h1 or _friendly_doc_label(fpath, lang=lang),
                 "markdown": raw,
                 "base_dir": fpath.parent,
             }
@@ -1306,6 +1355,16 @@ body {
   margin: var(--sp-4) 0 var(--sp-2) 0;
 }
 .outline-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.outline-group-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary);
+  margin: 12px 0 4px 0;
+  padding: 6px var(--sp-2) 2px;
+  border-top: 1px solid var(--line);
+  letter-spacing: 0.01em;
+}
+.outline-group-title:first-child { margin-top: 2px; border-top: 0; padding-top: 2px; }
 .outline-link {
   display: grid;
   grid-template-columns: 24px minmax(0, 1fr);
@@ -2800,6 +2859,7 @@ WEB_JS = r"""
   const panels = Array.from(document.querySelectorAll('.doc-panel'));
   const navBtns = Array.from(document.querySelectorAll('[data-doc-target]'));
   const outlineLinks = Array.from(document.querySelectorAll('.outline-link[data-sec-doc]'));
+  const outlineGroups = Array.from(document.querySelectorAll('.outline-group-title[data-sec-group]'));
   const btnTab = document.getElementById('mode-tab');
   const btnAll = document.getElementById('mode-all');
   const chapterNav = document.getElementById('chapter-nav');
@@ -2817,6 +2877,9 @@ WEB_JS = r"""
     navBtns.forEach(b => b.classList.toggle('active', b.dataset.docTarget === activeDocId));
     outlineLinks.forEach(a => {
       a.parentElement.style.display = (viewMode === 'all' || a.dataset.secDoc === activeDocId) ? '' : 'none';
+    });
+    outlineGroups.forEach(g => {
+      g.style.display = (viewMode === 'all') ? '' : 'none';
     });
     if (chapterNav) {
       const showNav = viewMode === 'tab' && panels.length > 1;
@@ -4298,16 +4361,17 @@ def render_web_document(
             f'<li><button type="button" class="nav-item-btn nav-sub-btn" data-doc-target="{doc["id"]}" title="{html.escape(doc["label"])}">'
             f'<span class="nav-item-left">{FILE_SVG}<span class="nav-label">{html.escape(doc["label"])}</span></span></button></li>'
         )
-        for level, sec_title, sec_id in toc:
-            if level == 2:
-                sec_counter += 1
-                num_m = re.match(r"^(\d+\.)\s*(.*)$", sec_title.strip())
-                num_lbl = num_m.group(1) if num_m else f"{sec_counter}."
-                txt_lbl = num_m.group(2) if num_m else sec_title
-                outline_items.append(
-                    f'<li><a class="outline-link" data-sec-doc="{doc["id"]}" href="#{sec_id}">'
-                    f'<span class="outline-num">{html.escape(num_lbl)}</span><span>{html.escape(txt_lbl)}</span></a></li>'
-                )
+        doc_h2s = [(sec_title, sec_id) for level, sec_title, sec_id in toc if level == 2]
+        if doc_h2s and len(docs) > 1:
+            outline_items.append(
+                f'<li class="outline-group-title" data-sec-group="{doc["id"]}">{html.escape(doc["label"])}</li>'
+            )
+        for doc_sec_idx, (sec_title, sec_id) in enumerate(doc_h2s, 1):
+            txt_lbl = re.sub(r"^\d+\.\s*", "", sec_title.strip())
+            outline_items.append(
+                f'<li><a class="outline-link" data-sec-doc="{doc["id"]}" href="#{sec_id}">'
+                f'<span class="outline-num">{doc_sec_idx}.</span><span>{html.escape(txt_lbl)}</span></a></li>'
+            )
 
     if model_inputs:
         rendered_panels.append(_build_simulator_panel(model_inputs, lang))
@@ -4316,11 +4380,12 @@ def render_web_document(
             f'<span class="nav-item-left">{ACTIVITY_SVG}<span class="nav-label">{html.escape(t["simulator"])}</span></span></button></li>'
         )
 
-    # Sidebar collections (identical to Hub, with nested sub-items under active collection)
+    # Sidebar collections (unified Modular Super PRD: PRD, Ide, Contoh)
+    if doc_group == "prp":
+        doc_group = "prd"
     hub_list = hub_items or []
     counts = {
-        "prp": sum(1 for x in hub_list if x["group"] == "prp"),
-        "prd": sum(1 for x in hub_list if x["group"] == "prd"),
+        "prd": sum(1 for x in hub_list if x["group"] in ("prd", "prp")),
         "idea": sum(1 for x in hub_list if x["group"] == "idea"),
         "sample": sum(1 for x in hub_list if x["group"] == "sample"),
     }
@@ -4329,7 +4394,6 @@ def render_web_document(
     total_hub_count = len(hub_list) if hub_list else 1
 
     collections_nav = [
-        ("prp", "PRP", counts["prp"], FOLDER_SVG),
         ("prd", "PRD", counts["prd"], FILE_CHECK_SVG),
         ("idea", t["tab_ideas"], counts["idea"], LIGHTBULB_SVG),
         ("sample", t["tab_samples"], counts["sample"], BOOK_OPEN_SVG),
@@ -4630,12 +4694,27 @@ def discover_workspace_items(base_dir: Path) -> list[dict]:
             score, verdict = extract_scorecard_badge(child)
             has_sim = (child / "model" / "inputs.json").exists()
             latest_mtime = max(p.stat().st_mtime for p in mds)
+            md_names = {p.name for p in mds}
+            has_tech = bool(md_names & {"03-architecture.md", "04-data-model.md", "05-roadmap-and-tasks.md"})
+            has_biz = bool(md_names & {"07-market-research.md", "11-financial-plan.md", "17-scorecard-and-decision.md", "18-executive-summary.md"}) or has_sim
+            if track_group == "prd":
+                if has_tech and has_biz:
+                    prd_tier, effective_mode = "full", "full"
+                elif has_biz:
+                    prd_tier, effective_mode = "business", "full"
+                elif has_tech:
+                    prd_tier, effective_mode = "tech", "full"
+                else:
+                    prd_tier, effective_mode = "core", "prd"
+            else:
+                prd_tier, effective_mode = "", default_mode
             items.append(
                 {
                     "title": title,
                     "rel_path": str(child.relative_to(base_dir)),
                     "group": track_group,
-                    "mode": default_mode,
+                    "tier": prd_tier,
+                    "mode": effective_mode,
                     "doc_count": len(mds),
                     "score": score,
                     "verdict": verdict,
@@ -4647,8 +4726,8 @@ def discover_workspace_items(base_dir: Path) -> list[dict]:
                 }
             )
 
-    _scan_project_root("prps", "prp", "executive")
     _scan_project_root("prds", "prd", "prd")
+    _scan_project_root("prps", "prd", "full")
     _scan_project_root("ideas", "idea", "executive")
 
     sample_md = base_dir / "examples" / "sample-report" / "sample-executive-report.md"
@@ -4701,17 +4780,21 @@ def render_portfolio_hub(base_dir: Path, lang: str = "id") -> str:
     t = I18N[lang]
     items = discover_workspace_items(base_dir)
     counts = {
-        "prp": sum(1 for x in items if x["group"] == "prp"),
         "prd": sum(1 for x in items if x["group"] == "prd"),
         "idea": sum(1 for x in items if x["group"] == "idea"),
         "sample": sum(1 for x in items if x["group"] == "sample"),
     }
 
     type_labels = {
-        "prp": "PRP",
         "prd": "PRD",
         "idea": t["tab_ideas"],
         "sample": t["tab_samples"],
+    }
+    tier_labels = {
+        "core": "Core",
+        "tech": "Teknis" if lang == "id" else "Tech",
+        "business": "Bisnis" if lang == "id" else "Business",
+        "full": "Lengkap" if lang == "id" else "Full",
     }
 
     numeric_scores: list[float] = []
@@ -4747,6 +4830,9 @@ def render_portfolio_hub(base_dir: Path, lang: str = "id") -> str:
             score_cell = f'<span class="muted-text">{html.escape(t["no_score"])}</span>'
 
         base_type = type_labels.get(it["group"], it["group"].upper())
+        tier_suffix = tier_labels.get(it.get("tier", ""), "")
+        if it["group"] == "prd" and tier_suffix:
+            base_type = f"PRD · {tier_suffix}"
         combined_type = f"{base_type} · {t['sim_badge']}" if it["has_sim"] else base_type
         type_title = t["sim_tooltip"] if it["has_sim"] else base_type
         type_html = f'<span class="badge-combined" title="{html.escape(type_title)}">{html.escape(combined_type)}</span>'
@@ -4829,9 +4915,8 @@ def render_portfolio_hub(base_dir: Path, lang: str = "id") -> str:
         summary_parts.append(f'diperbarui <span class="mono-num">{html.escape(newest_date)}</span>' if lang == "id" else f'updated <span class="mono-num">{html.escape(newest_date)}</span>')
     summary_line = " &middot; ".join(summary_parts)
 
-    # Sidebar collections & recent items
+    # Sidebar collections & recent items (Unified Modular Super PRD)
     collections_nav = [
-        ("prp", "PRP", counts["prp"], FOLDER_SVG),
         ("prd", "PRD", counts["prd"], FILE_CHECK_SVG),
         ("idea", t["tab_ideas"], counts["idea"], LIGHTBULB_SVG),
         ("sample", t["tab_samples"], counts["sample"], BOOK_OPEN_SVG),
@@ -4860,8 +4945,7 @@ def render_portfolio_hub(base_dir: Path, lang: str = "id") -> str:
 
     collections_meta = {
         "all": {"title": "Semua dokumen" if lang == "id" else "All documents", "desc": t["hub_subtitle"], "crumb": "<strong>Semua dokumen</strong>" if lang == "id" else "<strong>All documents</strong>"},
-        "prp": {"title": "Koleksi: PRP" if lang == "id" else "Collection: PRP", "desc": "Project Requirements & Plan lengkap untuk produk dan kelayakan bisnis.", "crumb": 'Koleksi / <strong>PRP</strong>'},
-        "prd": {"title": "Koleksi: PRD" if lang == "id" else "Collection: PRD", "desc": "Product Requirements Document siap implementasi untuk tim dan coding agent.", "crumb": 'Koleksi / <strong>PRD</strong>'},
+        "prd": {"title": "Koleksi: PRD" if lang == "id" else "Collection: PRD", "desc": "Modular Super PRD: mulai dari Core PRD siap coding agent, dapat diperluas dengan modul Teknis, Riset Pasar, Finansial, dan Scorecard Go/No-Go.", "crumb": 'Koleksi / <strong>PRD</strong>'},
         "idea": {"title": "Koleksi: Ide" if lang == "id" else "Collection: Ideas", "desc": "Catatan eksplorasi awal dan ringkasan brainstorming.", "crumb": 'Koleksi / <strong>Ide</strong>'},
         "sample": {"title": "Koleksi: Contoh" if lang == "id" else "Collection: Samples", "desc": "Contoh laporan eksekutif beserta model finansial untuk evaluasi.", "crumb": 'Koleksi / <strong>Contoh</strong>'},
     }
@@ -4992,7 +5076,6 @@ def render_portfolio_hub(base_dir: Path, lang: str = "id") -> str:
               <div class="pop-group">
                 <p class="pop-label">Tipe</p>
                 <button type="button" class="pop-opt active" data-pop-type="all">Semua tipe</button>
-                <button type="button" class="pop-opt" data-pop-type="prp">PRP</button>
                 <button type="button" class="pop-opt" data-pop-type="prd">PRD</button>
                 <button type="button" class="pop-opt" data-pop-type="idea">{html.escape(t['tab_ideas'])}</button>
                 <button type="button" class="pop-opt" data-pop-type="sample">{html.escape(t['tab_samples'])}</button>
@@ -5084,7 +5167,7 @@ def build_html_for_target(
             {
                 "id": f"doc-1-{export_pdf.slugify(target.stem)}",
                 "filename": target.name,
-                "label": _friendly_doc_label(target),
+                "label": _friendly_doc_label(target, lang=lang),
                 "title": doc_title,
                 "markdown": raw,
                 "base_dir": target.parent,
@@ -5100,8 +5183,15 @@ def build_html_for_target(
         score, verdict = ("3.75", "Go with conditions") if target.name == "sample-executive-report.md" else (None, None)
         updated_date = date.fromtimestamp(target.stat().st_mtime).isoformat()
     else:
-        docs = load_project_documents(target, mode)
-        doc_title = title or target.name.replace("-", " ").title()
+        docs = load_project_documents(target, mode, lang=lang)
+        readme_title = None
+        readme_f = target / "README.md"
+        if readme_f.is_file():
+            for ln in readme_f.read_text(encoding="utf-8").splitlines():
+                if ln.strip().startswith("# "):
+                    readme_title = ln.strip()[2:].strip()
+                    break
+        doc_title = title or readme_title or re.sub(r"^\d{4}-\d{2}-\d{2}-", "", target.name).replace("-", " ").title()
         if model_inputs_path is None:
             candidate = target / "model" / "inputs.json"
             if candidate.is_file():

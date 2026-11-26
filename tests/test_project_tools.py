@@ -50,12 +50,13 @@ class TestProjectTools(unittest.TestCase):
                 check=True,
                 capture_output=True,
             )
-            proj = ws / "prps/2026-11-22-demo-saas"
+            proj = ws / "prds/2026-11-22-demo-saas"
             self.assertTrue((proj / "README.md").exists())
             self.assertTrue((proj / "CHANGELOG.md").exists())
+            self.assertTrue((proj / "PRD.md").exists())
             self.assertTrue((proj / "13-assumption-register.md").exists())
             self.assertTrue((proj / "model/inputs.json").exists())
-            self.assertIn("2026-11-22-demo-saas", (ws / "prps/INDEX.md").read_text(encoding="utf-8"))
+            self.assertIn("2026-11-22-demo-saas", (ws / "prds/INDEX.md").read_text(encoding="utf-8"))
 
             lint_proc = subprocess.run(
                 [sys.executable, str(LINT_SCRIPT), str(proj)],
@@ -86,7 +87,7 @@ class TestProjectTools(unittest.TestCase):
                 check=True,
                 capture_output=True,
             )
-            proj = ws / "prps/2026-11-22-bad-math"
+            proj = ws / "prds/2026-11-22-bad-math"
             (proj / "17-scorecard-and-decision.md").write_text(
                 "# Scorecard\n\n"
                 "| Criterion | Weight | Score (1-5) | Weighted | Justification |\n"
@@ -156,6 +157,27 @@ class TestProjectTools(unittest.TestCase):
             self.assertEqual(lint_proc.returncode, 0, lint_proc.stdout + lint_proc.stderr)
             self.assertIn("PRD.md includes all required PRD sections.", lint_proc.stdout)
             self.assertIn("PRD.md includes structured Given/When/Then acceptance criteria.", lint_proc.stdout)
+
+            # Test in-place progressive upgrade from Core PRD -> Business/Financial Super PRD
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(INIT_SCRIPT),
+                    "--upgrade",
+                    str(proj),
+                    "--add",
+                    "business",
+                    "--model-type",
+                    "saas",
+                    "--base-dir",
+                    str(ws),
+                ],
+                check=True,
+                capture_output=True,
+            )
+            self.assertTrue((proj / "model/inputs.json").exists())
+            self.assertIn("11-financial-plan.md", (proj / "README.md").read_text(encoding="utf-8"))
+            self.assertIn("Upgrade (business)", (proj / "CHANGELOG.md").read_text(encoding="utf-8"))
 
     def test_lint_catches_prd_issues(self):
         with tempfile.TemporaryDirectory() as tmp:

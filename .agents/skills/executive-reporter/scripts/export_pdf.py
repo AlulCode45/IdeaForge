@@ -38,6 +38,7 @@ SECTION_MODES = {
     "executive": [
         "18-executive-summary.md",
         "17-scorecard-and-decision.md",
+        "PRD.md",
         "00-overview.md",
         "07-market-research.md",
         "15-competitor-analysis.md",
@@ -72,11 +73,10 @@ SECTION_MODES = {
     ],
     "full": [
         "18-executive-summary.md",
-        "17-scorecard-and-decision.md",
+        "PRD.md",
         "00-overview.md",
         "01-users-and-flows.md",
         "02-requirements.md",
-        "PRD.md",
         "03-architecture.md",
         "04-data-model.md",
         "05-roadmap-and-tasks.md",
@@ -91,6 +91,7 @@ SECTION_MODES = {
         "16-compliance-and-legal.md",
         "12-go-to-market-and-risk.md",
         "13-assumption-register.md",
+        "17-scorecard-and-decision.md",
         "19-retrospective.md",
     ],
 }
@@ -512,6 +513,8 @@ def md_to_html(md_text: str, base_dir: Path, add_back_to_toc: bool = False, lang
                 has_mermaid = True
                 src = html.escape("\n".join(code_lines))
                 out.append(f'<div class="mermaid-block"><div class="mermaid">{src}</div></div>')
+            elif fence_lang:
+                out.append(f'<pre><code class="language-{html.escape(fence_lang)}">' + html.escape("\n".join(code_lines)) + "</code></pre>")
             else:
                 out.append("<pre><code>" + html.escape("\n".join(code_lines)) + "</code></pre>")
             i += 1

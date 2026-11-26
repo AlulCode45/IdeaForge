@@ -47,15 +47,17 @@ A structured, enterprise-grade workspace for an **AI Brainstorming Partner & Str
 
 ---
 
-## Engagement Tracks & Staged Pipeline
+## Engagement Tracks (Modular Super PRD)
+
+Start lightweight with a coding-agent-ready **Core PRD** in `prds/YYYY-MM-DD-<slug>/`, then upgrade in-place (`--upgrade <dir> --add tech|business|full`) without moving folders (`prps/` remains legacy-compatible):
 
 | Track | Best For | Output Location |
 |---|---|---|
 | `quick` | Early exploration, 1–2 page structured note | `ideas/<slug>/YYYY-MM-DD-brief.md` |
-| `prd` | Standalone, coding-agent-ready product/feature PRD | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `13-assumption-register.md`) |
-| `tech` | Software/product specification & architecture | `prps/YYYY-MM-DD-<slug>/` (`00`–`06`, `13`, `17`) |
-| `business` | Commercial & financial feasibility without code specs | `prps/YYYY-MM-DD-<slug>/` (`00`, `07`–`19`) |
-| `full` | End-to-end product, business, finance, & compliance | `prps/YYYY-MM-DD-<slug>/` (`00`–`19`) |
+| `prd` *(default)* | Coding-agent-ready Core PRD (problem, visual flows, stories + AC, FR/NFR, API) | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `13-assumption-register.md`) |
+| `tech` | Core PRD + Technical Deep-Dive (architecture, ERD, roadmap, tech risks, scorecard) | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `03`–`06`, `13`, `17`) |
+| `business` | Core PRD + Commercial Feasibility & Computed Financial Model | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `07`–`19`, `model/inputs.json`) |
+| `full` | Complete Super PRD (Core + Technical + Business + Finance + Compliance + Scorecard) | `prds/YYYY-MM-DD-<slug>/` (`PRD.md`, `03`–`19`, `model/inputs.json`) |
 
 ```mermaid
 flowchart TD
