@@ -179,6 +179,46 @@ PENCIL_SVG = (
     '<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>'
 )
 
+CHEVRON_DOWN_SVG = (
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" '
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>'
+)
+
+CHEVRON_LEFT_SVG = (
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" '
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>'
+)
+
+CHEVRON_RIGHT_SVG = (
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" '
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>'
+)
+
+INFO_SVG = (
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" '
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'
+)
+
+BOOKMARK_SVG = (
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" '
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>'
+)
+
+LIST_SVG = (
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" '
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/>'
+    '<line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>'
+)
+
+ACTIVITY_SVG = (
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" '
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>'
+)
+
 I18N = {
     "id": {
         "hub_title": "IdeaForge Portfolio Hub",
@@ -893,84 +933,459 @@ body {
 .audit-warn { color: var(--amber-fg); }
 .audit-fail { color: var(--warn-fg); }
 
-/* Editorial Document Canvas */
-.content-stage {
-  padding: 28px 36px 72px;
+/* Three-Zone Document Viewer ("Kolom Baca Tenang") */
+.viewer-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+.viewer-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  height: 48px;
+  padding: 0 var(--sp-8);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.viewer-topbar-left, .viewer-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
   min-width: 0;
 }
-.sheet {
-  max-width: 840px;
-  margin: 0 auto;
-  background: var(--sheet);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-md);
-  padding: 36px 44px 48px;
+.viewer-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.doc-masthead {
-  padding-bottom: 18px;
-  margin-bottom: 24px;
-  border-bottom: 1px solid var(--rule);
+.viewer-breadcrumb a {
+  color: var(--text-muted);
+  text-decoration: none;
 }
-.doc-category {
+.viewer-breadcrumb a:hover { color: var(--text); text-decoration: underline; }
+.viewer-breadcrumb .crumb-current {
+  color: var(--text);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mobile-back-link { display: none; }
+
+.viewer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: var(--sp-12);
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: var(--sp-12) var(--sp-12) var(--sp-12);
+  align-items: start;
+}
+.viewer-doc-col {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+.doc-panel { min-width: 0; max-width: 100%; }
+.doc-panel svg, .doc-panel img { max-width: 100%; height: auto; }
+.viewer-prose-head,
+.doc-panel > * {
+  max-width: 100%;
+}
+
+.viewer-doc-col .doc-category {
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--accent);
-  margin: 0 0 6px 0;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin: 0 0 var(--sp-2) 0;
 }
-.doc-headline {
+.viewer-doc-col .doc-headline {
   font-family: var(--font-serif);
-  font-size: 30px;
-  font-weight: 700;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 1.2;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-  margin: 0 0 10px 0;
+  color: var(--primary);
+  margin: 0 0 var(--sp-4) 0;
 }
-.doc-meta-row {
+
+/* Notion-style 2-column property rows */
+.prop-list {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  row-gap: var(--sp-2);
+  column-gap: var(--sp-4);
+  padding: var(--sp-4) 0;
+  margin: 0 0 var(--sp-4) 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.prop-key {
+  color: var(--text-muted);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+.prop-val {
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* Thin Evidence Filter Toolbar */
+.viewer-filter-bar {
+  max-width: 100%;
+  margin: 0 0 var(--sp-6);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--line);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  font-size: 13px;
-  color: var(--ink-subtle);
+  gap: var(--sp-2);
 }
-
-/* Evidence Filter Inline Strip */
-.evidence-strip {
+.ev-seg-group {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid var(--rule);
+  gap: var(--sp-1);
 }
-.evidence-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--ink-subtle);
-  margin-right: 4px;
-}
-.ev-btn {
+.ev-seg-btn {
   height: 28px;
-  padding: 0 10px;
+  padding: 0 var(--sp-2);
+  border: 1px solid transparent;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--rule);
   background: transparent;
-  color: var(--ink-muted);
+  color: var(--text-muted);
   font-family: inherit;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 140ms ease, color 140ms ease;
 }
-.ev-btn:hover { background: var(--subtle-surface); color: var(--ink); }
-.ev-btn.active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: var(--primary-fg);
+.ev-seg-btn:hover { background: var(--line-soft); color: var(--text); }
+.ev-seg-btn.active {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--text);
   font-weight: 600;
+}
+
+/* Document Typography & Headings */
+.doc-panel h1 {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.28;
+  color: var(--text);
+  margin: 0 0 var(--sp-4) 0;
+  scroll-margin-top: 72px;
+}
+.doc-panel h2 {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.32;
+  color: var(--text);
+  margin: 40px 0 var(--sp-3) 0;
+  padding-bottom: 0;
+  border-bottom: none;
+  scroll-margin-top: 72px;
+}
+.doc-panel h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin: var(--sp-6) 0 var(--sp-2) 0;
+  scroll-margin-top: 72px;
+}
+.doc-panel h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: var(--sp-4) 0 var(--sp-2) 0;
+}
+.doc-panel p {
+  font-size: 16px;
+  line-height: 1.65;
+  margin: 0 0 var(--sp-4) 0;
+  color: var(--text);
+}
+.doc-panel ul, .doc-panel ol {
+  font-size: 16px;
+  line-height: 1.65;
+  margin: 0 0 var(--sp-4) 0;
+  padding-left: var(--sp-6);
+}
+.doc-panel li { margin-bottom: var(--sp-2); }
+
+/* Unified Callout Component (Note & Recommendation) */
+.callout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  margin: var(--sp-4) auto var(--sp-6);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.callout-rec {
+  border-left: 3px solid var(--primary);
+}
+.callout-warn {
+  border-left: 3px solid var(--nogo);
+}
+.callout-icon {
+  color: var(--text-muted);
+  margin-top: 3px;
+  flex-shrink: 0;
+  display: inline-flex;
+}
+.callout-body { min-width: 0; flex: 1; }
+.callout-body p:last-child { margin-bottom: 0; }
+
+/* Hairline KPI Strip (neutral 24px mono values + semantic status below) */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin: var(--sp-6) auto var(--sp-6);
+}
+.kpi-card {
+  padding: var(--sp-4);
+  border-right: 1px solid var(--line);
+}
+.kpi-card:last-child { border-right: none; }
+.kpi-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: var(--sp-1);
+}
+.kpi-val {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.25;
+}
+.kpi-card.good .kpi-val,
+.kpi-card.warn .kpi-val { color: var(--text); }
+.kpi-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: var(--sp-1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.kpi-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.kpi-card.good .kpi-status-dot { background: var(--go); }
+.kpi-card.warn .kpi-status-dot { background: var(--nogo); }
+.kpi-card.good .kpi-status-lbl { color: var(--go); font-weight: 600; }
+.kpi-card.warn .kpi-status-lbl { color: var(--nogo); font-weight: 600; }
+
+/* Tables in Viewer */
+.table-wrap { max-width: 100%; overflow-x: auto; margin: var(--sp-4) auto var(--sp-6); }
+.doc-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.doc-panel th {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-align: left;
+  padding: 10px var(--sp-3);
+  border-top: none;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.doc-panel td {
+  padding: 11px var(--sp-3);
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.doc-panel tbody tr:hover td { background: var(--line-soft); }
+.doc-panel td.num, .doc-panel th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* Evidence Badges (same 4px outline style as Hub) */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 var(--sp-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.tag-verified { color: var(--go); border-color: var(--go); background: var(--go-bg); }
+.tag-estimate { color: var(--primary); background: var(--surface-2); }
+.tag-assumption { color: var(--conditional); border-color: var(--conditional); background: var(--conditional-bg); }
+.tag-unverified, .tag-stale { color: var(--nogo); border-color: var(--nogo); background: var(--nogo-bg); }
+
+/* Inline & Block Code */
+.doc-panel code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--surface-2);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  overflow-wrap: anywhere;
+}
+.doc-panel pre {
+  background: var(--surface-2);
+  border: none;
+  padding: var(--sp-4);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.doc-panel pre code { background: none; padding: 0; }
+
+/* Right Outline Rail ("Di halaman ini") */
+.outline-rail {
+  position: sticky;
+  top: 72px;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  padding-left: var(--sp-2);
+}
+.outline-heading {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin: var(--sp-4) 0 var(--sp-2) 0;
+}
+.outline-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.outline-link {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 4px;
+  padding: 5px var(--sp-2);
+  border-left: 2px solid transparent;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 140ms ease, border-color 140ms ease;
+}
+.outline-link:hover { color: var(--text); }
+.outline-link[aria-current="true"],
+.outline-link.active {
+  color: var(--text);
+  font-weight: 500;
+  border-left-color: var(--accent);
+}
+.outline-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.mobile-outline-wrap { display: none; max-width: 100%; margin: 0 0 var(--sp-4); }
+.mobile-outline-panel {
+  display: none;
+  margin-top: var(--sp-2);
+  padding: var(--sp-3);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+.mobile-outline-panel.open { display: block; }
+
+.chapter-nav {
+  display: none;
+  max-width: 100%;
+  margin: var(--sp-8) 0 0;
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--line);
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.chapter-nav.visible { display: flex; }
+
+/* Nested Sidebar Project Files */
+.nav-sub-list {
+  list-style: none;
+  margin: 2px 0 4px 14px;
+  padding: 0 0 0 8px;
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nav-sub-btn {
+  height: 29px;
+  padding: 0 var(--sp-2);
+  font-size: 13px;
+}
+.hub-app.is-collapsed .nav-sub-list { display: none; }
+
+@media (max-width: 1199px) {
+  .viewer-grid { grid-template-columns: minmax(0, 1fr); padding: var(--sp-8) var(--sp-6) var(--sp-12); }
+  .outline-rail { display: none; }
+  .mobile-outline-wrap { display: block; }
+}
+
+@media (max-width: 768px) {
+  .viewer-topbar { padding: 0 var(--sp-4); }
+  .viewer-grid { padding: var(--sp-6) var(--sp-4) var(--sp-8); }
+  .viewer-doc-col .doc-headline { font-size: 26px; }
+  .prop-list { grid-template-columns: 96px minmax(0, 1fr); }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .kpi-card { border-right: none; border-bottom: 1px solid var(--line); }
+  .mobile-back-link { display: inline-flex; }
+  .crumb-desktop { display: none; }
 }
 
 /* Audit Findings Panel */
@@ -1167,11 +1582,24 @@ pre code { background: none; padding: 0; }
 .mermaid-block {
   margin: 18px 0 22px 0;
   padding: 16px;
-  background: var(--canvas);
+  background: #FFFFFF;
+  color: #1B1F24;
   border: 1px solid var(--rule);
   border-radius: var(--radius-sm);
   overflow-x: auto;
   text-align: center;
+}
+[data-theme="dark"] .mermaid-block {
+  background: #F6F4EF;
+  color: #1B1F24;
+  border-color: var(--rule-strong);
+}
+.mermaid-block .mermaid,
+.mermaid-block foreignObject,
+.mermaid-block foreignObject span,
+.mermaid-block foreignObject div,
+.mermaid-block foreignObject p {
+  color: #1B1F24;
 }
 .mermaid-fallback {
   text-align: left;
@@ -2150,6 +2578,7 @@ details.sim-details summary {
 .md-editor:focus { border-color: var(--accent); background: var(--surface); }
 
 @media print {
+  @page { margin: 20mm; }
   :root, [data-theme="dark"] {
     --bg: #FFFFFF;
     --surface: #FFFFFF;
@@ -2161,14 +2590,18 @@ details.sim-details summary {
   }
   .topbar, .rail, .evidence-strip, .lint-drawer, .sim-controls-col, .empty-search,
   .hub-controls, .hub-row-actions, .theme-switch, .empty-hub-state,
-  .hub-sidebar, .hub-topbar, .db-toolbar, .active-chips, .db-actions-cell,
+  .hub-sidebar, .hub-topbar, .viewer-topbar, .outline-rail, .mobile-outline-wrap,
+  .viewer-filter-bar, .chapter-nav, .db-toolbar, .active-chips, .db-actions-cell,
   .cmd-backdrop, .drawer-backdrop { display: none !important; }
   .workspace, .hub-app { display: block; }
-  .content-stage, .hub-shell, .hub-content { padding: 0; max-width: 100%; }
+  .content-stage, .hub-shell, .hub-content, .viewer-grid { display: block; padding: 0; max-width: 100%; }
+  .viewer-doc-col, .viewer-prose-head, .doc-panel > * { max-width: 100% !important; }
   .sheet { max-width: 100%; border: none; padding: 0; }
   .hub-table-card { border-color: #000000; }
-  .hub-table th, .hub-table td, .db-table th, .db-table td { color: #000000; border-color: #9CA3AF; }
-  .decision-pill, .badge-outline, .badge-combined { border: 1px solid #000000; background: #FFFFFF; color: #000000; }
+  .hub-table th, .hub-table td, .db-table th, .db-table td, .doc-panel th, .doc-panel td { color: #000000; border-color: #9CA3AF; }
+  .decision-pill, .badge-outline, .badge-combined, .tag { border: 1px solid #000000; background: #FFFFFF; color: #000000; }
+  tr, .callout, .kpi-grid, .svg-figure, .mermaid-block { break-inside: avoid; }
+  h1, h2, h3, h4 { break-after: avoid; }
   .doc-panel { display: block !important; page-break-after: always; }
   .sim-workbench { display: block; }
 }
@@ -2201,6 +2634,9 @@ WEB_JS = r"""
     }
     if (typeof window.__ideaforgeRedrawSim === 'function') {
       window.__ideaforgeRedrawSim();
+    }
+    if (typeof window.__ideaforgeRerenderMermaid === 'function') {
+      window.__ideaforgeRerenderMermaid(val);
     }
   }
   setTheme(savedTheme, false);
@@ -2256,25 +2692,43 @@ WEB_JS = r"""
     });
   }
 
-  // Document switching & Full vs By-Doc mode
+  // Document switching & Full vs By-Doc mode ("Satu bab | Semua bab") + Prev/Next chapter nav
   const panels = Array.from(document.querySelectorAll('.doc-panel'));
   const navBtns = Array.from(document.querySelectorAll('[data-doc-target]'));
-  const tocLinks = Array.from(document.querySelectorAll('[data-sec-doc]'));
+  const outlineLinks = Array.from(document.querySelectorAll('.outline-link[data-sec-doc]'));
   const btnTab = document.getElementById('mode-tab');
   const btnAll = document.getElementById('mode-all');
+  const chapterNav = document.getElementById('chapter-nav');
+  const prevChapterBtn = document.getElementById('prev-chapter-btn');
+  const nextChapterBtn = document.getElementById('next-chapter-btn');
   let viewMode = panels.length > 2 ? 'tab' : 'all';
   let activeDocId = panels.length ? panels[0].id : null;
 
   function applyViewMode() {
-    if (btnTab) btnTab.classList.toggle('active', viewMode === 'tab');
-    if (btnAll) btnAll.classList.toggle('active', viewMode === 'all');
+    if (btnTab) btnTab.setAttribute('aria-pressed', String(viewMode === 'tab'));
+    if (btnAll) btnAll.setAttribute('aria-pressed', String(viewMode === 'all'));
     panels.forEach(p => {
       p.classList.toggle('hidden', viewMode === 'tab' && p.id !== activeDocId);
     });
     navBtns.forEach(b => b.classList.toggle('active', b.dataset.docTarget === activeDocId));
-    tocLinks.forEach(a => {
+    outlineLinks.forEach(a => {
       a.parentElement.style.display = (viewMode === 'all' || a.dataset.secDoc === activeDocId) ? '' : 'none';
     });
+    if (chapterNav) {
+      const showNav = viewMode === 'tab' && panels.length > 1;
+      chapterNav.classList.toggle('visible', showNav);
+      if (showNav) {
+        const idx = panels.findIndex(p => p.id === activeDocId);
+        if (prevChapterBtn) {
+          prevChapterBtn.disabled = idx <= 0;
+          prevChapterBtn.dataset.goIdx = String(Math.max(0, idx - 1));
+        }
+        if (nextChapterBtn) {
+          nextChapterBtn.disabled = idx < 0 || idx >= panels.length - 1;
+          nextChapterBtn.dataset.goIdx = String(Math.min(panels.length - 1, idx + 1));
+        }
+      }
+    }
   }
 
   navBtns.forEach(btn => {
@@ -2282,13 +2736,131 @@ WEB_JS = r"""
       activeDocId = btn.dataset.docTarget;
       applyViewMode();
       const target = document.getElementById(activeDocId);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      if (rail) rail.classList.remove('open');
+      if (target) target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+      const sb = document.getElementById('hub-sidebar');
+      const db = document.getElementById('drawer-backdrop');
+      if (sb) sb.classList.remove('open');
+      if (db) db.classList.remove('open');
     });
   });
   if (btnTab) btnTab.addEventListener('click', () => { viewMode = 'tab'; applyViewMode(); });
   if (btnAll) btnAll.addEventListener('click', () => { viewMode = 'all'; applyViewMode(); });
+  if (prevChapterBtn) {
+    prevChapterBtn.addEventListener('click', () => {
+      const p = panels[Number(prevChapterBtn.dataset.goIdx || 0)];
+      if (p) { activeDocId = p.id; applyViewMode(); window.scrollTo(0, 0); }
+    });
+  }
+  if (nextChapterBtn) {
+    nextChapterBtn.addEventListener('click', () => {
+      const p = panels[Number(nextChapterBtn.dataset.goIdx || 0)];
+      if (p) { activeDocId = p.id; applyViewMode(); window.scrollTo(0, 0); }
+    });
+  }
   if (panels.length) applyViewMode();
+
+  // Export dropdown in Viewer topbar
+  const exportBtn = document.getElementById('export-pop-btn');
+  const exportPop = document.getElementById('export-popover');
+  if (exportBtn && exportPop) {
+    function closeExportPop(returnFocus) {
+      exportPop.classList.remove('open');
+      exportBtn.setAttribute('aria-expanded', 'false');
+      if (returnFocus) exportBtn.focus();
+    }
+    exportBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const willOpen = !exportPop.classList.contains('open');
+      if (willOpen) {
+        exportPop.classList.add('open');
+        exportBtn.setAttribute('aria-expanded', 'true');
+        const first = exportPop.querySelector('a, button');
+        if (first) first.focus();
+      } else {
+        closeExportPop(false);
+      }
+    });
+    document.addEventListener('click', e => {
+      if (!exportPop.contains(e.target) && e.target !== exportBtn) closeExportPop(false);
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && exportPop.classList.contains('open')) {
+        e.preventDefault();
+        closeExportPop(true);
+      }
+    });
+  }
+
+  // Mobile Outline Toggle (<1200px)
+  const mobOutlineBtn = document.getElementById('mobile-outline-btn');
+  const mobOutlinePanel = document.getElementById('mobile-outline-panel');
+  if (mobOutlineBtn && mobOutlinePanel) {
+    mobOutlineBtn.addEventListener('click', () => {
+      const open = mobOutlinePanel.classList.toggle('open');
+      mobOutlineBtn.setAttribute('aria-expanded', String(open));
+    });
+  }
+
+  // Outline Anchor Navigation (moves focus to target heading) + Scrollspy
+  const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.outline-link').forEach(link => {
+    link.addEventListener('click', e => {
+      const href = link.getAttribute('href') || '';
+      if (!href.startsWith('#')) return;
+      const targetId = href.slice(1);
+      const secDoc = link.dataset.secDoc;
+      if (secDoc && viewMode === 'tab' && activeDocId !== secDoc) {
+        activeDocId = secDoc;
+        applyViewMode();
+      }
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        e.preventDefault();
+        history.replaceState(null, '', href);
+        targetEl.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+        targetEl.setAttribute('tabindex', '-1');
+        targetEl.focus({ preventScroll: true });
+        if (mobOutlinePanel) mobOutlinePanel.classList.remove('open');
+      }
+    });
+  });
+
+  if (outlineLinks.length && 'IntersectionObserver' in window) {
+    const headingEls = outlineLinks
+      .map(l => document.getElementById((l.getAttribute('href') || '').slice(1)))
+      .filter(Boolean);
+    const setActiveOutline = id => {
+      outlineLinks.forEach(l => {
+        const match = l.getAttribute('href') === '#' + id;
+        l.classList.toggle('active', match);
+        if (match) l.setAttribute('aria-current', 'true');
+        else l.removeAttribute('aria-current');
+      });
+    };
+    const obs = new IntersectionObserver(entries => {
+      const vis = entries.filter(en => en.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (vis.length) setActiveOutline(vis[0].target.id);
+    }, { rootMargin: '-72px 0px -65% 0px', threshold: 0.1 });
+    headingEls.forEach(h => obs.observe(h));
+  }
+
+  // Re-render Mermaid diagrams when theme changes
+  document.querySelectorAll('.mermaid').forEach(el => {
+    if (!el.dataset.mermaidSrc) el.dataset.mermaidSrc = el.textContent;
+  });
+  window.__ideaforgeRerenderMermaid = function(themeVal) {
+    if (!window.mermaid) return;
+    const nodes = Array.from(document.querySelectorAll('.mermaid[data-mermaid-src]'));
+    if (!nodes.length) return;
+    nodes.forEach(el => {
+      el.removeAttribute('data-processed');
+      el.textContent = el.dataset.mermaidSrc;
+    });
+    window.mermaid.initialize({ startOnLoad: false, theme: themeVal === 'dark' ? 'dark' : 'neutral', securityLevel: 'loose' });
+    if (typeof window.mermaid.run === 'function') {
+      window.mermaid.run({ nodes });
+    }
+  };
 
   // Interactive Checklists (persisted in localStorage)
   const docKeyPrefix = 'ideaforge-cb:' + (CFG.projectId || 'doc') + ':';
@@ -3291,6 +3863,62 @@ def _build_simulator_panel(model_inputs: dict, lang: str) -> str:
     )
 
 
+def _enhance_viewer_html(html_body: str, lang: str = "id") -> str:
+    """Enhance md_to_html output for the Kolom Baca Tenang viewer (accessible tables, callout icons, localized badges, KPI status)."""
+    # 1. Add scope="col" on table headers if missing
+    html_body = re.sub(r"<th(\s|>)", r'<th scope="col"\1', html_body)
+    html_body = html_body.replace('<th scope="col" scope="col"', '<th scope="col"')
+
+    # 2. Unified Callout component with 16px Lucide icon
+    html_body = re.sub(
+        r'<div class="callout-rec">(.*?)</div>',
+        rf'<div class="callout callout-rec"><span class="callout-icon">{BOOKMARK_SVG}</span><div class="callout-body">\1</div></div>',
+        html_body,
+        flags=re.S,
+    )
+    html_body = re.sub(
+        r'<blockquote(\s+class="callout-warn")?>(.*?)</blockquote>',
+        lambda m: f'<blockquote class="callout{" callout-warn" if m.group(1) else ""}"><span class="callout-icon">{INFO_SVG}</span><div class="callout-body">{m.group(2)}</div></blockquote>',
+        html_body,
+        flags=re.S,
+    )
+
+    # 3. KPI strip: add explicit status dot + text label in .kpi-sub for good/warn cards
+    def _kpi_repl(m: re.Match) -> str:
+        tone = m.group(1)
+        inner = m.group(2)
+        if tone in ("good", "warn"):
+            lbl = "Sehat" if (tone == "good" and lang == "id") else ("Ketat" if (tone == "warn" and lang == "id") else ("Healthy" if tone == "good" else "Tight"))
+            inner = inner.replace(
+                '<div class="kpi-sub">',
+                f'<div class="kpi-sub"><span class="kpi-status-dot" aria-hidden="true"></span><span class="kpi-status-lbl">{lbl}</span><span>&middot;</span><span>',
+                1,
+            ).replace("</div>", "</span></div>", 1)
+        return f'<div class="kpi-card {tone}">{inner}</div>'
+
+    html_body = re.sub(r'<div class="kpi-card (good|warn)">(.*?)</div>(?=\s*(?:<div class="kpi-card|</div>))', _kpi_repl, html_body, flags=re.S)
+
+    # 4. Evidence tag display localization (preserving .tag-<key> classes)
+    tag_map_id = {
+        "verified": ("Terverifikasi", "Didukung minimal 2 sumber primer/sekunder tepercaya"),
+        "estimate": ("Estimasi", "Angka turunan dari rumus atau benchmark"),
+        "assumption": ("Asumsi", "Perlu diuji melalui eksperimen atau validasi lapangan"),
+        "unverified": ("Belum terverifikasi", "Belum memiliki sumber pendukung yang memadai"),
+        "stale": ("Kedaluwarsa", "Data berusia lebih dari 12 bulan"),
+        "contoh": ("Data contoh", "Data ilustrasi contoh, bukan data proyek nyata"),
+    }
+    if lang == "id":
+        def _tag_loc(m: re.Match) -> str:
+            cls_key = m.group(1)
+            raw_lbl = m.group(2)
+            disp, tip = tag_map_id.get(cls_key, (raw_lbl, raw_lbl))
+            return f'<span class="tag tag-{cls_key}" title="{html.escape(tip)}">{html.escape(disp)}</span>'
+
+        html_body = re.sub(r'<span class="tag tag-([a-z]+)">([^<]+)</span>', _tag_loc, html_body)
+
+    return html_body
+
+
 def render_web_document(
     docs: list[dict],
     title: str,
@@ -3306,14 +3934,20 @@ def render_web_document(
     project_id: str = "report",
     editable: bool = False,
     rel_path: str | None = None,
+    doc_group: str = "sample",
+    score: str | None = None,
+    verdict: str | None = None,
+    updated_date: str | None = None,
+    hub_items: list[dict] | None = None,
 ) -> str:
-    """Compile one or more Markdown documents into a self-contained editorial Web GUI HTML string."""
+    """Compile one or more Markdown documents into the 3-zone Kolom Baca Tenang Web GUI."""
     t = I18N[lang]
     has_mermaid = False
     rendered_panels: list[str] = []
-    sidebar_docs: list[str] = []
-    sidebar_sections: list[str] = []
-    tag_counts = {"verified": 0, "estimate": 0, "assumption": 0, "unverified": 0, "stale": 0}
+    sub_doc_items: list[str] = []
+    outline_items: list[str] = []
+    tag_counts = {"verified": 0, "estimate": 0, "assumption": 0, "unverified": 0, "stale": 0, "contoh": 0}
+    sec_counter = 0
 
     for doc in docs:
         body_html, toc, doc_mermaid = export_pdf.md_to_html(doc["markdown"], doc["base_dir"], add_back_to_toc=False, lang=lang)
@@ -3321,55 +3955,123 @@ def render_web_document(
         body_html = inline_local_assets(body_html, doc["base_dir"])
         body_html = make_interactive_checkboxes(body_html, doc["id"])
         body_html = body_html.replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
+        body_html = _enhance_viewer_html(body_html, lang=lang)
 
         for k in tag_counts:
             tag_counts[k] += len(re.findall(rf'class="tag tag-{k}"', body_html))
 
         rendered_panels.append(f'<article id="{doc["id"]}" class="doc-panel">{body_html}</article>')
-        sidebar_docs.append(
-            f'<li><button type="button" class="rail-link" data-doc-target="{doc["id"]}">'
-            f'<span>{html.escape(doc["label"])}</span></button></li>'
+        sub_doc_items.append(
+            f'<li><button type="button" class="nav-item-btn nav-sub-btn" data-doc-target="{doc["id"]}" title="{html.escape(doc["label"])}">'
+            f'<span class="nav-item-left">{FILE_SVG}<span class="nav-label">{html.escape(doc["label"])}</span></span></button></li>'
         )
         for level, sec_title, sec_id in toc:
             if level == 2:
-                sidebar_sections.append(
-                    f'<li><a class="rail-link rail-sub" data-sec-doc="{doc["id"]}" href="#{sec_id}">'
-                    f'{html.escape(sec_title)}</a></li>'
+                sec_counter += 1
+                num_m = re.match(r"^(\d+\.)\s*(.*)$", sec_title.strip())
+                num_lbl = num_m.group(1) if num_m else f"{sec_counter}."
+                txt_lbl = num_m.group(2) if num_m else sec_title
+                outline_items.append(
+                    f'<li><a class="outline-link" data-sec-doc="{doc["id"]}" href="#{sec_id}">'
+                    f'<span class="outline-num">{html.escape(num_lbl)}</span><span>{html.escape(txt_lbl)}</span></a></li>'
                 )
 
     if model_inputs:
         rendered_panels.append(_build_simulator_panel(model_inputs, lang))
-        sidebar_docs.append(
-            f'<li><button type="button" class="rail-link" data-doc-target="sim-panel">'
-            f'<span>{html.escape(t["simulator"])}</span></button></li>'
+        sub_doc_items.append(
+            f'<li><button type="button" class="nav-item-btn nav-sub-btn" data-doc-target="sim-panel" title="{html.escape(t["simulator"])}">'
+            f'<span class="nav-item-left">{ACTIVITY_SVG}<span class="nav-label">{html.escape(t["simulator"])}</span></span></button></li>'
         )
 
-    # Evidence filter strip (rendered only when tags exist)
-    ev_strip_html = ""
+    # Sidebar collections (identical to Hub, with nested sub-items under active collection)
+    hub_list = hub_items or []
+    counts = {
+        "prp": sum(1 for x in hub_list if x["group"] == "prp"),
+        "prd": sum(1 for x in hub_list if x["group"] == "prd"),
+        "idea": sum(1 for x in hub_list if x["group"] == "idea"),
+        "sample": sum(1 for x in hub_list if x["group"] == "sample"),
+    }
+    if not hub_list and doc_group in counts:
+        counts[doc_group] = 1
+    total_hub_count = len(hub_list) if hub_list else 1
+
+    collections_nav = [
+        ("prp", "PRP", counts["prp"], FOLDER_SVG),
+        ("prd", "PRD", counts["prd"], FILE_CHECK_SVG),
+        ("idea", t["tab_ideas"], counts["idea"], LIGHTBULB_SVG),
+        ("sample", t["tab_samples"], counts["sample"], BOOK_OPEN_SVG),
+    ]
+    coll_lis = []
+    for key, lbl, cnt, icon in collections_nav:
+        is_act = key == doc_group
+        cur_attr = ' aria-current="page"' if is_act else ""
+        act_cls = " active" if is_act else ""
+        href_attr = f'href="{html.escape(hub_back_url)}?track={key}"' if hub_back_url else 'href="#main-content"'
+        sub_ul = f'<ul class="nav-sub-list">{"".join(sub_doc_items)}</ul>' if (is_act and sub_doc_items) else ""
+        coll_lis.append(
+            f'<li><a class="nav-item-btn{act_cls}" {href_attr}{cur_attr} title="{html.escape(lbl)}">'
+            f'<span class="nav-item-left">{icon}<span class="nav-label">{html.escape(lbl)}</span></span>'
+            f'<span class="nav-count">{cnt}</span></a>{sub_ul}</li>'
+        )
+
+    # Evidence filter toolbar
+    ev_toolbar_html = ""
     if sum(tag_counts.values()) > 0:
-        ev_btns = [f'<button type="button" class="ev-btn active" data-ev-filter="all">{html.escape(t["all_tags"])}</button>']
-        for k, label in (("verified", "Verified"), ("estimate", "Estimate"), ("assumption", "Assumption"), ("unverified", "Unverified"), ("stale", "Stale")):
+        ev_label_map = {
+            "verified": "Terverifikasi" if lang == "id" else "Verified",
+            "estimate": "Estimasi" if lang == "id" else "Estimate",
+            "assumption": "Asumsi" if lang == "id" else "Assumption",
+            "unverified": "Belum terverifikasi" if lang == "id" else "Unverified",
+            "stale": "Kedaluwarsa" if lang == "id" else "Stale",
+        }
+        ev_btns = [f'<button type="button" class="ev-seg-btn active" data-ev-filter="all">{html.escape(t["all_tags"])}</button>']
+        for k in ("verified", "estimate", "assumption", "unverified", "stale"):
             if tag_counts[k] > 0:
                 ev_btns.append(
-                    f'<button type="button" class="ev-btn" data-ev-filter="{k}">{label} ({tag_counts[k]})</button>'
+                    f'<button type="button" class="ev-seg-btn" data-ev-filter="{k}">'
+                    f'<span>{html.escape(ev_label_map[k])}</span><span class="tab-count">{tag_counts[k]}</span></button>'
                 )
-        ev_strip_html = (
-            f'<div class="evidence-strip">'
-            f'<span class="evidence-label">{html.escape(t["evidence_filter"])}</span>'
-            f'{"".join(ev_btns)}'
+        ev_toolbar_html = (
+            f'<div class="viewer-filter-bar">'
+            f'<span class="evidence-label">Filter bukti</span>'
+            f'<div class="ev-seg-group">{"".join(ev_btns)}</div>'
             f"</div>"
         )
 
-    rail_footer_html = ""
+    # Notion-style 2-column property rows
+    type_names = {"prp": "PRP", "prd": "PRD", "idea": t["tab_ideas"], "sample": t["tab_samples"]}
+    base_type = type_names.get(doc_group, doc_group.upper())
+    combined_type = f"{base_type} · {t['sim_badge']}" if model_inputs else base_type
+    date_val = updated_date or meta.replace("Tanggal:", "").replace("Date:", "").strip()
+
+    prop_rows = [
+        f'<div class="prop-key">Tanggal</div><div class="prop-val"><span class="mono-num" style="font-family:var(--font-mono);">{html.escape(date_val)}</span></div>',
+        f'<div class="prop-key">Tipe</div><div class="prop-val"><span class="badge-combined">{html.escape(combined_type)}</span></div>',
+    ]
+    if score:
+        try:
+            sc_f = float(score)
+            pct = max(0.0, min(100.0, (sc_f / 5.0) * 100.0))
+            prop_rows.append(
+                f'<div class="prop-key">Skor</div><div class="prop-val">'
+                f'<div class="score-cell"><div class="score-num">{sc_f:.2f}</div>'
+                f'<div class="score-track" aria-hidden="true"><div class="score-fill-bar" style="width:{pct:.0f}%"></div></div></div></div>'
+            )
+        except ValueError:
+            pass
+    if verdict or score:
+        _, dec_cls, dec_label = _classify_decision(verdict, score, t)
+        prop_rows.append(
+            f'<div class="prop-key">Keputusan</div><div class="prop-val">'
+            f'<span class="decision-pill {dec_cls}"><span class="decision-dot" aria-hidden="true"></span><span>{html.escape(dec_label)}</span></span></div>'
+        )
     lint_drawer_html = ""
     if lint_info:
-        status_cls = "audit-fail" if lint_info["fails"] else ("audit-warn" if lint_info["warns"] else "audit-ok")
-        rail_footer_html = (
-            f'<div class="rail-footer">'
-            f'<button type="button" id="lint-toggle" class="audit-trigger" aria-expanded="false">'
-            f'<span>{html.escape(t["quality_gates"])}</span>'
-            f'<span class="audit-count {status_cls}">{lint_info["fails"]} FAIL / {lint_info["warns"]} WARN</span>'
-            f"</button></div>"
+        f_cnt, w_cnt = lint_info["fails"], lint_info["warns"]
+        audit_lbl = f"{t['audit_pass']} (0 FAIL)" if (f_cnt == 0 and w_cnt == 0) else f"{f_cnt} FAIL · {w_cnt} WARN"
+        prop_rows.append(
+            f'<div class="prop-key">Audit</div><div class="prop-val">'
+            f'<button type="button" id="lint-toggle" class="btn" style="height:26px;font-size:12px;" aria-expanded="false">{html.escape(audit_lbl)}</button></div>'
         )
         rows_html = "".join(
             f'<div class="lint-row"><span class="tag tag-{"verified" if item["severity"]=="PASS" else ("assumption" if item["severity"]=="WARN" else "unverified")}">{item["severity"]}</span>'
@@ -3377,45 +4079,78 @@ def render_web_document(
             for item in lint_info["items"]
         )
         lint_drawer_html = f'<section id="lint-drawer" class="lint-drawer" aria-label="{html.escape(t["quality_gates"])}">{rows_html}</section>'
+    else:
+        prop_rows.append(f'<div class="prop-key">Audit</div><div class="prop-val"><span class="muted-text">{html.escape(t["not_audited"])}</span></div>')
 
-    view_toggle_html = ""
+    # Right outline + mode toggle ("Satu bab | Semua bab")
+    mode_seg_html = ""
     if len(rendered_panels) > 1:
-        view_toggle_html = (
-            '<div class="seg-control" role="group">'
-            f'<button type="button" id="mode-tab">{html.escape(t["tab_view"])}</button>'
-            f'<button type="button" id="mode-all">{html.escape(t["all_view"])}</button>'
+        mode_seg_html = (
+            '<div class="view-seg" role="group" aria-label="Mode baca" style="width:100%;display:grid;grid-template-columns:1fr 1fr;">'
+            '<button type="button" id="mode-tab" class="view-seg-btn" style="justify-content:center;" aria-pressed="false">Satu bab</button>'
+            '<button type="button" id="mode-all" class="view-seg-btn" style="justify-content:center;" aria-pressed="true">Semua bab</button>'
             "</div>"
         )
 
-    brand_left = (
-        f'<a class="brand-link" href="{html.escape(hub_back_url)}">{BRAND_MARK_SVG}<span>{html.escape(t["back_hub"])}</span></a>'
-        if hub_back_url
-        else f'<span class="brand-link">{BRAND_MARK_SVG}<span>IdeaForge</span></span>'
+    outline_html = (
+        f'<nav aria-label="Daftar bagian"><p class="outline-heading">Di halaman ini</p>'
+        f'<ul class="outline-list">{"".join(outline_items)}</ul></nav>'
+        if outline_items
+        else ""
+    )
+
+    # Topbar breadcrumb + Edit + Ekspor dropdown (PDF first, HTML second)
+    home_href = html.escape(hub_back_url) if hub_back_url else "/"
+    crumb_desktop = (
+        f'<a href="{home_href}">Semua dokumen</a>'
+        f'<span>/</span><a href="{home_href}">{html.escape(base_type)}</a>'
+        f'<span>/</span><span class="crumb-current">{html.escape(title)}</span>'
     )
     edit_btn = (
         f'<button type="button" id="edit-toggle-btn" class="btn" title="Edit dokumen (E)">{PENCIL_SVG}<span>Edit</span></button>'
         if editable
         else ""
     )
-    dl_html_btn = (
-        f'<a class="btn btn-dl-html" href="{html.escape(download_html_url)}">{html.escape(t["download_html"])}</a>'
+    pdf_item = (
+        f'<a class="pop-opt" href="{html.escape(export_pdf_url)}" style="text-decoration:none;"><span>{html.escape(t["export_pdf_btn"])}</span></a>'
+        if export_pdf_url
+        else f'<button type="button" class="pop-opt" onclick="window.print()"><span>{html.escape(t["print_pdf"])}</span></button>'
+    )
+    html_item = (
+        f'<a class="pop-opt" href="{html.escape(download_html_url)}" style="text-decoration:none;"><span>{html.escape(t["download_html"])}</span></a>'
         if download_html_url
         else ""
     )
-    pdf_btn = (
-        f'<a class="btn btn-primary" href="{html.escape(export_pdf_url)}">{html.escape(t["export_pdf_btn"])}</a>'
-        if export_pdf_url
-        else f'<button type="button" class="btn btn-primary" onclick="window.print()">{html.escape(t["print_pdf"])}</button>'
+    export_menu_html = (
+        f'<div class="popover-anchor">'
+        f'  <button type="button" id="export-pop-btn" class="btn" aria-expanded="false" aria-haspopup="true">{DOWNLOAD_SVG}<span>Ekspor</span>{CHEVRON_DOWN_SVG}</button>'
+        f'  <div id="export-popover" class="popover-menu" role="menu" aria-label="Opsi ekspor" style="min-width:170px;">'
+        f'    {pdf_item}{html_item}'
+        f"  </div>"
+        f"</div>"
     )
+
+    cmd_items = [
+        {
+            "title": it["title"],
+            "path": it["rel_path"],
+            "type": type_names.get(it["group"], it["group"].upper()),
+            "href": f'/view?path={urllib.parse.quote(it["rel_path"])}&mode={it["mode"]}',
+        }
+        for it in hub_list
+    ]
 
     cfg_payload = {
         "projectId": project_id,
         "locale": lang,
-        "labels": t,
+        "labels": {**t, "theme_light": "Tema: Terang" if lang == "id" else "Theme: Light", "theme_dark": "Tema: Gelap" if lang == "id" else "Theme: Dark"},
         "modelInputs": model_inputs,
         "editable": editable,
         "relPath": rel_path,
         "docs": [{"id": d["id"], "filename": d["filename"], "markdown": d["markdown"]} for d in docs] if editable else [],
+        "hubItems": cmd_items,
+        "sunSvg": SUN_SVG,
+        "moonSvg": MOON_SVG,
     }
     safe_json = json.dumps(cfg_payload).replace("</", "<\\/")
     mermaid_script = export_pdf.build_mermaid_script(mermaid_js) if has_mermaid else ""
@@ -3429,64 +4164,104 @@ def render_web_document(
 <style>{WEB_CSS}</style>
 </head>
 <body>
-<a class="skip-link" href="#main-content">Skip to content</a>
+<a class="skip-link" href="#main-content">Lewati ke konten utama</a>
 
-<header class="topbar">
-  <div class="topbar-left">
-    <button type="button" id="menu-toggle" class="btn btn-ghost menu-btn" aria-label="Menu" aria-expanded="false">&#9776;</button>
-    {brand_left}
-    <span class="crumb-sep">/</span>
-    <span class="topbar-doc-name">{html.escape(title)}</span>
-  </div>
-  <div class="topbar-right">
-    <button type="button" id="search-toggle" class="btn btn-ghost search-toggle-btn" aria-label="{html.escape(t['search_hub_placeholder'])}" aria-expanded="false">{SEARCH_SVG}</button>
-    <div class="search-box">
-      <span class="search-icon">{SEARCH_SVG}</span>
-      <input id="search-input" class="search-input" type="search" placeholder="{html.escape(t['search_hub_placeholder'])}" aria-label="{html.escape(t['search_hub_placeholder'])}" autocomplete="off">
-      <kbd class="kbd-hint">/</kbd>
-    </div>
-    {edit_btn}
-    {dl_html_btn}
-    {pdf_btn}
-    {_theme_switch_html(lang)}
-  </div>
-</header>
+<div id="drawer-backdrop" class="drawer-backdrop"></div>
 
-<div class="workspace">
-  <aside id="sidebar" class="rail" aria-label="Document navigation">
+<div id="hub-app" class="hub-app">
+  <aside id="hub-sidebar" class="hub-sidebar">
     <div>
-      {view_toggle_html}
-      <div class="rail-group">
-        <p class="rail-label">{html.escape(t['documents'])}</p>
-        <ul class="rail-list">{"".join(sidebar_docs)}</ul>
+      <div class="ws-switcher">
+        <a class="ws-brand" href="{home_href}">{BRAND_MARK_SVG}<span class="ws-brand-text">IdeaForge</span></a>
+        <button type="button" id="hub-collapse-btn" class="collapse-btn" title="Ciutkan sidebar ([)" aria-label="Ciutkan sidebar" aria-expanded="true">{PANEL_LEFT_SVG}</button>
       </div>
-      {f'<div class="rail-group"><p class="rail-label">{html.escape(t["sections"])}</p><ul class="rail-list">{"".join(sidebar_sections)}</ul></div>' if sidebar_sections else ''}
+
+      <button type="button" id="hub-search-trigger" class="nav-item-btn" title="Cari (/)">
+        <span class="nav-item-left">{SEARCH_SVG}<span class="nav-label">Cari</span></span>
+        <kbd class="nav-kbd">/</kbd>
+      </button>
+
+      <nav aria-label="Navigasi utama" style="margin-top:8px;">
+        <ul class="sidebar-list">
+          <li>
+            <a class="nav-item-btn" href="{home_href}" title="Semua dokumen">
+              <span class="nav-item-left">{LAYERS_SVG}<span class="nav-label">Semua dokumen</span></span>
+              <span class="nav-count">{total_hub_count}</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="sidebar-section">
+          <p class="sidebar-section-label">Koleksi</p>
+          <ul class="sidebar-list">{"".join(coll_lis)}</ul>
+        </div>
+      </nav>
     </div>
-    {rail_footer_html}
+
+    <div class="sidebar-footer">
+      <button type="button" id="hub-theme-toggle" class="nav-item-btn" title="Ganti tema">
+        <span class="nav-item-left">
+          <span id="hub-theme-icon" style="display:inline-flex;">{SUN_SVG}</span>
+          <span id="hub-theme-label" class="nav-label">Tema: Terang</span>
+        </span>
+      </button>
+      <div class="sidebar-version">IdeaForge v1.0</div>
+    </div>
   </aside>
 
-  <main id="main-content" class="content-stage">
-    <div class="sheet">
-      <header class="doc-masthead">
-        <p class="doc-category">{html.escape(kicker)}</p>
-        <h1 class="doc-headline">{html.escape(title)}</h1>
-        <div class="doc-meta-row">
-          <span>{html.escape(meta)}</span>
-          <span>{len(docs)} {html.escape(t['files_unit'])}</span>
-        </div>
-        {ev_strip_html}
-      </header>
-
-      {lint_drawer_html}
-
-      <div id="empty-search" class="empty-search" role="status">
-        <p style="margin:0 0 10px 0;">{html.escape(t['no_results'])}</p>
-        <button type="button" id="clear-search-btn" class="btn">{html.escape(t['reset_search'])}</button>
+  <div class="viewer-main">
+    <header class="viewer-topbar">
+      <div class="viewer-topbar-left">
+        <button type="button" id="hub-hamburger" class="hub-hamburger" aria-label="Buka menu navigasi" aria-expanded="false">{MENU_SVG}</button>
+        <a class="btn btn-ghost mobile-back-link" href="{home_href}" aria-label="Kembali ke Semua dokumen" style="padding:0 6px;">{CHEVRON_LEFT_SVG}</a>
+        <nav class="viewer-breadcrumb crumb-desktop" aria-label="Breadcrumb">{crumb_desktop}</nav>
+        <span class="viewer-breadcrumb mobile-back-link"><span class="crumb-current">{html.escape(title)}</span></span>
       </div>
+      <div class="viewer-topbar-right">
+        {edit_btn}
+        {export_menu_html}
+      </div>
+    </header>
 
-      {"".join(rendered_panels)}
+    <div class="viewer-grid">
+      <main id="main-content" class="viewer-doc-col">
+        <header class="viewer-prose-head">
+          <p class="doc-category">{html.escape(kicker)}</p>
+          <h1 class="doc-headline">{html.escape(title)}</h1>
+          <div class="prop-list">{"".join(prop_rows)}</div>
+        </header>
+
+        {lint_drawer_html}
+
+        {f'<div class="mobile-outline-wrap"><button type="button" id="mobile-outline-btn" class="btn" aria-expanded="false">{LIST_SVG}<span>Daftar bagian</span></button><div id="mobile-outline-panel" class="mobile-outline-panel">{outline_html}</div></div>' if outline_items else ''}
+
+        {ev_toolbar_html}
+
+        {"".join(rendered_panels)}
+
+        <div id="chapter-nav" class="chapter-nav">
+          <button type="button" id="prev-chapter-btn" class="btn">{CHEVRON_LEFT_SVG}<span>Sebelumnya</span></button>
+          <button type="button" id="next-chapter-btn" class="btn"><span>Berikutnya</span>{CHEVRON_RIGHT_SVG}</button>
+        </div>
+      </main>
+
+      <aside class="outline-rail">
+        {mode_seg_html}
+        {outline_html}
+      </aside>
     </div>
-  </main>
+  </div>
+</div>
+
+<div id="cmd-backdrop" class="cmd-backdrop" role="dialog" aria-modal="true" aria-label="Pencarian cepat dokumen">
+  <div class="cmd-modal">
+    <div class="cmd-input-row">
+      {SEARCH_SVG}
+      <input id="cmd-input" class="cmd-input" type="search" placeholder="Cari dokumen berdasarkan judul atau path..." autocomplete="off">
+      <kbd class="nav-kbd">Esc</kbd>
+    </div>
+    <div id="cmd-results" class="cmd-results"></div>
+  </div>
 </div>
 
 <script>window.__IDEAFORGE_DATA__ = {safe_json};</script>
@@ -3988,6 +4763,9 @@ def build_html_for_target(
                 model_inputs_path = candidate
         project_id = target.stem
         resolved_kicker = kicker or "Strategic Analysis Report"
+        doc_group = "sample" if "examples" in str(target) else "idea"
+        score, verdict = ("3.75", "Go with conditions") if target.name == "sample-executive-report.md" else (None, None)
+        updated_date = date.fromtimestamp(target.stat().st_mtime).isoformat()
     else:
         docs = load_project_documents(target, mode)
         doc_title = title or target.name.replace("-", " ").title()
@@ -3998,11 +4776,16 @@ def build_html_for_target(
         lint_info = run_lint_summary(target)
         project_id = target.name
         resolved_kicker = kicker or ("Product Requirements Document (PRD)" if mode == "prd" else "Strategic Analysis Report")
+        parent_name = target.parent.name
+        doc_group = "prd" if (mode == "prd" or parent_name == "prds") else ("idea" if parent_name == "ideas" else "prp")
+        score, verdict = extract_scorecard_badge(target)
+        updated_date = date.fromtimestamp(target.stat().st_mtime).isoformat()
 
     if model_inputs_path and model_inputs_path.is_file():
         model_inputs = json.loads(model_inputs_path.read_text(encoding="utf-8"))
 
-    meta = f"{'Date' if lang == 'en' else 'Tanggal'}: {date.today().isoformat()}"
+    hub_items = discover_workspace_items(base_dir) if (base_dir and hub_back_url) else None
+    meta = f"{'Date' if lang == 'en' else 'Tanggal'}: {updated_date}"
     full_html = render_web_document(
         docs=docs,
         title=doc_title,
@@ -4018,6 +4801,11 @@ def build_html_for_target(
         project_id=project_id,
         editable=editable,
         rel_path=rel_path,
+        doc_group=doc_group,
+        score=score,
+        verdict=verdict,
+        updated_date=updated_date,
+        hub_items=hub_items,
     )
     return full_html, doc_title
 
@@ -4153,6 +4941,7 @@ def create_server(base_dir: Path, host: str, port: int, lang: str = "id", mermai
                 body_html = inline_local_assets(body_html, doc_path.parent)
                 body_html = make_interactive_checkboxes(body_html, f"doc-1-{export_pdf.slugify(doc_path.stem)}")
                 body_html = body_html.replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
+                body_html = _enhance_viewer_html(body_html, lang=lang)
                 lint_info = run_lint_summary(target) if target.is_dir() else None
                 resp = json.dumps({"ok": True, "html": body_html, "lint": lint_info}).encode("utf-8")
                 self._send_bytes(resp, "application/json; charset=utf-8")

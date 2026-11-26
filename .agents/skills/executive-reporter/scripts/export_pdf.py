@@ -98,18 +98,18 @@ SECTION_MODES = {
 BASE_CSS = """
 @page {
   size: A4;
-  margin: 18mm 16mm 18mm 16mm;
+  margin: 20mm;
   @bottom-left {
     content: "__FOOTER_TITLE__";
-    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: 8pt;
-    color: #6B7280;
+    color: #5B6470;
   }
   @bottom-right {
     content: "__PAGE_LABEL__";
-    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: 8pt;
-    color: #6B7280;
+    color: #5B6470;
   }
 }
 @page :first {
@@ -117,42 +117,44 @@ BASE_CSS = """
 }
 * { box-sizing: border-box; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 9.8pt;
-  line-height: 1.55;
-  color: #1A1D21;
+  line-height: 1.6;
+  color: #1B1F24;
   margin: 0;
   padding: 0;
   background: #FFFFFF;
 }
 .cover-page {
-  border-top: 4px solid #1B365D;
+  border-top: 3px solid #12263F;
   padding-top: 24px;
   margin-bottom: 18px;
 }
 .doc-header {
-  border-bottom: 2px solid #1B365D;
+  border-bottom: 1.5px solid #DDD8CE;
   padding-bottom: 12px;
   margin-bottom: 18px;
 }
 .doc-kicker {
   font-size: 8.5pt;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #1B365D;
+  color: #5B6470;
   margin: 0 0 6px 0;
 }
 .doc-title {
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
   font-size: 20pt;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.2;
-  color: #111317;
+  letter-spacing: -0.01em;
+  color: #12263F;
   margin: 0 0 8px 0;
 }
 .doc-meta {
   font-size: 8.5pt;
-  color: #525866;
+  color: #5B6470;
   margin: 0;
 }
 .toc-box {
@@ -578,7 +580,7 @@ def md_to_html(md_text: str, base_dir: Path, add_back_to_toc: bool = False, lang
             tbl = ["<table><thead><tr>"]
             for idx, h in enumerate(headers):
                 cls = ' class="num"' if idx in num_cols else ""
-                tbl.append(f"<th{cls}>{format_inline(h)}</th>")
+                tbl.append(f'<th scope="col"{cls}>{format_inline(h)}</th>')
             tbl.append("</tr></thead><tbody>")
             for r in rows:
                 tbl.append("<tr>")
