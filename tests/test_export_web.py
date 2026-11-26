@@ -208,6 +208,25 @@ class TestExportWeb(unittest.TestCase):
                     self.assertIn("FR-099", save_data["html"])
                     self.assertIn("Live edited item.", (ws / "prds/2026-11-26-wallet-prd/PRD.md").read_text(encoding="utf-8"))
 
+                # Test that Mermaid flows inside reports are automatically upgraded to interactive Visual Architect Flow Cards
+                flow_md = updated_md + "\n## Alur Utama\n\n```mermaid\nflowchart LR\n  A[Kasir] --> B[Bayar]\n```\n"
+                flow_req = urllib.request.Request(
+                    f"{base_url}/api/save-doc",
+                    data=json.dumps({
+                        "path": "prds/2026-11-26-wallet-prd",
+                        "filename": "PRD.md",
+                        "content": flow_md,
+                    }).encode("utf-8"),
+                    headers={"Content-Type": "application/json"},
+                    method="POST",
+                )
+                with urllib.request.urlopen(flow_req) as resp:
+                    self.assertEqual(resp.status, 200)
+                    fdata = json.loads(resp.read().decode("utf-8"))
+                    self.assertTrue(fdata["ok"])
+                    self.assertIn("va-flow-card", fdata["html"])
+                    self.assertIn("data-va-expand", fdata["html"])
+
                 with urllib.request.urlopen(f"{base_url}/api/download-html?path={rel}&mode=prd") as resp:
                     self.assertEqual(resp.status, 200)
                     self.assertIn("attachment", resp.headers.get("Content-Disposition", ""))

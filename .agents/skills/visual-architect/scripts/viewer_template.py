@@ -56,7 +56,7 @@ body {
   font-size: 14px;
   line-height: 1.5;
 }
-.studio-shell { display: grid; grid-template-rows: 52px 1fr; height: 100vh; }
+.studio-shell { display: grid; grid-template-rows: auto 1fr; height: 100vh; }
 .studio-shell.is-present { grid-template-rows: 1fr; }
 .studio-shell.is-present .studio-bar,
 .studio-shell.is-present .inspector { display: none; }
@@ -67,8 +67,8 @@ body {
 .studio-shell.is-present .present-exit { display: inline-flex !important; }
 
 .studio-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 10px; padding: 0 18px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  gap: 8px 12px; padding: 8px 18px; min-height: 52px;
   background: var(--surface); border-bottom: 1px solid var(--line);
 }
 .studio-brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
@@ -77,7 +77,7 @@ body {
   color: var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .studio-meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); white-space: nowrap; }
-.studio-actions { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
+.studio-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .btn {
   height: 30px; padding: 0 10px; border: 1px solid var(--line); border-radius: 6px;
   background: var(--surface); color: var(--text); font-family: inherit;

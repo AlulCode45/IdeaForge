@@ -1608,6 +1608,110 @@ pre code { background: none; padding: 0; }
   white-space: pre-wrap;
 }
 
+/* Embedded Interactive Visual Architect Flow Card (inside every report) */
+.va-flow-card {
+  margin: var(--sp-6) 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+}
+.va-flow-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: 10px 14px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+.va-flow-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.va-flow-pill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--primary);
+}
+.va-flow-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.va-flow-stage {
+  padding: 18px 16px;
+  overflow-x: auto;
+  background: var(--bg);
+}
+.va-flow-stage svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+.va-flow-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.va-flow-stage .zone-box { fill: var(--surface-2); stroke: var(--line); stroke-width: 1.2; stroke-dasharray: 5 4; opacity: 0.85; }
+.va-flow-stage .zone-title { font-family: var(--font-mono); font-size: 11px; fill: var(--text-muted); font-weight: 600; }
+.va-flow-stage .node-box { fill: var(--surface); stroke: var(--line); stroke-width: 1.25; transition: stroke 140ms ease, opacity 140ms ease; }
+.va-flow-stage .node-accent { fill: var(--primary); }
+.va-flow-stage .dg-node.status-ok .node-accent, .va-flow-stage .dg-node.chg-added .node-accent { fill: var(--go); }
+.va-flow-stage .dg-node.status-conditional .node-accent, .va-flow-stage .dg-node.chg-modified .node-accent { fill: var(--conditional); }
+.va-flow-stage .dg-node.status-warn .node-accent, .va-flow-stage .dg-node.chg-removed .node-accent { fill: var(--nogo); }
+.va-flow-stage .dg-node { cursor: pointer; }
+.va-flow-stage .dg-node:hover .node-box, .va-flow-stage .dg-node.is-selected .node-box { stroke: var(--accent); stroke-width: 2.2; }
+.va-flow-stage .dg-node.is-dimmed, .va-flow-stage .dg-edge.is-dimmed { opacity: 0.18; }
+.va-flow-stage .dg-edge.is-highlighted .edge-line { stroke: var(--accent); stroke-width: 2.3; }
+.va-flow-stage .node-title { font-family: var(--font-sans); font-size: 13px; font-weight: 600; fill: var(--text); }
+.va-flow-stage .node-sub, .va-flow-stage .edge-lbl { font-family: var(--font-mono); font-size: 11px; fill: var(--text-muted); }
+.va-flow-stage .node-mono { font-family: var(--font-mono); font-size: 11px; fill: var(--text); }
+.va-flow-stage .node-sep { stroke: var(--line); stroke-width: 1; }
+.va-flow-stage .edge-line { fill: none; stroke: var(--text-muted); stroke-width: 1.45; }
+.va-flow-stage .dg-edge-dashed .edge-line { stroke-dasharray: 5 4; }
+.va-flow-stage .arrow-fill { fill: var(--text-muted); }
+.va-flow-stage .edge-pill { fill: var(--bg); stroke: var(--line); stroke-width: 1; }
+.va-flow-stage .seq-lifeline { stroke: var(--line); stroke-dasharray: 4 4; }
+.va-flow-stage .erd-head { fill: var(--primary); }
+.va-flow-stage .erd-title { font-family: var(--font-sans); font-size: 13px; font-weight: 600; fill: var(--primary-fg); }
+.va-flow-stage .wf-bar { fill: var(--primary); opacity: 0.88; }
+.va-flow-stage .comet-dot { fill: var(--accent); opacity: 0.92; pointer-events: none; }
+.va-flow-stage .comet-halo { fill: var(--accent); opacity: 0.25; pointer-events: none; }
+.va-modal {
+  display: none; position: fixed; inset: 0; z-index: 90;
+  background: var(--overlay-bg); padding: 20px; align-items: center; justify-content: center;
+}
+.va-modal.open { display: flex; }
+.va-modal-shell {
+  width: 96vw; height: 92vh; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;
+}
+.va-modal-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 14px; background: var(--surface-2); border-bottom: 1px solid var(--line);
+  font-size: 13px; font-weight: 600; color: var(--text);
+}
+.va-modal-frame { width: 100%; flex: 1; border: 0; background: var(--bg); }
+@media print { .va-flow-actions, .va-flow-foot, .va-modal { display: none !important; } }
+
 /* Evidence Tags (functional, flat, crisp) */
 .tag {
   font-family: var(--font-mono);
@@ -2844,6 +2948,144 @@ WEB_JS = r"""
     headingEls.forEach(h => obs.observe(h));
   }
 
+  // Embedded Interactive Visual Architect Flow Cards
+  function initVisualFlows(root) {
+    let modal = document.getElementById('va-flow-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'va-flow-modal';
+      modal.className = 'va-modal';
+      modal.innerHTML =
+        '<div class="va-modal-shell">' +
+        '  <div class="va-modal-bar"><span id="va-modal-title">Alur Interaktif</span>' +
+        '    <button type="button" id="va-modal-close" class="btn" style="height:26px;font-size:12px">Tutup (Esc)</button>' +
+        '  </div>' +
+        '  <iframe id="va-modal-frame" class="va-modal-frame" title="Visual Architect Interaktif"></iframe>' +
+        '</div>';
+      document.body.appendChild(modal);
+      document.getElementById('va-modal-close').addEventListener('click', () => modal.classList.remove('open'));
+      modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.classList.remove('open'); });
+    }
+
+    (root || document).querySelectorAll('.va-flow-card:not([data-va-bound])').forEach(card => {
+      card.dataset.vaBound = '1';
+      const svg = card.querySelector('.va-flow-stage svg');
+      const statusEl = card.querySelector('.va-flow-status');
+      const defaultStatus = statusEl ? statusEl.textContent : '';
+      if (!svg) return;
+
+      const nodes = Array.from(svg.querySelectorAll('.dg-node'));
+      const edges = Array.from(svg.querySelectorAll('.dg-edge')).map(el => ({
+        el, id: el.dataset.edgeId, from: el.dataset.from, to: el.dataset.to,
+        pathEl: el.querySelector('path.edge-line')
+      }));
+      const fwd = {}, rev = {};
+      edges.forEach(e => {
+        (fwd[e.from] = fwd[e.from] || []).push(e);
+        (rev[e.to] = rev[e.to] || []).push(e);
+      });
+      function reach(start, adj) {
+        const seen = new Set([start]), q = [start], eids = new Set();
+        while (q.length) {
+          const u = q.shift();
+          (adj[u] || []).forEach(e => {
+            eids.add(e.id);
+            const nxt = adj === fwd ? e.to : e.from;
+            if (!seen.has(nxt)) { seen.add(nxt); q.push(nxt); }
+          });
+        }
+        return { nodes: seen, edges: eids };
+      }
+      function clearCard() {
+        nodes.forEach(n => n.classList.remove('is-selected', 'is-dimmed'));
+        edges.forEach(e => e.el.classList.remove('is-highlighted', 'is-dimmed'));
+        if (statusEl) statusEl.textContent = defaultStatus;
+      }
+      nodes.forEach(n => {
+        n.addEventListener('click', ev => {
+          ev.stopPropagation();
+          const nid = n.dataset.nodeId;
+          const up = reach(nid, rev), dn = reach(nid, fwd);
+          const keepN = new Set([...up.nodes, ...dn.nodes]);
+          const keepE = new Set([...up.edges, ...dn.edges]);
+          nodes.forEach(x => {
+            x.classList.toggle('is-selected', x.dataset.nodeId === nid);
+            x.classList.toggle('is-dimmed', !keepN.has(x.dataset.nodeId));
+          });
+          edges.forEach(e => {
+            e.el.classList.toggle('is-highlighted', keepE.has(e.id));
+            e.el.classList.toggle('is-dimmed', !keepE.has(e.id));
+          });
+          const lbl = Array.from(n.querySelectorAll('.node-title')).map(t => t.textContent).join(' ') || nid;
+          if (statusEl) statusEl.textContent = `${lbl} · ${up.nodes.size - 1} hulu · ${dn.nodes.size - 1} hilir (klik latar untuk reset)`;
+        });
+      });
+      card.querySelector('.va-flow-stage')?.addEventListener('click', clearCard);
+      card.querySelector('[data-va-reset]')?.addEventListener('click', clearCard);
+
+      // Live / Still pulse animation
+      const vp = svg.querySelector('#dg-viewport') || svg;
+      const mLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      mLayer.style.display = 'none';
+      vp.appendChild(mLayer);
+      const comets = [];
+      edges.forEach((e, idx) => {
+        if (!e.pathEl || typeof e.pathEl.getTotalLength !== 'function') return;
+        const len = e.pathEl.getTotalLength();
+        if (!len || len < 10) return;
+        const halo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        halo.setAttribute('r', '6.5'); halo.setAttribute('class', 'comet-halo');
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        dot.setAttribute('r', '3'); dot.setAttribute('class', 'comet-dot');
+        mLayer.appendChild(halo); mLayer.appendChild(dot);
+        comets.push({ path: e.pathEl, len, halo, dot, phase: (idx * 0.21) % 1, edgeEl: e.el });
+      });
+      let live = false, rafId = null;
+      function tick(ts) {
+        if (!live) return;
+        const t = (ts / 2500) % 1;
+        comets.forEach(c => {
+          const hide = c.edgeEl.classList.contains('is-dimmed');
+          c.halo.style.display = hide ? 'none' : '';
+          c.dot.style.display = hide ? 'none' : '';
+          if (hide) return;
+          const pt = c.path.getPointAtLength(((t + c.phase) % 1) * c.len);
+          c.halo.setAttribute('cx', pt.x.toFixed(1)); c.halo.setAttribute('cy', pt.y.toFixed(1));
+          c.dot.setAttribute('cx', pt.x.toFixed(1)); c.dot.setAttribute('cy', pt.y.toFixed(1));
+        });
+        rafId = requestAnimationFrame(tick);
+      }
+      const liveBtn = card.querySelector('[data-va-live]');
+      liveBtn?.addEventListener('click', () => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        live = !live;
+        mLayer.style.display = live ? '' : 'none';
+        liveBtn.textContent = live ? 'Live' : 'Still';
+        liveBtn.style.borderColor = live ? 'var(--accent)' : '';
+        liveBtn.style.color = live ? 'var(--accent)' : '';
+        if (live) { cancelAnimationFrame(rafId); rafId = requestAnimationFrame(tick); }
+        else { cancelAnimationFrame(rafId); }
+      });
+
+      // Expand to full-screen Visual Architect Viewer modal
+      card.querySelector('[data-va-expand]')?.addEventListener('click', () => {
+        const b64 = card.dataset.vaHtml || '';
+        if (!b64) return;
+        const rawHtml = decodeURIComponent(escape(atob(b64)));
+        const curTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const themed = rawHtml.replace(/data-theme="(?:light|dark)"/, `data-theme="${curTheme}"`);
+        const frame = document.getElementById('va-modal-frame');
+        const titleEl = document.getElementById('va-modal-title');
+        if (titleEl) titleEl.textContent = card.dataset.vaTitle || 'Alur Interaktif';
+        if (frame) frame.srcdoc = themed;
+        modal.classList.add('open');
+      });
+    });
+  }
+  window.__ideaforgeInitFlows = initVisualFlows;
+  initVisualFlows(document);
+
   // Re-render Mermaid diagrams when theme changes
   document.querySelectorAll('.mermaid').forEach(el => {
     if (!el.dataset.mermaidSrc) el.dataset.mermaidSrc = el.textContent;
@@ -3490,8 +3732,11 @@ WEB_JS = r"""
               }).join('');
             }
           }
+          if (typeof window.__ideaforgeInitFlows === 'function') {
+            window.__ideaforgeInitFlows(panel);
+          }
           if (window.mermaid && typeof window.mermaid.run === 'function') {
-            window.mermaid.run({ nodes: panel.querySelectorAll('.mermaid') });
+            window.mermaid.run({ nodes: panel.querySelectorAll('.mermaid:not([style*="display:none"])') });
           }
         } catch (err) {
           statusEl.textContent = `Error: ${err.message}`;
@@ -3915,6 +4160,94 @@ def _enhance_viewer_html(html_body: str, lang: str = "id") -> str:
             return f'<span class="tag tag-{cls_key}" title="{html.escape(tip)}">{html.escape(disp)}</span>'
 
         html_body = re.sub(r'<span class="tag tag-([a-z]+)">([^<]+)</span>', _tag_loc, html_body)
+
+    # 5. Automatically upgrade Mermaid & ```diagram/```archify JSON blocks into embedded Interactive Visual Architect Flow Cards
+    def _build_flow_card(spec: dict, raw_mermaid: str | None = None) -> str:
+        ds = _load_visual_architect()
+        svg_s, _, _, nmeta = ds.render_svg(spec, dual_theme_style=False)
+        # Ensure unique SVG IDs per card so arrow markers & viewports never clash across multiple diagrams
+        card_uid = f"va-{abs(hash(svg_s)) % 1000000}"
+        svg_s = (
+            svg_s.replace('id="dg-svg"', f'id="{card_uid}-svg"')
+            .replace('id="arrow-head"', f'id="{card_uid}-arrow"')
+            .replace('url(#arrow-head)', f'url(#{card_uid}-arrow)')
+        )
+        full_html = ds.render_html(spec, lang=lang, theme="light")
+        b64_html = base64.b64encode(full_html.encode("utf-8")).decode("ascii")
+        dtype = str(spec.get("type", "workflow"))
+        type_names = {
+            "workflow": "Alur Kerja" if lang == "id" else "Workflow",
+            "architecture": "Arsitektur" if lang == "id" else "Architecture",
+            "sequence": "Urutan Proses" if lang == "id" else "Sequence",
+            "dataflow": "Alur Data" if lang == "id" else "Data Flow",
+            "lifecycle": "Siklus Status" if lang == "id" else "Lifecycle",
+            "erd": "Model Data (ERD)" if lang == "id" else "ERD",
+            "tree": "Struktur Hierarki" if lang == "id" else "Tree",
+            "class": "Diagram Kelas" if lang == "id" else "Class",
+            "timeline": "Linimasa" if lang == "id" else "Timeline",
+            "waterfall": "Waterfall",
+        }
+        badge = type_names.get(dtype, dtype.title())
+        n_cnt = len(nmeta)
+        e_cnt = len(spec.get("edges", spec.get("messages", spec.get("relationships", []))))
+        title_txt = str(spec.get("title") or badge)
+        hint_txt = (
+            f"Klik langkah mana saja untuk menyorot alur hulu & hilir · {n_cnt} langkah · {e_cnt} relasi"
+            if lang == "id"
+            else f"Click any step to highlight upstream & downstream flow · {n_cnt} steps · {e_cnt} edges"
+        )
+        hidden_mmd = f'<div style="display:none"><div class="mermaid">{html.escape(raw_mermaid)}</div></div>' if raw_mermaid is not None else ""
+        return (
+            f'<figure class="va-flow-card" data-va-title="{html.escape(title_txt)}" data-va-html="{b64_html}">'
+            f'  <div class="va-flow-head">'
+            f'    <div class="va-flow-meta"><span class="va-flow-pill">{html.escape(badge)}</span>'
+            f'      <span class="mono-num">{n_cnt} {"langkah" if lang == "id" else "nodes"} &middot; {e_cnt} {"relasi" if lang == "id" else "edges"}</span></div>'
+            f'    <div class="va-flow-actions">'
+            f'      <button type="button" class="btn" data-va-live style="height:26px;font-size:11.5px;">Still</button>'
+            f'      <button type="button" class="btn" data-va-reset style="height:26px;font-size:11.5px;">Reset</button>'
+            f'      <button type="button" class="btn" data-va-expand style="height:26px;font-size:11.5px;">{"Perbesar Interaktif ↗" if lang == "id" else "Expand Interactive ↗"}</button>'
+            f'    </div>'
+            f'  </div>'
+            f'  <div class="va-flow-stage">{svg_s}</div>'
+            f'  <div class="va-flow-foot"><span class="va-flow-status">{html.escape(hint_txt)}</span></div>'
+            f'  {hidden_mmd}'
+            f'</figure>'
+        )
+
+    def _upgrade_mermaid(m: re.Match) -> str:
+        raw_src = html.unescape(m.group(1)).strip()
+        try:
+            ds = _load_visual_architect()
+            spec = ds.parse_mermaid(raw_src, title="Alur Diagram" if lang == "id" else "Flow Diagram")
+            if spec.get("nodes") or spec.get("participants") or spec.get("entities"):
+                return _build_flow_card(spec, raw_mermaid=raw_src)
+        except Exception:
+            pass
+        return m.group(0)
+
+    def _upgrade_diagram_json(m: re.Match) -> str:
+        raw_src = html.unescape(m.group(1)).strip()
+        try:
+            spec = json.loads(raw_src)
+            ds = _load_visual_architect()
+            if ds.validate_diagram(spec)["ok"]:
+                return _build_flow_card(spec)
+        except Exception:
+            pass
+        return m.group(0)
+
+    html_body = re.sub(
+        r'<div class="mermaid-block"><div class="mermaid">(.*?)</div></div>',
+        _upgrade_mermaid,
+        html_body,
+        flags=re.S,
+    )
+    html_body = re.sub(
+        r'<pre><code class="language-(?:diagram|archify)">(.*?)</code></pre>',
+        _upgrade_diagram_json,
+        html_body,
+        flags=re.S,
+    )
 
     return html_body
 
@@ -4810,6 +5143,50 @@ def build_html_for_target(
     return full_html, doc_title
 
 
+def _load_visual_architect():
+    """Lazily import Visual Architect diagram_studio from sibling skill directory."""
+    va_scripts = SCRIPT_DIR.parent.parent / "visual-architect" / "scripts"
+    if str(va_scripts) not in sys.path:
+        sys.path.insert(0, str(va_scripts))
+    import diagram_studio
+    return diagram_studio
+
+
+def discover_workspace_diagrams(base_dir: Path) -> list[dict]:
+    """Find saved .diagram.json, .diagram.html, and .explainer.md files across workspace."""
+    results: list[dict] = []
+    for root_name in ("prps", "prds", "ideas", "examples"):
+        root = base_dir / root_name
+        if not root.is_dir():
+            continue
+        for p in sorted(root.rglob("*")):
+            if not p.is_file():
+                continue
+            name_low = p.name.lower()
+            if name_low.endswith((".diagram.json", ".diagram.html", ".explainer.md")):
+                rel = p.relative_to(base_dir).as_posix()
+                kind = "Explainer" if name_low.endswith(".explainer.md") else ("HTML" if name_low.endswith(".diagram.html") else "Diagram IR")
+                results.append({
+                    "title": p.stem.replace(".diagram", "").replace(".explainer", "").replace("-", " ").title(),
+                    "rel_path": rel,
+                    "kind": kind,
+                    "updated": date.fromtimestamp(p.stat().st_mtime).isoformat(),
+                })
+    return results
+
+
+def _inject_hub_back_bar(page_html: str, back_url: str = "/studio", label: str = "← Visual Studio") -> str:
+    """Inject a subtle Institutional Editorial return pill into standalone diagram HTML."""
+    pill = (
+        f'<a href="{html.escape(back_url)}" style="position:fixed;left:16px;bottom:14px;z-index:55;'
+        'padding:6px 12px;border-radius:6px;border:1px solid var(--line);background:var(--surface);'
+        'color:var(--text);text-decoration:none;font:500 12px Inter,system-ui,sans-serif;'
+        'box-shadow:0 2px 8px rgba(0,0,0,0.08);">'
+        f'{html.escape(label)}</a>'
+    )
+    return page_html.replace("</body>", f"{pill}\n</body>", 1) if "</body>" in page_html else page_html + pill
+
+
 def create_server(base_dir: Path, host: str, port: int, lang: str = "id", mermaid_js: str | None = None):
     """Create a local stdlib HTTP server serving the live IdeaForge Portfolio Hub & Viewer."""
     base_dir = base_dir.resolve()
@@ -4835,6 +5212,23 @@ def create_server(base_dir: Path, host: str, port: int, lang: str = "id", mermai
                 if parsed.path in ("/", "/index.html"):
                     page = render_portfolio_hub(base_dir, lang=lang).encode("utf-8")
                     self._send_bytes(page, "text/html; charset=utf-8")
+                    return
+
+                if parsed.path == "/diagram":
+                    rel = qs.get("path", [""])[0]
+                    target = _resolve_safe_target(base_dir, rel)
+                    ds = _load_visual_architect()
+                    low = target.name.lower()
+                    if low.endswith(".html"):
+                        page_html = target.read_text(encoding="utf-8")
+                    elif low.endswith(".md"):
+                        doc = ds.parse_explainer_markdown(target.read_text(encoding="utf-8"))
+                        page_html = ds.render_explainer_html(doc, lang=lang)
+                    else:
+                        spec = json.loads(target.read_text(encoding="utf-8"))
+                        page_html = ds.render_html(spec, lang=lang)
+                    page_html = _inject_hub_back_bar(page_html, "/", "← Kembali ke Hub")
+                    self._send_bytes(page_html.encode("utf-8"), "text/html; charset=utf-8")
                     return
 
                 if parsed.path == "/view":

@@ -343,15 +343,15 @@ def parse_mermaid(text: str, force_type: str = "auto", title: str = "Diagram") -
         if ln.lower() == "end":
             cur_group = None
             continue
-        m_edge = re.match(r"^(.+?)\s*(?:-->|-.->|==>)\s*(?:\|([^|]+)\|)?\s*(.+)$", ln)
-        if m_edge:
-            lhs, elbl, rhs = m_edge.groups()
-            edges.append({"from": ensure_node(lhs), "to": ensure_node(rhs), "label": (elbl or "").strip()})
-            continue
         m_lbl_edge = re.match(r"^(.+?)\s+--\s+(.+?)\s+-->\s+(.+)$", ln)
         if m_lbl_edge:
             lhs, elbl, rhs = m_lbl_edge.groups()
-            edges.append({"from": ensure_node(lhs), "to": ensure_node(rhs), "label": elbl.strip()})
+            edges.append({"from": ensure_node(lhs), "to": ensure_node(rhs), "label": elbl.strip().strip('"').strip("'")})
+            continue
+        m_edge = re.match(r"^(.+?)\s*(?:-->|-.->|==>)\s*(?:\|([^|]+)\|)?\s*(.+)$", ln)
+        if m_edge:
+            lhs, elbl, rhs = m_edge.groups()
+            edges.append({"from": ensure_node(lhs), "to": ensure_node(rhs), "label": (elbl or "").strip().strip('"').strip("'")})
             continue
         m_state = re.match(r"^([A-Za-z0-9_.*\[\]-]+)\s*-->\s*([A-Za-z0-9_.*\[\]-]+)(?:\s*:\s*(.+))?$", ln)
         if m_state:
