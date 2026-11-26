@@ -17,7 +17,7 @@ A structured, enterprise-grade workspace for an **AI Brainstorming Partner & Str
 - **Evidence Discipline & Automated Linter**: Every numeric claim is labeled `[Verified]`, `[Estimate]`, `[Assumption]`, or `[Unverified]`, sources are graded `A`/`B`/`C` with access dates, and `scripts/lint_project.py` automatically catches broken links, scorecard math errors, PRD structure/ID/Given-When-Then gaps, stale sources, and editorial slop.
 - **Computed Financial Modeling (Transactional & SaaS)**: `model.py` computes 3 scenarios (pessimistic, base, optimistic), CAPEX, channel fees, taxes, exact cash runway, LTV/CAC, payback period, 2-way sensitivity matrices, and clean SVG cash curves—never prose guesses.
 - **Editorial PDF Export with Mermaid**: `export_pdf.py` compiles single Markdown files, PRD folders, or full PRP folders (`--mode executive|technical|full|prd`) into A4 PDFs with cover styling, automatic Table of Contents, repeating table headers, embedded SVG charts, and Mermaid diagram rendering.
-- **Interactive Web GUI & Local Portfolio Hub**: `export_web.py` exports any report, PRD, or PRP into a self-contained single-file interactive HTML app (sidebar navigation, instant search, Dark/Light mode, evidence tag filter, interactive checklists, quality-gate drawer, and live What-If Financial Simulator sliders) OR launches a live local Portfolio Hub (`--serve`) across all `prps/`, `prds/`, and `ideas/`.
+- **Interactive Web GUI & Local Portfolio Hub**: `export_web.py` exports any report, PRD, or PRP into a self-contained single-file interactive HTML app (Institutional Editorial Light/Dark themes, collapsible sidebar navigation, right outline with scrollspy, `One chapter | All chapters` mode, `/` command search, evidence tag filter, interactive checklists, quality-gate drawer, and live What-If Financial Simulator sliders) OR launches a live local Portfolio Hub (`--serve`) across all `prps/`, `prds/`, and `ideas/` with **inline Markdown editing** and **one-click HTML/PDF export**.
 
 ---
 
@@ -178,7 +178,7 @@ python3 .agents/skills/executive-reporter/scripts/export_web.py \
   --title "Sample Business Analysis Report" \
   --model-inputs .agents/skills/financial-modeler/scripts/example_inputs.json --lang en
 ```
-Or launch the live local Portfolio Hub dashboard (`http://127.0.0.1:8765`):
+Or launch the live local Portfolio Hub dashboard (`http://127.0.0.1:8765`) with inline Markdown editing, 3-zone document viewer, and one-click HTML/PDF export:
 ```bash
 python3 .agents/skills/executive-reporter/scripts/export_web.py --serve --port 8765
 ```

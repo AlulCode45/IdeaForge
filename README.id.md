@@ -17,7 +17,7 @@ Workspace terstruktur untuk **AI Brainstorming Partner & Strategic Analysis Agen
 - **Standar Bukti & Linter Otomatis**: Setiap angka dilabeli `[Verified]`, `[Estimate]`, `[Assumption]`, atau `[Unverified]`, sumber diberi grade `A`/`B`/`C` beserta tanggal akses, dan `scripts/lint_project.py` memvalidasi link, aritmatika scorecard, kelengkapan PRD (section, ID FR, Given/When/Then), data kedaluwarsa, serta anti-*AI slop*.
 - **Model Keuangan Terhitung (Transactional & SaaS)**: `model.py` menghitung 3 skenario (pesimis, dasar, optimis), CAPEX, *channel fee*, pajak, *runway* eksak, LTV/CAC, *payback period*, sensitivitas 2-arah, dan grafik SVG otomatis.
 - **Export PDF Editorial + Mermaid**: `export_pdf.py` mengekspor satu file Markdown, folder PRD, atau folder PRP (`--mode executive|technical|full|prd`) menjadi PDF A4 dengan cover, daftar isi (TOC) otomatis, header tabel berulang, grafik SVG, dan diagram Mermaid.
-- **Web GUI Interaktif & Local Portfolio Hub**: `export_web.py` mengekspor laporan, PRD, atau PRP menjadi file HTML interaktif mandiri (*sidebar* navigasi, pencarian instan, Dark/Light mode, filter tag bukti, checklist interaktif, panel Quality Gate, dan **Simulator Finansial What-If** real-time) ATAU menjalankan dashboard lokal live (`--serve`) untuk seluruh `prps/`, `prds/`, dan `ideas/`.
+- **Web GUI Interaktif & Local Portfolio Hub**: `export_web.py` mengekspor laporan, PRD, atau PRP menjadi file HTML interaktif mandiri (tema Terang/Gelap *Institutional Editorial*, sidebar dapat di-collapse, daftar bagian kanan + *scrollspy*, mode `Satu bab | Semua bab`, pencarian cepat `/`, filter tag bukti, checklist interaktif, panel Quality Gate, dan **Simulator Finansial What-If** real-time) ATAU menjalankan dashboard lokal live (`--serve`) untuk seluruh `prps/`, `prds/`, dan `ideas/` lengkap dengan **editor Markdown langsung di browser** serta **ekspor HTML/PDF sekali klik**.
 
 ---
 
@@ -178,7 +178,7 @@ python3 .agents/skills/executive-reporter/scripts/export_web.py \
   --title "Sample Business Analysis Report" \
   --model-inputs .agents/skills/financial-modeler/scripts/example_inputs.json --lang id
 ```
-Atau jalankan Local Portfolio Hub Dashboard (`http://127.0.0.1:8765`) untuk menjelajahi seluruh `prps/`, `prds/`, & `ideas/`:
+Atau jalankan Local Portfolio Hub Dashboard (`http://127.0.0.1:8765`) untuk menjelajahi seluruh `prps/`, `prds/`, & `ideas/` dengan editor Markdown inline, tampilan baca 3 zona, dan ekspor HTML/PDF sekali klik:
 ```bash
 python3 .agents/skills/executive-reporter/scripts/export_web.py --serve --port 8765 --lang id
 ```
