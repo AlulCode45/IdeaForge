@@ -1,3 +1,4 @@
+import json
 import shutil
 import subprocess
 import sys
@@ -186,6 +187,26 @@ class TestExportWeb(unittest.TestCase):
                     view_html = resp.read().decode("utf-8")
                     self.assertIn("Portfolio Hub", view_html)
                     self.assertIn("FR-001", view_html)
+                    self.assertIn('id="edit-toggle-btn"', view_html)
+
+                # Test live editing via POST /api/save-doc
+                updated_md = (ws / "prds/2026-11-26-wallet-prd/PRD.md").read_text(encoding="utf-8") + "\n- **FR-099**: Live edited item.\n"
+                save_req = urllib.request.Request(
+                    f"{base_url}/api/save-doc",
+                    data=json.dumps({
+                        "path": "prds/2026-11-26-wallet-prd",
+                        "filename": "PRD.md",
+                        "content": updated_md,
+                    }).encode("utf-8"),
+                    headers={"Content-Type": "application/json"},
+                    method="POST",
+                )
+                with urllib.request.urlopen(save_req) as resp:
+                    self.assertEqual(resp.status, 200)
+                    save_data = json.loads(resp.read().decode("utf-8"))
+                    self.assertTrue(save_data["ok"])
+                    self.assertIn("FR-099", save_data["html"])
+                    self.assertIn("Live edited item.", (ws / "prds/2026-11-26-wallet-prd/PRD.md").read_text(encoding="utf-8"))
 
                 with urllib.request.urlopen(f"{base_url}/api/download-html?path={rel}&mode=prd") as resp:
                     self.assertEqual(resp.status, 200)

@@ -173,6 +173,12 @@ X_SVG = (
     '<path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>'
 )
 
+PENCIL_SVG = (
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" '
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>'
+)
+
 I18N = {
     "id": {
         "hub_title": "IdeaForge Portfolio Hub",
@@ -2106,6 +2112,43 @@ details.sim-details summary {
   .kpi-grid { grid-template-columns: 1fr; }
 }
 
+/* Inline Markdown Editor (live --serve mode) */
+.editor-shell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.editor-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+.editor-status {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+.md-editor {
+  width: 100%;
+  min-height: 520px;
+  padding: var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  resize: vertical;
+}
+.md-editor:focus { border-color: var(--accent); background: var(--surface); }
+
 @media print {
   :root, [data-theme="dark"] {
     --bg: #FFFFFF;
@@ -2797,6 +2840,118 @@ WEB_JS = r"""
     });
   });
 
+  // Live Markdown Editor (in --serve /view mode)
+  const editToggleBtn = document.getElementById('edit-toggle-btn');
+  if (editToggleBtn && CFG.editable && Array.isArray(CFG.docs)) {
+    let editingPanelId = null;
+
+    function getActivePanel() {
+      return panels.find(p => !p.classList.contains('hidden') && p.id !== 'sim-panel') || panels[0];
+    }
+
+    function openEditorForPanel(panel) {
+      if (!panel || editingPanelId) return;
+      const docMeta = CFG.docs.find(d => d.id === panel.id);
+      if (!docMeta) return;
+      editingPanelId = panel.id;
+      const origHtml = panel.innerHTML;
+      panel.dataset.origHtml = origHtml;
+
+      panel.innerHTML = `
+        <div class="editor-shell">
+          <div class="editor-bar">
+            <span class="editor-status" id="editor-status">${docMeta.filename} · Siap diedit</span>
+            <div style="display:flex;gap:8px;">
+              <button type="button" id="editor-cancel-btn" class="btn">Batal (Esc)</button>
+              <button type="button" id="editor-save-btn" class="btn btn-primary">Simpan (Ctrl/Cmd+S)</button>
+            </div>
+          </div>
+          <textarea id="md-editor-area" class="md-editor" aria-label="Editor Markdown"></textarea>
+        </div>
+      `;
+      const ta = document.getElementById('md-editor-area');
+      const statusEl = document.getElementById('editor-status');
+      const saveBtn = document.getElementById('editor-save-btn');
+      const cancelBtn = document.getElementById('editor-cancel-btn');
+      ta.value = docMeta.markdown || '';
+      ta.focus();
+
+      ta.addEventListener('input', () => {
+        statusEl.textContent = `${docMeta.filename} · Belum disimpan`;
+      });
+
+      function closeEditor(nextHtml) {
+        panel.innerHTML = nextHtml !== undefined ? nextHtml : (panel.dataset.origHtml || origHtml);
+        delete panel.dataset.origHtml;
+        editingPanelId = null;
+        editToggleBtn.focus();
+      }
+
+      async function saveDoc() {
+        statusEl.textContent = `${docMeta.filename} · Menyimpan...`;
+        saveBtn.disabled = true;
+        try {
+          const resp = await fetch('/api/save-doc', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              path: CFG.relPath,
+              filename: docMeta.filename,
+              content: ta.value,
+            }),
+          });
+          const data = await resp.json();
+          if (!resp.ok || !data.ok) throw new Error(data.error || 'Gagal menyimpan');
+          docMeta.markdown = ta.value;
+          closeEditor(data.html);
+          if (data.lint) {
+            const lintCountEl = document.querySelector('#lint-toggle .audit-count');
+            if (lintCountEl) {
+              lintCountEl.textContent = `${data.lint.fails} FAIL / ${data.lint.warns} WARN`;
+              lintCountEl.className = 'audit-count ' + (data.lint.fails ? 'audit-fail' : (data.lint.warns ? 'audit-warn' : 'audit-ok'));
+            }
+            const drawerEl = document.getElementById('lint-drawer');
+            if (drawerEl && Array.isArray(data.lint.items)) {
+              drawerEl.innerHTML = data.lint.items.map(it => {
+                const cls = it.severity === 'PASS' ? 'verified' : (it.severity === 'WARN' ? 'assumption' : 'unverified');
+                return `<div class="lint-row"><span class="tag tag-${cls}">${it.severity}</span><span>${it.message.replace(/</g, '&lt;')}</span></div>`;
+              }).join('');
+            }
+          }
+          if (window.mermaid && typeof window.mermaid.run === 'function') {
+            window.mermaid.run({ nodes: panel.querySelectorAll('.mermaid') });
+          }
+        } catch (err) {
+          statusEl.textContent = `Error: ${err.message}`;
+          saveBtn.disabled = false;
+        }
+      }
+
+      cancelBtn.addEventListener('click', () => closeEditor());
+      saveBtn.addEventListener('click', saveDoc);
+      ta.addEventListener('keydown', e => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') {
+          e.preventDefault();
+          saveDoc();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          closeEditor();
+        }
+      });
+    }
+
+    editToggleBtn.addEventListener('click', () => {
+      if (!editingPanelId) openEditorForPanel(getActivePanel());
+    });
+    document.addEventListener('keydown', e => {
+      const inField = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
+      if (e.key.toLowerCase() === 'e' && !inField && !editingPanelId) {
+        e.preventDefault();
+        openEditorForPanel(getActivePanel());
+      }
+    });
+  }
+
   // Interactive Financial What-If Simulator (mirrors model.py exact math)
   const simRoot = document.getElementById('sim-panel');
   if (simRoot && CFG.modelInputs) {
@@ -3149,6 +3304,8 @@ def render_web_document(
     download_html_url: str | None = None,
     export_pdf_url: str | None = None,
     project_id: str = "report",
+    editable: bool = False,
+    rel_path: str | None = None,
 ) -> str:
     """Compile one or more Markdown documents into a self-contained editorial Web GUI HTML string."""
     t = I18N[lang]
@@ -3235,6 +3392,11 @@ def render_web_document(
         if hub_back_url
         else f'<span class="brand-link">{BRAND_MARK_SVG}<span>IdeaForge</span></span>'
     )
+    edit_btn = (
+        f'<button type="button" id="edit-toggle-btn" class="btn" title="Edit dokumen (E)">{PENCIL_SVG}<span>Edit</span></button>'
+        if editable
+        else ""
+    )
     dl_html_btn = (
         f'<a class="btn btn-dl-html" href="{html.escape(download_html_url)}">{html.escape(t["download_html"])}</a>'
         if download_html_url
@@ -3251,6 +3413,9 @@ def render_web_document(
         "locale": lang,
         "labels": t,
         "modelInputs": model_inputs,
+        "editable": editable,
+        "relPath": rel_path,
+        "docs": [{"id": d["id"], "filename": d["filename"], "markdown": d["markdown"]} for d in docs] if editable else [],
     }
     safe_json = json.dumps(cfg_payload).replace("</", "<\\/")
     mermaid_script = export_pdf.build_mermaid_script(mermaid_js) if has_mermaid else ""
@@ -3280,6 +3445,7 @@ def render_web_document(
       <input id="search-input" class="search-input" type="search" placeholder="{html.escape(t['search_hub_placeholder'])}" aria-label="{html.escape(t['search_hub_placeholder'])}" autocomplete="off">
       <kbd class="kbd-hint">/</kbd>
     </div>
+    {edit_btn}
     {dl_html_btn}
     {pdf_btn}
     {_theme_switch_html(lang)}
@@ -3796,6 +3962,8 @@ def build_html_for_target(
     download_html_url: str | None = None,
     export_pdf_url: str | None = None,
     base_dir: Path | None = None,
+    editable: bool = False,
+    rel_path: str | None = None,
 ) -> tuple[str, str]:
     """Build interactive Web GUI HTML for either a single Markdown file or a project directory."""
     model_inputs = None
@@ -3848,6 +4016,8 @@ def build_html_for_target(
         download_html_url=download_html_url,
         export_pdf_url=export_pdf_url,
         project_id=project_id,
+        editable=editable,
+        rel_path=rel_path,
     )
     return full_html, doc_title
 
@@ -3895,6 +4065,8 @@ def create_server(base_dir: Path, host: str, port: int, lang: str = "id", mermai
                         download_html_url=f"/api/download-html?path={q_rel}&mode={mode}",
                         export_pdf_url=f"/api/export-pdf?path={q_rel}&mode={mode}",
                         base_dir=base_dir,
+                        editable=True,
+                        rel_path=rel,
                     )
                     self._send_bytes(page.encode("utf-8"), "text/html; charset=utf-8")
                     return
@@ -3950,6 +4122,46 @@ def create_server(base_dir: Path, host: str, port: int, lang: str = "id", mermai
                 self._send_bytes(str(e).encode("utf-8"), "text/plain; charset=utf-8", status=404)
             except Exception as e:
                 self._send_bytes(f"Server error: {e}".encode("utf-8"), "text/plain; charset=utf-8", status=500)
+
+        def do_POST(self):
+            parsed = urllib.parse.urlparse(self.path)
+            if parsed.path != "/api/save-doc":
+                self._send_bytes(b'{"ok":false,"error":"Not Found"}', "application/json; charset=utf-8", status=404)
+                return
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+                payload = json.loads(self.rfile.read(length).decode("utf-8"))
+                rel = str(payload.get("path", ""))
+                filename = str(payload.get("filename", ""))
+                content = str(payload.get("content", ""))
+
+                target = _resolve_safe_target(base_dir, rel)
+                if target.is_file():
+                    doc_path = target
+                else:
+                    if not filename or "/" in filename or "\\" in filename:
+                        raise PermissionError("Invalid filename.")
+                    doc_path = (target / filename).resolve()
+                    if not doc_path.is_relative_to(target.resolve()):
+                        raise PermissionError("Path outside project folder is not allowed.")
+
+                if doc_path.suffix.lower() != ".md":
+                    raise PermissionError("Only Markdown (.md) files can be edited.")
+
+                doc_path.write_text(content, encoding="utf-8")
+                body_html, _, _ = export_pdf.md_to_html(content, doc_path.parent, add_back_to_toc=False, lang=lang)
+                body_html = inline_local_assets(body_html, doc_path.parent)
+                body_html = make_interactive_checkboxes(body_html, f"doc-1-{export_pdf.slugify(doc_path.stem)}")
+                body_html = body_html.replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
+                lint_info = run_lint_summary(target) if target.is_dir() else None
+                resp = json.dumps({"ok": True, "html": body_html, "lint": lint_info}).encode("utf-8")
+                self._send_bytes(resp, "application/json; charset=utf-8")
+            except PermissionError as e:
+                self._send_bytes(json.dumps({"ok": False, "error": str(e)}).encode("utf-8"), "application/json; charset=utf-8", status=403)
+            except FileNotFoundError as e:
+                self._send_bytes(json.dumps({"ok": False, "error": str(e)}).encode("utf-8"), "application/json; charset=utf-8", status=404)
+            except Exception as e:
+                self._send_bytes(json.dumps({"ok": False, "error": str(e)}).encode("utf-8"), "application/json; charset=utf-8", status=500)
 
     class ReusableTCPServer(socketserver.TCPServer):
         allow_reuse_address = True
