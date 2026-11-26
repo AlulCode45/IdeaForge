@@ -88,7 +88,7 @@ flowchart TD
 
 ---
 
-## 21 Modular Skills (`.agents/skills/`)
+## 22 Modular Skills (`.agents/skills/`)
 
 ### 1. Intake, Ideation & Product Scoping
 | Skill | Purpose | Primary Output |
@@ -125,6 +125,7 @@ flowchart TD
 | `evidence-auditor` | Source grading (`A`/`B`/`C`), `[Stale]` flagging, assumption register, & linter | `13-assumption-register.md` |
 | `decision-scorecard` | Red-team check, 1–5 rubric, weighted Go/No-Go, weight sensitivity, & ADR | `17-scorecard-and-decision.md` |
 | `executive-reporter` | 1-page summary, SVG charts, pitch/backlog outline, & editorial PDF export | `18-executive-summary.md` & PDF |
+| `visual-architect` | 10 interactive diagram types, story playback, Mermaid transpiler, one-page explainers, & repo architecture diagnosis | `assets/*.diagram.html` & `.svg` |
 | `retrospective-tracker` | Actual vs forecast variance review, assumption updates, & pivot/scale ADR | `19-retrospective.md` |
 
 ---

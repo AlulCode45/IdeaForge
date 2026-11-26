@@ -44,6 +44,7 @@ Activate the matching skill in `.agents/skills/` based on the user's intent:
 - Auditing evidence, source quality, assumptions, running `lint_project.py` -> `evidence-auditor`
 - Go/No-Go decision, comparing ideas, decision log (ADR) -> `decision-scorecard`
 - Executive summary, charts, pitch/backlog handoff, PDF & interactive Web GUI export -> `executive-reporter`
+- Interactive diagrams (10 types), Mermaid conversion, visual explainers, & repository architecture diagnosis -> `visual-architect`
 - Post-launch / post-experiment actual vs forecast variance tracking -> `retrospective-tracker`
 - Saving/archiving a brainstorming session -> `idea-logger`
 

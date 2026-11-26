@@ -88,7 +88,7 @@ flowchart TD
 
 ---
 
-## Daftar 21 Skill Modular (`.agents/skills/`)
+## Daftar 22 Skill Modular (`.agents/skills/`)
 
 ### 1. Intake, Ideasi & Scoping Produk
 | Skill | Fungsi Utama | Output Utama |
@@ -125,6 +125,7 @@ flowchart TD
 | `evidence-auditor` | Audit sumber (`A`/`B`/`C`), penanda `[Stale]`, register asumsi, & run `lint_project.py` | `13-assumption-register.md` |
 | `decision-scorecard` | Red-team otomatis, rubrik 1–5, scorecard Go/No-Go, sensitivitas bobot, & ADR | `17-scorecard-and-decision.md` |
 | `executive-reporter` | Ringkasan 1 halaman, grafik SVG, *pitch/backlog outline*, & export PDF | `18-executive-summary.md` & PDF |
+| `visual-architect` | 10 jenis diagram interaktif, *story playback*, konversi Mermaid, *explainer* 1 halaman, & diagnosis arsitektur repo | `assets/*.diagram.html` & `.svg` |
 | `retrospective-tracker` | Evaluasi aktual vs proyeksi, update asumsi/model, & log keputusan pivot/scale | `19-retrospective.md` |
 
 ---
